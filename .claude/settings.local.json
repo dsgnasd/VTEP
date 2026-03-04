@@ -10,7 +10,9 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/requests)",
       "Bash(git init)",
       "Bash(git add -A)",
-      "Bash(git commit -m \"Initial commit: Employee Portal MVP\")"
+      "Bash(git commit -m \"Initial commit: Employee Portal MVP\")",
+      "Bash(git rm -r --cached node_modules dist)",
+      "Bash(git commit -m \"Add .gitignore and remove node_modules from tracking\")"
     ]
   }
 }
