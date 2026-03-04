@@ -450,7 +450,7 @@ export default function MyProfilePage() {
 
             <button
               onClick={() => setVacationModalOpen(true)}
-              className="w-full mt-4 h-9 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              className="w-full mt-4 h-9 rounded-lg bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 transition"
             >
               Запросить отпуск
             </button>
