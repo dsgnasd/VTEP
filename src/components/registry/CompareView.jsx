@@ -1,0 +1,448 @@
+import { memo, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import AllocationBlock from '../shared/AllocationBlock';
+import StatusBadge from '../shared/StatusBadge';
+
+// ──────────────────────────────────────────────────────────────
+// CompareView — сравнение выбранных сотрудников:
+//  • Таймлайн — загрузка + отпуска с подсветкой пересечений
+//  • Профили — навыки, роли, загрузка, сертификации бок о бок
+// ──────────────────────────────────────────────────────────────
+
+const TIMELINE_START = new Date('2026-01-01');
+const TIMELINE_END = new Date('2026-04-01');
+const TOTAL_DAYS = Math.round((TIMELINE_END - TIMELINE_START) / 86400000);
+
+const MONTHS = [
+  { label: 'Январь 2026', days: 31 },
+  { label: 'Февраль 2026', days: 28 },
+  { label: 'Март 2026', days: 31 },
+];
+
+function dayOffset(dateStr) {
+  const d = new Date(dateStr);
+  return Math.max(0, Math.round((d - TIMELINE_START) / 86400000));
+}
+
+function toPercent(days) {
+  return (days / TOTAL_DAYS) * 100;
+}
+
+function getAllocationType(percentage) {
+  if (percentage >= 80) return 'full';
+  if (percentage > 0) return 'partial';
+  return 'bench';
+}
+
+/* ── Overlap computation ── */
+function computeOverlaps(employees) {
+  const bitmap = new Uint8Array(TOTAL_DAYS);
+  for (const emp of employees) {
+    for (const v of emp.vacation) {
+      const s = dayOffset(v.startDate);
+      const e = Math.min(dayOffset(v.endDate), TOTAL_DAYS);
+      for (let d = s; d < e; d++) bitmap[d]++;
+    }
+  }
+
+  const ranges = [];
+  let start = -1;
+  for (let d = 0; d <= TOTAL_DAYS; d++) {
+    if (d < TOTAL_DAYS && bitmap[d] >= 2) {
+      if (start === -1) start = d;
+    } else {
+      if (start !== -1) {
+        ranges.push({ start, end: d, count: Math.max(...bitmap.slice(start, d)) });
+        start = -1;
+      }
+    }
+  }
+
+  const overlapDays = bitmap.filter((v) => v >= 2).length;
+
+  const vacBitmap = new Uint8Array(TOTAL_DAYS);
+  for (const emp of employees) {
+    for (const v of emp.vacation) {
+      const s = dayOffset(v.startDate);
+      const e = Math.min(dayOffset(v.endDate), TOTAL_DAYS);
+      for (let d = s; d < e; d++) vacBitmap[d] = 1;
+    }
+  }
+  const allAvailableDays = vacBitmap.filter((v) => v === 0).length;
+
+  return { ranges, overlapDays, allAvailableDays };
+}
+
+/* ── Collect all unique skills across employees ── */
+function collectSkillMatrix(employees) {
+  const skillMap = new Map();
+  for (const emp of employees) {
+    for (const s of emp.skills) {
+      if (!skillMap.has(s.name)) skillMap.set(s.name, new Map());
+      skillMap.get(s.name).set(emp.id, s.level);
+    }
+  }
+  // Sort by how many employees have the skill (desc)
+  return [...skillMap.entries()]
+    .sort((a, b) => b[1].size - a[1].size)
+    .map(([name, levels]) => ({ name, levels }));
+}
+
+const LEVEL_COLORS = {
+  Senior: 'bg-emerald-100 text-emerald-700',
+  Middle: 'bg-blue-100 text-blue-700',
+  Junior: 'bg-amber-100 text-amber-700',
+};
+
+const LEVEL_ORDER = { Senior: 3, Middle: 2, Junior: 1 };
+
+/* ── Tab: Timeline ── */
+function TimelineTab({ employees, ranges, monthWidths }) {
+  return (
+    <div className="border border-gray-200 rounded-xl bg-white overflow-x-auto">
+      <div className="min-w-[900px]">
+        <div className="flex border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
+          <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2.5 text-xs font-medium text-gray-600 sticky left-0 bg-gray-50 z-20 border-r border-gray-200">
+            Сотрудник
+          </div>
+          <div className="flex-1 flex">
+            {MONTHS.map((m, i) => (
+              <div
+                key={m.label}
+                className="text-xs font-medium text-gray-600 px-3 py-2.5 text-center border-r border-gray-100 last:border-r-0"
+                style={{ width: `${monthWidths[i]}%` }}
+              >
+                {m.label}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {employees.map((emp) => (
+          <div
+            key={emp.id}
+            className="flex border-b border-gray-100 hover:bg-gray-50/40 transition-colors"
+          >
+            <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2 sticky left-0 bg-white z-10 border-r border-gray-200">
+              <Link
+                to={`/employee/${emp.id}`}
+                className="text-sm font-medium text-gray-800 hover:text-blue-600 truncate block transition-colors"
+              >
+                {emp.name}
+              </Link>
+            </div>
+
+            <div className="flex-1 relative h-9">
+              {ranges.map((r) => (
+                <div
+                  key={`ovl-${r.start}`}
+                  className="absolute top-0 bottom-0 bg-red-100/50 border-l border-r border-red-200/40"
+                  style={{
+                    left: `${toPercent(r.start)}%`,
+                    width: `${toPercent(r.end - r.start)}%`,
+                  }}
+                />
+              ))}
+
+              {emp.allocations.map((a) => {
+                const start = dayOffset(a.startDate);
+                const end = dayOffset(a.endDate);
+                const left = toPercent(start);
+                const width = toPercent(Math.max(end - start, 1));
+                return (
+                  <AllocationBlock
+                    key={a.projectId}
+                    type={getAllocationType(a.percentage)}
+                    left={left}
+                    width={width}
+                    label={a.projectName}
+                    percentage={a.percentage}
+                  />
+                );
+              })}
+
+              {emp.vacation.map((v, i) => {
+                const start = dayOffset(v.startDate);
+                const end = dayOffset(v.endDate);
+                const left = toPercent(start);
+                const width = toPercent(Math.max(end - start, 1));
+                return (
+                  <AllocationBlock
+                    key={`vac-${i}`}
+                    type="vacation"
+                    left={left}
+                    width={width}
+                    label="Отпуск"
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Tab: Profiles ── */
+function ProfilesTab({ employees, skillMatrix }) {
+  return (
+    <div className="space-y-5">
+      {/* Summary cards */}
+      <div className="overflow-x-auto">
+        <div className="flex gap-3" style={{ minWidth: `${employees.length * 220}px` }}>
+          {employees.map((emp) => (
+            <div
+              key={emp.id}
+              className="flex-1 min-w-[200px] bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+            >
+              <div>
+                <Link
+                  to={`/employee/${emp.id}`}
+                  className="font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                >
+                  {emp.name}
+                </Link>
+                <p className="text-xs text-gray-500 mt-0.5">{emp.role}</p>
+                <p className="text-xs text-gray-500">{emp.team}</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <StatusBadge status={emp.status} />
+              </div>
+
+              {/* Allocation bar */}
+              <div>
+                <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                  <span>Загрузка</span>
+                  <span className="font-medium text-gray-700">{emp.totalAllocation}%</span>
+                </div>
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all ${
+                      emp.totalAllocation >= 80
+                        ? 'bg-emerald-500'
+                        : emp.totalAllocation > 0
+                          ? 'bg-amber-400'
+                          : 'bg-gray-300'
+                    }`}
+                    style={{ width: `${emp.totalAllocation}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Projects */}
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Проекты</p>
+                <div className="flex flex-wrap gap-1">
+                  {emp.allocations.map((a) => (
+                    <span
+                      key={a.projectId}
+                      className="px-1.5 py-0.5 rounded bg-slate-100 text-[11px] text-gray-700"
+                    >
+                      {a.projectName} {a.percentage}%
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Certs */}
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-gray-500">Сертификации</span>
+                <span className="font-medium text-gray-700">{emp.certificates}</span>
+              </div>
+
+              {/* Vacation */}
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Отпуска</p>
+                {emp.vacation.length === 0 ? (
+                  <p className="text-xs text-gray-500">Нет запланированных</p>
+                ) : (
+                  <div className="space-y-0.5">
+                    {emp.vacation.map((v, i) => (
+                      <p key={i} className="text-xs text-red-600">
+                        {new Date(v.startDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+                        {' – '}
+                        {new Date(v.endDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Skills matrix */}
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-100">
+          <h3 className="text-sm font-semibold text-gray-900">Матрица навыков</h3>
+          <p className="text-xs text-gray-500 mt-0.5">Сравнение компетенций и уровней</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-gray-50/50">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 sticky left-0 bg-gray-50/50 z-10 min-w-[140px]">
+                  Навык
+                </th>
+                {employees.map((emp) => (
+                  <th key={emp.id} className="text-center px-3 py-2 text-xs font-medium text-gray-600 min-w-[120px]">
+                    {emp.name.split(' ')[0]}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {skillMatrix.map(({ name, levels }) => (
+                <tr key={name} className="border-b border-gray-50 hover:bg-gray-50/40">
+                  <td className="px-4 py-1.5 text-xs font-medium text-gray-700 sticky left-0 bg-white z-10">
+                    {name}
+                  </td>
+                  {employees.map((emp) => {
+                    const level = levels.get(emp.id);
+                    return (
+                      <td key={emp.id} className="text-center px-3 py-1.5">
+                        {level ? (
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-medium ${LEVEL_COLORS[level] || 'bg-gray-100 text-gray-600'}`}>
+                            {level}
+                          </span>
+                        ) : (
+                          <span className="text-gray-300">—</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Main CompareView ── */
+function CompareView({ employees, onBack }) {
+  const [tab, setTab] = useState('timeline');
+
+  const monthWidths = useMemo(
+    () => MONTHS.map((m) => toPercent(m.days)),
+    []
+  );
+
+  const { ranges, overlapDays, allAvailableDays } = useMemo(
+    () => computeOverlaps(employees),
+    [employees]
+  );
+
+  const skillMatrix = useMemo(
+    () => collectSkillMatrix(employees),
+    [employees]
+  );
+
+  const tabs = [
+    { id: 'timeline', label: 'Таймлайн' },
+    { id: 'profiles', label: 'Профили и навыки' },
+  ];
+
+  return (
+    <div className="space-y-4">
+      {/* Хедер */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+            Назад к реестру
+          </button>
+          <span className="text-gray-300">|</span>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Сравнение
+          </h2>
+          <span className="text-sm text-gray-500">
+            {employees.length} сотр.
+          </span>
+        </div>
+
+        {/* Tab switch */}
+        <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`px-3.5 py-1.5 text-sm font-medium transition ${
+                tab === t.id
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              } ${t.id !== tabs[0].id ? 'border-l border-gray-300' : ''}`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Сводка */}
+      <div className="flex flex-wrap gap-3">
+        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-gray-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
+          <span className="text-sm text-gray-700">
+            Пересечение отпусков: <strong className="font-semibold text-gray-900">{overlapDays} дн.</strong>
+          </span>
+        </div>
+        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-gray-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+          <span className="text-sm text-gray-700">
+            Все доступны: <strong className="font-semibold text-gray-900">{allAvailableDays} дн.</strong>
+          </span>
+        </div>
+        {ranges.length > 0 && (
+          <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-50 border border-amber-200">
+            <svg className="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            <span className="text-sm text-amber-800">
+              {ranges.length} период{ranges.length > 1 ? 'а' : ''} с наложением
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      {tab === 'timeline' ? (
+        <>
+          <TimelineTab employees={employees} ranges={ranges} monthWidths={monthWidths} />
+          <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-2 rounded-sm bg-emerald-500" />
+              Загрузка ≥80%
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-2 rounded-sm bg-amber-400" />
+              Частичная
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-2 rounded-sm bg-red-400" />
+              Отпуск
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-2 rounded-sm bg-red-100 border border-red-200" />
+              Пересечение (2+ чел.)
+            </div>
+          </div>
+        </>
+      ) : (
+        <ProfilesTab employees={employees} skillMatrix={skillMatrix} />
+      )}
+    </div>
+  );
+}
+
+export default memo(CompareView);

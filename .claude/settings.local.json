@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create vite@latest . -- --template react)",
+      "Bash(yes)",
+      "Bash(npm install)",
+      "mcp__Claude_Preview__preview_start",
+      "WebFetch(domain:wiki.vebtech.by)",
+      "Bash(curl -s http://localhost:5173/my-profile)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/requests)",
+      "Bash(git init)",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"Initial commit: Employee Portal MVP\")"
+    ]
+  }
+}
