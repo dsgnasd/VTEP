@@ -12,7 +12,9 @@
       "Bash(git add -A)",
       "Bash(git commit -m \"Initial commit: Employee Portal MVP\")",
       "Bash(git rm -r --cached node_modules dist)",
-      "Bash(git commit -m \"Add .gitignore and remove node_modules from tracking\")"
+      "Bash(git commit -m \"Add .gitignore and remove node_modules from tracking\")",
+      "Bash(git rm -r --cached node_modules)",
+      "Bash(git commit -m \"Remove node_modules from tracking\")"
     ]
   }
 }
