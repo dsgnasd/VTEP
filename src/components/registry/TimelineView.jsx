@@ -100,7 +100,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
               key={emp.id}
               className={`flex border-b border-gray-100 transition-colors ${
                 isSelected
-                  ? 'bg-blue-50/40 hover:bg-blue-50/60'
+                  ? 'bg-blue-50/60 hover:bg-blue-50'
                   : 'hover:bg-gray-50/40'
               }`}
             >

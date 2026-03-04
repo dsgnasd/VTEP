@@ -136,7 +136,7 @@ function TimelineTab({ employees, ranges, monthWidths }) {
               {ranges.map((r) => (
                 <div
                   key={`ovl-${r.start}`}
-                  className="absolute top-0 bottom-0 bg-red-100/50 border-l border-r border-red-200/40"
+                  className="absolute top-0 bottom-0 bg-red-100/50 border-l border-r border-red-200/40 dark:bg-red-500/15 dark:border-red-400/30"
                   style={{
                     left: `${toPercent(r.start)}%`,
                     width: `${toPercent(r.end - r.start)}%`,
@@ -378,7 +378,7 @@ function CompareView({ employees, onBack }) {
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
+            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
               tab === t.id
                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
                 : 'text-gray-500 hover:text-gray-700'
@@ -404,11 +404,11 @@ function CompareView({ employees, onBack }) {
           </span>
         </div>
         {ranges.length > 0 && (
-          <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-50 border border-amber-200">
-            <svg className="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-50 border border-amber-200 dark:bg-amber-900/30 dark:border-amber-700/50">
+            <svg className="w-4 h-4 text-amber-500 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
             </svg>
-            <span className="text-sm text-amber-800">
+            <span className="text-sm text-amber-800 dark:text-amber-300">
               {ranges.length} период{ranges.length > 1 ? 'а' : ''} с наложением
             </span>
           </div>

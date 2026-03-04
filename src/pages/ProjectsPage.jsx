@@ -285,7 +285,7 @@ export default function ProjectsPage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
                 activeTab === tab
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-700'

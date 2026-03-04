@@ -84,7 +84,7 @@ export default function RegistryPage({ search }) {
           <button
             key={tab}
             onClick={() => setView(viewMap[tab])}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
+            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
               viewLabel === tab
                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
                 : 'text-gray-500 hover:text-gray-700'
