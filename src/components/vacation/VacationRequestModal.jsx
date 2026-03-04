@@ -28,9 +28,8 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [dragY, setDragY] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const dragStartY = useRef(0);
   const sheetRef = useRef(null);
+  const dragState = useRef({ active: false, startY: 0, currentY: 0 });
 
   // Reset on open/close
   useEffect(() => {
@@ -39,7 +38,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
       setErrors({});
       setSubmitted(false);
       setDragY(0);
-      setDragging(false);
+      dragState.current = { active: false, startY: 0, currentY: 0 };
     }
   }, [open]);
 
@@ -111,34 +110,49 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
     [validate]
   );
 
-  // ── Swipe-to-close handlers (mobile bottom sheet) ──
-  const handleTouchStart = useCallback((e) => {
-    // Only start drag from the handle area or when sheet is scrolled to top
+  // ── Swipe-to-close via native listeners (passive: false) ──
+  useEffect(() => {
     const el = sheetRef.current;
-    if (!el) return;
-    const scrollable = el.querySelector('[data-scroll]');
-    if (scrollable && scrollable.scrollTop > 0) return;
-    dragStartY.current = e.touches[0].clientY;
-    setDragging(true);
-  }, []);
+    if (!el || !open) return;
 
-  const handleTouchMove = useCallback((e) => {
-    if (!dragging) return;
-    const dy = e.touches[0].clientY - dragStartY.current;
-    if (dy > 0) {
-      setDragY(dy);
-      e.preventDefault();
-    }
-  }, [dragging]);
+    const onTouchStart = (e) => {
+      const scrollable = el.querySelector('[data-scroll]');
+      if (scrollable && scrollable.scrollTop > 0) return;
+      dragState.current = { active: true, startY: e.touches[0].clientY, currentY: 0 };
+    };
 
-  const handleTouchEnd = useCallback(() => {
-    if (!dragging) return;
-    setDragging(false);
-    if (dragY > CLOSE_THRESHOLD) {
-      onClose();
-    }
-    setDragY(0);
-  }, [dragging, dragY, onClose]);
+    const onTouchMove = (e) => {
+      const ds = dragState.current;
+      if (!ds.active) return;
+      const dy = e.touches[0].clientY - ds.startY;
+      if (dy > 0) {
+        ds.currentY = dy;
+        setDragY(dy);
+        e.preventDefault();
+      }
+    };
+
+    const onTouchEnd = () => {
+      const ds = dragState.current;
+      if (!ds.active) return;
+      const finalY = ds.currentY;
+      ds.active = false;
+      ds.currentY = 0;
+      if (finalY > CLOSE_THRESHOLD) {
+        onClose();
+      }
+      setDragY(0);
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [open, onClose]);
 
   // Show 14-day warning for first vacation
   const showMinWarning = form.type === 'labor' && days > 0 && days < 14;
@@ -168,7 +182,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
         <button
           type="button"
           onClick={onClose}
-          className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-600"
+          className="hidden sm:block p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-600"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -319,12 +333,9 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
         className="sm:hidden bg-white rounded-t-2xl shadow-2xl w-full max-h-[92vh] flex flex-col overflow-hidden"
         style={{
           transform: `translateY(${dragY}px)`,
-          transition: dragging ? 'none' : 'transform 300ms ease-out',
-          animation: dragY === 0 && !dragging ? 'sheetUp 300ms ease-out' : undefined,
+          transition: dragY > 0 ? 'none' : 'transform 300ms ease-out',
+          animation: dragY === 0 ? 'sheetUp 300ms ease-out' : undefined,
         }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
