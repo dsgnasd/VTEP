@@ -384,7 +384,7 @@ export default function MyProfilePage() {
           <div className="p-6">
             {activeTab === 'Обзор' && <OverviewTab onNavigate={setActiveTab} />}
             {activeTab === 'Навыки и экспертиза' && <SkillsTab />}
-            {activeTab === 'Активность' && <EmptyTab label="История активности и вклад в проекты" />}
+            {activeTab === 'Активность' && <ActivityTab />}
             {activeTab === 'Опыт' && <ExperienceTab />}
           </div>
         </section>
@@ -1011,6 +1011,157 @@ function ExperienceTab() {
           <p className="text-sm text-gray-500">Нет записей. Добавьте завершённые проекты.</p>
         )}
       </div>
+    </div>
+  );
+}
+
+/* ── Activity tab ── */
+const ACTIVITY_ITEMS = [
+  {
+    id: 1,
+    type: 'project',
+    title: 'Назначен на проект API Gateway',
+    description: 'Роль: Lead Engineer · Загрузка 100%',
+    date: '28 фев 2026',
+    icon: 'project',
+  },
+  {
+    id: 2,
+    type: 'review',
+    title: 'Code review: авторизация через OAuth2',
+    description: 'Репозиторий platform-auth · 12 комментариев',
+    date: '25 фев 2026',
+    icon: 'review',
+  },
+  {
+    id: 3,
+    type: 'achievement',
+    title: 'Получена награда «100 Code Reviews»',
+    description: 'За вклад в качество кода команды',
+    date: '20 фев 2026',
+    icon: 'achievement',
+  },
+  {
+    id: 4,
+    type: 'skill',
+    title: 'Обновлён навык: Kubernetes → Senior',
+    description: 'Подтверждено руководителем',
+    date: '14 фев 2026',
+    icon: 'skill',
+  },
+  {
+    id: 5,
+    type: 'vacation',
+    title: 'Запрос на отпуск одобрен',
+    description: '23 июня – 7 июля · 14 календарных дней',
+    date: '10 фев 2026',
+    icon: 'vacation',
+  },
+  {
+    id: 6,
+    type: 'review',
+    title: 'Code review: миграция на gRPC v2',
+    description: 'Репозиторий platform-core · 8 комментариев',
+    date: '5 фев 2026',
+    icon: 'review',
+  },
+  {
+    id: 7,
+    type: 'mentor',
+    title: 'Менторская сессия с Алексеевым А. А.',
+    description: 'Тема: архитектура микросервисов',
+    date: '1 фев 2026',
+    icon: 'mentor',
+  },
+  {
+    id: 8,
+    type: 'project',
+    title: 'Завершён проект СИФР',
+    description: 'Длительность: 8 мес. · Роль: Senior Engineer',
+    date: '25 янв 2026',
+    icon: 'project',
+  },
+  {
+    id: 9,
+    type: 'achievement',
+    title: 'Получена награда «Mentor of the Year»',
+    description: 'По итогам 2025 года',
+    date: '15 янв 2026',
+    icon: 'achievement',
+  },
+  {
+    id: 10,
+    type: 'review',
+    title: 'Code review: rate limiter для API Gateway',
+    description: 'Репозиторий api-gateway · 5 комментариев',
+    date: '10 янв 2026',
+    icon: 'review',
+  },
+];
+
+const ACTIVITY_ICON_STYLES = {
+  project: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400',
+  review: 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400',
+  achievement: 'bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400',
+  skill: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400',
+  vacation: 'bg-red-100 text-red-500 dark:bg-red-900/40 dark:text-red-400',
+  mentor: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400',
+};
+
+const ACTIVITY_ICONS = {
+  project: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+    </svg>
+  ),
+  review: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+    </svg>
+  ),
+  achievement: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0 1 16.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.023 6.023 0 0 1-2.77.896m5.25-5.624a6.023 6.023 0 0 0-2.77.896" />
+    </svg>
+  ),
+  skill: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+    </svg>
+  ),
+  vacation: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+    </svg>
+  ),
+  mentor: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+    </svg>
+  ),
+};
+
+function ActivityTab() {
+  return (
+    <div className="space-y-0.5">
+      {ACTIVITY_ITEMS.map((item) => (
+        <div key={item.id} className="flex gap-3.5 py-2.5 px-1 rounded-lg hover:bg-gray-50/60 dark:hover:bg-gray-700/20 transition-colors">
+          <div className={`w-[30px] h-[30px] rounded-full flex items-center justify-center flex-shrink-0 ${ACTIVITY_ICON_STYLES[item.icon]}`}>
+            {ACTIVITY_ICONS[item.icon]}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {item.title}
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              {item.description}
+            </p>
+          </div>
+          <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap flex-shrink-0 pt-0.5">
+            {item.date}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
