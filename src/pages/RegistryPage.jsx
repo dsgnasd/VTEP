@@ -71,7 +71,7 @@ export default function RegistryPage({ search }) {
   const viewLabel = view === 'table' ? 'Таблица' : 'Таймлайн';
 
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto">
+    <div className="space-y-6">
       {/* Заголовок */}
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Реестр сотрудников</h1>

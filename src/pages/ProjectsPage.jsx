@@ -269,7 +269,7 @@ export default function ProjectsPage() {
   const [activeTab, setActiveTab] = useState('Текущие');
 
   return (
-    <div className="max-w-screen-xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Проекты</h1>
