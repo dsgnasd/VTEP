@@ -16,11 +16,11 @@ const VACATION_BALANCE = {
   workYearEnd: '11.03.2026',
 };
 
-const TABS = ['Все', 'Мои заявки', 'На согласовании', 'Завершённые', 'Отпускной баланс'];
+const TABS = ['Отпуск', 'На согласовании', 'Завершённые'];
 
 export default function RequestsPage() {
   const [vacationModalOpen, setVacationModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('Все');
+  const [activeTab, setActiveTab] = useState('Отпуск');
 
   return (
     <div className="space-y-6 max-w-screen-xl mx-auto">
@@ -63,7 +63,7 @@ export default function RequestsPage() {
       </div>
 
       {/* Content */}
-      {activeTab === 'Отпускной баланс' ? (
+      {activeTab === 'Отпуск' ? (
         <VacationBalancePanel balance={VACATION_BALANCE} />
       ) : (
         /* Empty state */

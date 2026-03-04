@@ -296,7 +296,7 @@ function ProfilesTab({ employees, skillMatrix }) {
             </thead>
             <tbody>
               {skillMatrix.map(({ name, levels }) => (
-                <tr key={name} className="border-b border-gray-50 hover:bg-gray-50/40">
+                <tr key={name} className="border-b border-gray-100 hover:bg-gray-50/60">
                   <td className="px-4 py-1.5 text-xs font-medium text-gray-700 sticky left-0 bg-white z-10">
                     {name}
                   </td>
@@ -349,9 +349,9 @@ function CompareView({ employees, onBack }) {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 max-w-screen-xl mx-auto">
       {/* Хедер */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div>
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
@@ -370,23 +370,23 @@ function CompareView({ employees, onBack }) {
             {employees.length} сотр.
           </span>
         </div>
+      </div>
 
-        {/* Tab switch */}
-        <div className="flex border border-gray-300 rounded-lg overflow-hidden">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className={`px-3.5 py-1.5 text-sm font-medium transition ${
-                tab === t.id
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
-              } ${t.id !== tabs[0].id ? 'border-l border-gray-300' : ''}`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
+      {/* Вкладки */}
+      <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
+              tab === t.id
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
       {/* Сводка */}

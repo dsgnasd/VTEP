@@ -66,35 +66,33 @@ export default function RegistryPage({ search }) {
     );
   }
 
+  const VIEW_TABS = ['Таблица', 'Таймлайн'];
+  const viewMap = { 'Таблица': 'table', 'Таймлайн': 'timeline' };
+  const viewLabel = view === 'table' ? 'Таблица' : 'Таймлайн';
+
   return (
-    <div className="space-y-4">
-      {/* Заголовок + переключатель вида */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="text-xl font-semibold text-gray-900">
-          Реестр сотрудников
-        </h1>
-        <div className="flex w-fit border border-gray-300 rounded-lg overflow-hidden">
+    <div className="space-y-6 max-w-screen-xl mx-auto">
+      {/* Заголовок */}
+      <div>
+        <h1 className="text-xl font-semibold text-gray-900">Реестр сотрудников</h1>
+        <p className="mt-1 text-sm text-gray-500">Управление командой и распределение ресурсов</p>
+      </div>
+
+      {/* Вкладки */}
+      <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
+        {VIEW_TABS.map((tab) => (
           <button
-            onClick={() => setView('table')}
-            className={`px-4 py-1.5 text-sm font-medium transition ${
-              view === 'table'
-                ? 'bg-gray-900 text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
+            key={tab}
+            onClick={() => setView(viewMap[tab])}
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
+              viewLabel === tab
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Таблица
+            {tab}
           </button>
-          <button
-            onClick={() => setView('timeline')}
-            className={`px-4 py-1.5 text-sm font-medium transition border-l border-gray-300 ${
-              view === 'timeline'
-                ? 'bg-gray-900 text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-50'
-            }`}
-          >
-            Таймлайн
-          </button>
-        </div>
+        ))}
       </div>
 
       {/* Фильтры */}
@@ -128,19 +126,19 @@ export default function RegistryPage({ search }) {
             : 'opacity-0 translate-y-4'
         }`}
       >
-        <div className="pointer-events-auto flex items-center gap-3 px-5 py-3 bg-gray-900 text-white rounded-xl shadow-2xl shadow-gray-900/30">
+        <div className="floating-bar pointer-events-auto flex items-center gap-3 px-5 py-3 text-white rounded-xl">
           <span className="text-sm">
             Выбрано <strong className="font-semibold">{selectedIds.size}</strong>
           </span>
           <button
             onClick={handleCompare}
-            className="px-4 py-1.5 bg-blue-500 hover:bg-blue-400 rounded-lg text-sm font-medium transition-colors"
+            className="floating-bar-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
           >
             Сравнить
           </button>
           <button
             onClick={clearSelection}
-            className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-white/15 rounded-lg transition-colors"
             title="Сбросить выбор"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -153,7 +151,7 @@ export default function RegistryPage({ search }) {
       {/* Подсказка — появляется при выборе 1 сотрудника */}
       {selectedIds.size === 1 && (
         <div className="fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none">
-          <div className="pointer-events-auto px-4 py-2.5 bg-gray-800 text-white/80 rounded-lg shadow-lg text-sm">
+          <div className="floating-bar pointer-events-auto px-4 py-2.5 text-white/80 rounded-lg text-sm">
             Выберите ещё хотя бы одного сотрудника для сравнения
           </div>
         </div>
