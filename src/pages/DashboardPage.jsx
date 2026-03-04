@@ -1,65 +1,14 @@
-// ──────────────────────────────────────────────────────────────
-// DashboardPage — landing page with summary widgets.
-// Content TBD — renders an empty-state shell for now.
-// ──────────────────────────────────────────────────────────────
-
 export default function DashboardPage() {
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto">
-      {/* Page header */}
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900">Дашборд</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Обзор ключевых метрик и активности команды
-        </p>
-      </div>
-
-      {/* KPI cards — empty shells */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Всего сотрудников', icon: '👥' },
-          { label: 'На проектах', icon: '💼' },
-          { label: 'На скамейке', icon: '⏸️' },
-          { label: 'В отпуске', icon: '🌴' },
-        ].map((card) => (
-          <div
-            key={card.label}
-            className="bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4"
-          >
-            <span className="text-2xl">{card.icon}</span>
-            <div>
-              <p className="text-sm text-gray-500">{card.label}</p>
-              <p className="mt-1 text-2xl font-semibold text-gray-300">—</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Placeholder grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white border border-gray-200 rounded-xl p-6 min-h-[240px] flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-              <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-gray-500">Загрузка команды</p>
-            <p className="text-xs text-gray-500 mt-1">Раздел в разработке</p>
-          </div>
+    <div className="max-w-screen-xl mx-auto flex items-center justify-center min-h-[60vh]">
+      <div className="text-center">
+        <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
+          </svg>
         </div>
-
-        <div className="bg-white border border-gray-200 rounded-xl p-6 min-h-[240px] flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-              <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-gray-500">Последняя активность</p>
-            <p className="text-xs text-gray-500 mt-1">Раздел в разработке</p>
-          </div>
-        </div>
+        <h2 className="text-lg font-semibold text-gray-900 mb-1">Раздел в разработке</h2>
+        <p className="text-sm text-gray-500">Дашборд с ключевыми метриками скоро будет доступен</p>
       </div>
     </div>
   );

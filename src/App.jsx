@@ -65,6 +65,7 @@ export default function App() {
         mobileOpen={mobileOpen}
         onMobileClose={closeMobile}
         themeMode={themeMode}
+        isDark={isDark}
         onCycleTheme={cycleTheme}
       />
 

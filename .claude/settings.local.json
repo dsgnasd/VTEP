@@ -14,7 +14,10 @@
       "Bash(git rm -r --cached node_modules dist)",
       "Bash(git commit -m \"Add .gitignore and remove node_modules from tracking\")",
       "Bash(git rm -r --cached node_modules)",
-      "Bash(git commit -m \"Remove node_modules from tracking\")"
+      "Bash(git commit -m \"Remove node_modules from tracking\")",
+      "Bash(git remote add origin https://github.com/dsgnasd/VTEP.git)",
+      "Bash(git branch -M main)",
+      "Bash(git push -u origin main)"
     ]
   }
 }

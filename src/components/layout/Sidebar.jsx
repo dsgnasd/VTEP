@@ -66,18 +66,18 @@ const NAV_ITEMS = [
 ];
 
 /* Renders nav links — isCompact controls icon-only vs icon+label */
-function NavContent({ isCompact, onItemClick }) {
+function NavContent({ isCompact, onItemClick, light }) {
   return (
     <>
       {/* Brand header */}
-      <div className="h-14 flex items-center border-b border-white/10 flex-shrink-0">
+      <div className={`h-14 flex items-center border-b flex-shrink-0 ${light ? 'border-gray-200' : 'border-white/10'}`}>
         {isCompact ? (
           <div className="w-full flex justify-center">
-            <span className="text-white font-bold text-lg">EP</span>
+            <span className={`font-bold text-lg ${light ? 'text-gray-900' : 'text-white'}`}>EP</span>
           </div>
         ) : (
           <div className="flex items-center justify-between w-full px-4">
-            <span className="text-white font-semibold text-[15px] tracking-tight">
+            <span className={`font-semibold text-[15px] tracking-tight ${light ? 'text-gray-900' : 'text-white'}`}>
               Employee Portal
             </span>
           </div>
@@ -96,8 +96,12 @@ function NavContent({ isCompact, onItemClick }) {
               `flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-200
                ${isCompact ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}
                ${isActive
-                  ? 'bg-white/10 text-white shadow-sm'
-                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                  ? light
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                    : 'bg-white/10 text-white shadow-sm'
+                  : light
+                    ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
                }`
             }
             title={isCompact ? item.label : undefined}
@@ -135,8 +139,14 @@ const THEME_LABEL = {
   system: 'Система',
 };
 
-function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, onCycleTheme }) {
+function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, isDark, onCycleTheme }) {
   const sidebarWidth = collapsed ? 'w-16' : 'w-60';
+  const isLight = !isDark;
+  const bgClass = isLight ? 'bg-white border-r border-gray-200' : 'bg-sidebar';
+  const borderClass = isLight ? 'border-gray-200' : 'border-white/10';
+  const btnClass = isLight
+    ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+    : 'text-slate-400 hover:bg-white/5 hover:text-white';
 
   return (
     <>
@@ -150,18 +160,17 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, on
 
       {/* ── Mobile drawer — always expanded ── */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 w-60 bg-sidebar flex flex-col z-50
+        className={`fixed top-0 left-0 bottom-0 w-60 ${bgClass} flex flex-col z-50
                      transform transition-transform duration-300 ease-in-out lg:hidden
                      ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
-        <NavContent isCompact={false} onItemClick={onMobileClose} />
+        <NavContent isCompact={false} onItemClick={onMobileClose} light={isLight} />
 
         {/* Theme toggle — mobile */}
-        <div className="border-t border-white/10 p-2 flex-shrink-0">
+        <div className={`border-t ${borderClass} p-2 flex-shrink-0`}>
           <button
             onClick={onCycleTheme}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-400
-                       hover:bg-white/5 hover:text-white transition-all duration-200 text-sm"
+            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm ${btnClass}`}
           >
             {THEME_ICON[themeMode]}
             <span>{THEME_LABEL[themeMode]}</span>
@@ -171,18 +180,17 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, on
 
       {/* ── Desktop sidebar — respects collapsed state ── */}
       <aside
-        className={`hidden lg:flex fixed top-0 left-0 bottom-0 bg-sidebar flex-col z-30
+        className={`hidden lg:flex fixed top-0 left-0 bottom-0 ${bgClass} flex-col z-30
                      transition-all duration-300 ease-in-out ${sidebarWidth}`}
       >
-        <NavContent isCompact={collapsed} onItemClick={undefined} />
+        <NavContent isCompact={collapsed} onItemClick={undefined} light={isLight} />
 
         {/* Theme toggle — desktop */}
-        <div className="border-t border-white/10 p-2 flex-shrink-0">
+        <div className={`border-t ${borderClass} p-2 flex-shrink-0`}>
           <button
             onClick={onCycleTheme}
-            className={`w-full flex items-center gap-2 rounded-lg text-slate-400
-                       hover:bg-white/5 hover:text-white transition-all duration-200 text-sm
-                       ${collapsed ? 'justify-center px-2 py-2' : 'px-3 py-2'}`}
+            className={`w-full flex items-center gap-2 rounded-lg transition-all duration-200 text-sm
+                       ${collapsed ? 'justify-center px-2 py-2' : 'px-3 py-2'} ${btnClass}`}
             title={THEME_LABEL[themeMode]}
           >
             {THEME_ICON[themeMode]}
@@ -191,12 +199,11 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, on
         </div>
 
         {/* Collapse toggle */}
-        <div className="border-t border-white/10 p-2 flex-shrink-0">
+        <div className={`border-t ${borderClass} p-2 flex-shrink-0`}>
           <button
             onClick={onToggle}
-            className={`w-full flex items-center gap-2 rounded-lg text-slate-400
-                       hover:bg-white/5 hover:text-white transition-all duration-200 text-sm
-                       ${collapsed ? 'justify-center px-2 py-2' : 'px-3 py-2'}`}
+            className={`w-full flex items-center gap-2 rounded-lg transition-all duration-200 text-sm
+                       ${collapsed ? 'justify-center px-2 py-2' : 'px-3 py-2'} ${btnClass}`}
             title={collapsed ? 'Развернуть меню' : 'Свернуть меню'}
           >
             <svg
