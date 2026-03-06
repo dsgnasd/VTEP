@@ -433,7 +433,7 @@ function CompareView({ employees, onBack }) {
               Отпуск
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-2 rounded-sm bg-red-100 border border-red-200" />
+              <span className="w-3 h-2 rounded-sm bg-red-100 border border-red-200 dark:bg-red-500/15 dark:border-red-400/30" />
               Пересечение (2+ чел.)
             </div>
           </div>
