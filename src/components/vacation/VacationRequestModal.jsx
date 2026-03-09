@@ -20,7 +20,13 @@ function todayStr() {
   return new Date().toISOString().slice(0, 10);
 }
 
-const INITIAL = { type: 'labor', startDate: '', endDate: '', reason: '' };
+const TYPES = [
+  { value: 'labor', label: 'Трудовой' },
+  { value: 'social', label: 'Социальный / Отгул' },
+  { value: 'sick_leave', label: 'Больничный' },
+];
+
+const INITIAL = { type: 'labor', startDate: '', endDate: '', reason: '', file: null };
 const CLOSE_THRESHOLD = 120; // px drag distance to trigger close
 
 export default function VacationRequestModal({ open, onClose, vacationBalance }) {
@@ -96,6 +102,10 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
 
     if (form.type === 'social' && !form.reason.trim()) {
       errs.reason = 'Укажите причину для социального отпуска';
+    }
+
+    if (form.type === 'sick_leave' && !form.file) {
+      errs.file = 'Прикрепите скан или фото больничного листа';
     }
 
     setErrors(errs);
@@ -178,7 +188,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
     <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 flex-shrink-0">
-        <h2 className="text-lg font-semibold text-gray-900">Заявка на отпуск</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Новая заявка</h2>
         <button
           type="button"
           onClick={onClose}
@@ -193,15 +203,12 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
       <div data-scroll className="px-6 py-5 space-y-5 overflow-y-auto flex-1 min-h-0">
         {/* Vacation type */}
         <fieldset>
-          <legend className="text-sm font-medium text-gray-700 mb-2">Тип отпуска</legend>
+          <legend className="text-sm font-medium text-gray-700 mb-2">Тип заявки</legend>
           <div className="flex gap-2">
-            {[
-              { value: 'labor', label: 'Трудовой' },
-              { value: 'social', label: 'Социальный' },
-            ].map((opt) => (
+            {TYPES.map((opt) => (
               <label
                 key={opt.value}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium cursor-pointer transition-all ${
+                className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border text-sm font-medium cursor-pointer transition-all ${
                   form.type === opt.value
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
@@ -286,7 +293,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
               value={form.reason}
               onChange={(e) => set('reason', e.target.value)}
               rows={3}
-              placeholder="Укажите причину социального отпуска..."
+              placeholder="Укажите причину социального отпуска / отгула..."
               className={`w-full px-3 py-2.5 rounded-lg border text-sm resize-none transition-colors ${
                 errors.reason
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
@@ -295,6 +302,62 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
             />
             {errors.reason && (
               <p className="text-xs text-red-500 mt-1">{errors.reason}</p>
+            )}
+          </div>
+        )}
+
+        {/* File upload (sick_leave only) */}
+        {form.type === 'sick_leave' && (
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-2 block">
+              Больничный лист <span className="text-red-400">*</span>
+            </label>
+            <label
+              className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 border-dashed cursor-pointer transition-colors ${
+                errors.file
+                  ? 'border-red-300 bg-red-50/50'
+                  : form.file
+                    ? 'border-emerald-300 bg-emerald-50/50'
+                    : 'border-gray-200 hover:border-gray-300 bg-gray-50/50'
+              }`}
+            >
+              {form.file ? (
+                <div className="flex items-center gap-2 text-sm text-emerald-700">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  <span className="font-medium truncate max-w-[200px]">{form.file.name}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); set('file', null); }}
+                    className="ml-1 text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                  </svg>
+                  <span className="text-sm text-gray-500">Загрузите скан или фото</span>
+                  <span className="text-xs text-gray-400">PDF, JPG, PNG до 10 МБ</span>
+                </>
+              )}
+              <input
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                className="sr-only"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) set('file', f);
+                }}
+              />
+            </label>
+            {errors.file && (
+              <p className="text-xs text-red-500 mt-1">{errors.file}</p>
             )}
           </div>
         )}

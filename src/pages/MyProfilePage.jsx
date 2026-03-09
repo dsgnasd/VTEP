@@ -67,6 +67,26 @@ const ME = {
   domains: [],
   education: [],
   archivedProjects: [],
+  currentProjects: [
+    { name: 'API Gateway', role: 'Lead Engineer', load: 100 },
+    { name: 'Интернет-банк 3.0', role: 'Staff Engineer', load: 40 },
+  ],
+  feedback: [
+    { id: 1, from: 'Алексей Смирнов', role: 'Руководитель', date: '20 фев 2026', text: 'Отличная работа над API Gateway. Павел показал высокий уровень архитектурного мышления и умение работать с командой.', type: 'positive' },
+    { id: 2, from: 'Мария Козлова', role: 'Product Manager', date: '5 фев 2026', text: 'Павел всегда доступен для обсуждения технических решений. Быстро реагирует на изменения в требованиях.', type: 'positive' },
+    { id: 3, from: 'Дмитрий Волков', role: 'DevOps Lead', date: '15 янв 2026', text: 'Код ревью от Павла всегда детальные и конструктивные. Помогает команде расти.', type: 'positive' },
+  ],
+  idp: [
+    { id: 1, goal: 'Получить сертификацию AWS Solutions Architect', status: 'in_progress', deadline: 'Q2 2026', progress: 60 },
+    { id: 2, goal: 'Провести 5 менторских сессий по Go', status: 'done', deadline: 'Q1 2026', progress: 100 },
+    { id: 3, goal: 'Выступить на внутреннем митапе по gRPC', status: 'planned', deadline: 'Q3 2026', progress: 0 },
+    { id: 4, goal: 'Изучить Rust на уровне Middle', status: 'in_progress', deadline: 'Q4 2026', progress: 25 },
+  ],
+  courses: [
+    { id: 1, name: 'AWS Solutions Architect', provider: 'Internal Academy', status: 'in_progress', progress: 60, deadline: 'Июнь 2026' },
+    { id: 2, name: 'Advanced Go Patterns', provider: 'Internal Academy', status: 'done', progress: 100, completedDate: 'Дек 2025' },
+    { id: 3, name: 'Kubernetes Security', provider: 'External', status: 'planned', progress: 0, deadline: 'Авг 2026' },
+  ],
   achievements: [
     { title: 'Mentor of the Year', icon: '🎓', date: '2025' },
     { title: 'Hackathon Winner', icon: '🏆', date: 'Q4 2025' },
@@ -83,12 +103,12 @@ const COMPLETION_ITEMS = [
   { label: 'Контактная информация', points: 10, done: true, tab: 'Обзор' },
   { label: 'Навыки и компетенции', points: 20, done: true, tab: 'Навыки и экспертиза' },
   { label: 'О себе', points: 15, done: true, tab: 'Обзор' },
-  { label: 'Домены', points: 20, done: false, tab: 'Опыт' },
+  { label: 'Проекты', points: 20, done: true, tab: 'Опыт' },
   { label: 'Образование', points: 10, done: false, tab: 'Опыт' },
   { label: 'Языки', points: 10, done: false, tab: 'Навыки и экспертиза' },
 ];
 
-const TABS = ['Обзор', 'Навыки и экспертиза', 'Активность', 'Опыт'];
+const TABS = ['Обзор', 'Навыки и экспертиза', 'Активность', 'Опыт', 'ИПР', 'Фидбэки'];
 
 const SKILL_COLORS = {
   Lead: 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700/40',
@@ -386,6 +406,8 @@ export default function MyProfilePage() {
             {activeTab === 'Навыки и экспертиза' && <SkillsTab />}
             {activeTab === 'Активность' && <ActivityTab />}
             {activeTab === 'Опыт' && <ExperienceTab />}
+            {activeTab === 'ИПР' && <IDPTab />}
+            {activeTab === 'Фидбэки' && <FeedbackTab />}
           </div>
         </section>
 
@@ -700,21 +722,10 @@ function SkillsTab() {
   );
 }
 
-/* ── Experience tab: domains, education, archived projects ── */
-const DOMAIN_OPTIONS = [
-  'Backend', 'Frontend', 'DevOps', 'Data Engineering', 'Machine Learning',
-  'Mobile', 'Security', 'QA / Testing', 'Product Management', 'UX / Design',
-  'Infrastructure', 'Databases', 'Cloud', 'Networking', 'Embedded',
-];
-
+/* ── Experience tab: current projects, education, archived projects ── */
 function ExperienceTab() {
-  const [domains, setDomains] = useState(ME.domains);
   const [edu, setEdu] = useState(ME.education);
   const [projects, setProjects] = useState(ME.archivedProjects);
-
-  // Domain form
-  const [newDomain, setNewDomain] = useState('');
-  const [newDomainYears, setNewDomainYears] = useState('');
 
   // Education form
   const emptyEdu = { institution: '', specialty: '', degree: '', endYear: '' };
@@ -727,18 +738,6 @@ function ExperienceTab() {
   const [projForm, setProjForm] = useState(emptyProj);
   const [projFormOpen, setProjFormOpen] = useState(false);
   const [editingProjIdx, setEditingProjIdx] = useState(null);
-
-  // ── Domain CRUD ──
-  const addDomain = () => {
-    if (!newDomain) return;
-    if (domains.some((d) => d.name === newDomain)) return;
-    setDomains((prev) => [...prev, { name: newDomain, years: newDomainYears || '' }]);
-    setNewDomain('');
-    setNewDomainYears('');
-  };
-  const removeDomain = (name) => {
-    setDomains((prev) => prev.filter((d) => d.name !== name));
-  };
 
   // ── Education CRUD ──
   const openAddEdu = () => { setEduForm(emptyEdu); setEditingEduIdx(null); setEduFormOpen(true); };
@@ -794,63 +793,36 @@ function ExperienceTab() {
 
   return (
     <div className="space-y-8">
-      {/* ── Domains ── */}
+      {/* ── Current Projects ── */}
       <div>
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-          Домены / области экспертизы
+          Текущие проекты
         </h3>
-
-        {domains.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {domains.map((d) => (
-              <span
-                key={d.name}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-indigo-50 text-indigo-700"
-              >
-                {d.name}
-                {d.years && <span className="text-[10px] opacity-60 font-normal">{d.years} г.</span>}
-                <button
-                  onClick={() => removeDomain(d.name)}
-                  className="ml-0.5 text-indigo-500 hover:text-red-500 transition"
-                >
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        {ME.currentProjects.length > 0 ? (
+          <div className="space-y-3">
+            {ME.currentProjects.map((proj) => (
+              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
                   </svg>
-                </button>
-              </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800">{proj.name}</p>
+                  <p className="text-xs text-gray-500">{proj.role}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${proj.load}%` }} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 tabular-nums">{proj.load}%</span>
+                </div>
+              </div>
             ))}
           </div>
+        ) : (
+          <p className="text-sm text-gray-500">Нет активных проектов.</p>
         )}
-
-        <div className="flex items-end gap-3">
-          <div className="flex-1 max-w-[200px]">
-            <label className="text-xs font-medium text-gray-500 mb-1.5 block">Домен</label>
-            <CustomSelect
-              value={newDomain}
-              onChange={(v) => setNewDomain(v)}
-              options={DOMAIN_OPTIONS.filter((d) => !domains.some((x) => x.name === d))}
-              placeholder="Выберите домен"
-            />
-          </div>
-          <div className="w-24">
-            <label className="text-xs font-medium text-gray-500 mb-1.5 block">Опыт (лет)</label>
-            <input
-              type="number"
-              min="0"
-              max="50"
-              value={newDomainYears}
-              onChange={(e) => setNewDomainYears(e.target.value)}
-              placeholder="3"
-              className={inputCls}
-            />
-          </div>
-          <button
-            onClick={addDomain}
-            className="h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition shadow-sm"
-          >
-            Добавить
-          </button>
-        </div>
       </div>
 
       {/* ── Education ── */}
@@ -937,6 +909,54 @@ function ExperienceTab() {
         )}
       </div>
 
+      {/* ── Internal Courses ── */}
+      <div>
+        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+          Курсы и обучение
+        </h3>
+        {ME.courses.length > 0 ? (
+          <div className="space-y-3">
+            {ME.courses.map((c) => (
+              <div key={c.id} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  c.status === 'done' ? 'bg-emerald-50' : c.status === 'in_progress' ? 'bg-blue-50' : 'bg-gray-50'
+                }`}>
+                  {c.status === 'done' ? (
+                    <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800">{c.name}</p>
+                  <p className="text-xs text-gray-500">{c.provider} · {c.status === 'done' ? c.completedDate : c.deadline}</p>
+                </div>
+                {c.status === 'in_progress' && (
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 rounded-full" style={{ width: `${c.progress}%` }} />
+                    </div>
+                    <span className="text-xs font-medium text-gray-600 tabular-nums">{c.progress}%</span>
+                  </div>
+                )}
+                {c.status === 'done' && (
+                  <span className="text-xs font-medium text-emerald-600">Завершён</span>
+                )}
+                {c.status === 'planned' && (
+                  <span className="text-xs font-medium text-gray-400">Запланирован</span>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Нет курсов.</p>
+        )}
+      </div>
+
       {/* ── Archived Projects ── */}
       <div>
         <div className="flex items-center justify-between mb-4">
@@ -1011,6 +1031,81 @@ function ExperienceTab() {
           <p className="text-sm text-gray-500">Нет записей. Добавьте завершённые проекты.</p>
         )}
       </div>
+    </div>
+  );
+}
+
+/* ── IDP tab: Individual Development Plan ── */
+const IDP_STATUS_STYLES = {
+  done: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+  in_progress: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  planned: 'bg-gray-100 text-gray-600 dark:bg-gray-700/40 dark:text-gray-300',
+};
+const IDP_STATUS_LABELS = { done: 'Выполнено', in_progress: 'В процессе', planned: 'Запланировано' };
+
+function IDPTab() {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          Индивидуальный план развития
+        </h3>
+        <span className="text-xs text-gray-400">{ME.idp.filter(g => g.status === 'done').length} из {ME.idp.length} целей</span>
+      </div>
+      {ME.idp.map((goal) => (
+        <div key={goal.id} className="p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{goal.goal}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Дедлайн: {goal.deadline}</p>
+            </div>
+            <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${IDP_STATUS_STYLES[goal.status]}`}>
+              {IDP_STATUS_LABELS[goal.status]}
+            </span>
+          </div>
+          {goal.status !== 'planned' && (
+            <div className="mt-3 flex items-center gap-2">
+              <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full ${goal.status === 'done' ? 'bg-emerald-500' : 'bg-blue-500'}`}
+                  style={{ width: `${goal.progress}%` }}
+                />
+              </div>
+              <span className="text-xs font-medium text-gray-500 tabular-nums">{goal.progress}%</span>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── Feedback tab ── */
+function FeedbackTab() {
+  return (
+    <div className="space-y-4">
+      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+        Обратная связь
+      </h3>
+      {ME.feedback.map((fb) => (
+        <div key={fb.id} className="p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center flex-shrink-0 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+              {fb.from.split(' ').map(w => w[0]).join('').slice(0, 2)}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{fb.from}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{fb.role}</p>
+                </div>
+                <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">{fb.date}</span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">{fb.text}</p>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

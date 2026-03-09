@@ -64,7 +64,51 @@ export default function RequestsPage() {
 
       {/* Content */}
       {activeTab === 'Отпуск' ? (
-        <VacationBalancePanel balance={VACATION_BALANCE} />
+        <div className="space-y-4">
+          <VacationBalancePanel balance={VACATION_BALANCE} />
+
+          {/* Legal info block */}
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+              Правовая информация
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">Трудовой отпуск</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Ст. 155 ТК РБ — минимальная продолжительность 24 календарных дня. Первый отпуск за рабочий период должен быть не менее 14 дней.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">Социальный отпуск / Отгул</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Ст. 183–191 ТК РБ — предоставляется по семейным обстоятельствам (свадьба, рождение ребёнка, похороны) или за ранее отработанное сверхурочное время. Без сохранения зарплаты.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">Больничный лист</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Оплачивается с первого дня нетрудоспособности. Необходимо предоставить скан или фото листка нетрудоспособности при подаче заявки.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         /* Empty state */
         <div className="bg-white border border-gray-200 rounded-xl p-6 min-h-[400px] flex items-center justify-center">
