@@ -50,11 +50,11 @@ function Topbar({ search, onSearchChange, onMobileMenuOpen }) {
         className="flex items-center gap-2.5 px-2 py-1.5 -mr-2 rounded-lg hover:bg-gray-50 transition group"
       >
         <div className="hidden sm:block text-right">
-          <p className="text-sm font-medium text-gray-900 leading-tight">Павел Бендин</p>
+          <p className="text-sm font-medium text-gray-900 leading-tight">Павел Пирожков</p>
           <p className="text-[11px] text-gray-500 leading-tight">Staff Engineer</p>
         </div>
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-xs font-semibold text-white shadow-sm">
-          ПБ
+          ПП
         </div>
       </Link>
     </header>

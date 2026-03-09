@@ -13,7 +13,7 @@ const CURRENT_PROJECTS = [
     startDate: 'Янв 2025',
     deadline: 'Дек 2025',
     techStack: ['React', 'Go', 'PostgreSQL', 'Kafka'],
-    lead: 'Алексей Смирнов',
+    lead: 'Алексей Борщёв',
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const CURRENT_PROJECTS = [
     startDate: 'Мар 2025',
     deadline: 'Сен 2025',
     techStack: ['Go', 'gRPC', 'Redis', 'Kubernetes'],
-    lead: 'Павел Бендин',
+    lead: 'Павел Пирожков',
   },
   {
     id: 3,
@@ -39,7 +39,7 @@ const CURRENT_PROJECTS = [
     startDate: 'Окт 2024',
     deadline: 'Июн 2025',
     techStack: ['Swift', 'Kotlin', 'Firebase', 'REST'],
-    lead: 'Мария Козлова',
+    lead: 'Мария Ватрушкина',
   },
   {
     id: 4,
@@ -52,7 +52,7 @@ const CURRENT_PROJECTS = [
     startDate: 'Фев 2025',
     deadline: 'Авг 2025',
     techStack: ['React', 'Figma', 'Storybook', 'TypeScript'],
-    lead: 'Анна Петрова',
+    lead: 'Анна Тефтелева',
   },
   {
     id: 5,
@@ -65,7 +65,7 @@ const CURRENT_PROJECTS = [
     startDate: 'Ноя 2024',
     deadline: 'Апр 2025',
     techStack: ['GitLab CI', 'Docker', 'Kubernetes', 'Terraform'],
-    lead: 'Дмитрий Волков',
+    lead: 'Дмитрий Крокодилов',
   },
   {
     id: 6,
@@ -78,7 +78,7 @@ const CURRENT_PROJECTS = [
     startDate: 'Мар 2025',
     deadline: 'Фев 2026',
     techStack: ['React', 'Node.js', 'MongoDB', 'GraphQL'],
-    lead: 'Елена Иванова',
+    lead: 'Елена Пингвинова',
   },
 ];
 
@@ -93,7 +93,7 @@ const ARCHIVED_PROJECTS = [
     startDate: 'Мар 2023',
     endDate: 'Дек 2024',
     techStack: ['Informatica', 'Oracle', 'Power BI', 'ETL'],
-    lead: 'Сергей Новиков',
+    lead: 'Сергей Самоваров',
     result: 'Внедрено, обслуживает 12 отделов',
   },
   {
@@ -106,7 +106,7 @@ const ARCHIVED_PROJECTS = [
     startDate: 'Июн 2023',
     endDate: 'Авг 2024',
     techStack: ['.NET', 'MSSQL', 'Angular', 'SOAP'],
-    lead: 'Ольга Белова',
+    lead: 'Ольга Шашлыкова',
     result: 'Сдан в продакшен, соответствует требованиям ЦБ',
   },
   {
@@ -119,7 +119,7 @@ const ARCHIVED_PROJECTS = [
     startDate: 'Янв 2022',
     endDate: 'Май 2024',
     techStack: ['Pega', 'Java', 'BPMN', 'Camunda'],
-    lead: 'Игорь Кузнецов',
+    lead: 'Игорь Хомяков',
     result: 'Автоматизировано 45 бизнес-процессов',
   },
   {
@@ -132,7 +132,7 @@ const ARCHIVED_PROJECTS = [
     startDate: 'Сен 2023',
     endDate: 'Мар 2024',
     techStack: ['Zabbix', 'Grafana', 'ELK', 'Prometheus'],
-    lead: 'Андрей Морозов',
+    lead: 'Андрей Компотов',
     result: 'Покрытие мониторингом 98% инфраструктуры',
   },
   {
@@ -145,7 +145,7 @@ const ARCHIVED_PROJECTS = [
     startDate: 'Апр 2024',
     endDate: 'Окт 2024',
     techStack: ['Java', 'Spring Boot', 'PostgreSQL', 'Kafka'],
-    lead: 'Виктор Сидоров',
+    lead: 'Виктор Бегемотов',
     result: 'Приостановлен из-за смены регуляторных требований',
   },
 ];

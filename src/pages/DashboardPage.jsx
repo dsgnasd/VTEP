@@ -62,7 +62,7 @@ const OPPORTUNITIES = [
   },
   {
     id: 3,
-    title: 'Менторство для Ивана Петрова',
+    title: 'Менторство для Ивана Бубликова',
     description: 'Junior Go разработчик ищет ментора. Отдел: Platform.',
     type: 'mentoring',
   },

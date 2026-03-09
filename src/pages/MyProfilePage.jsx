@@ -27,13 +27,13 @@ import VacationRequestModal from '../components/vacation/VacationRequestModal';
 
 /* ── Mock current-user data ── */
 const ME = {
-  name: 'Павел Бендин',
-  initials: 'ПБ',
+  name: 'Павел Пирожков',
+  initials: 'ПП',
   level: 'SENIOR L3',
-  email: 'p.bendin@company.com',
+  email: 'p.pirozhkov@company.com',
   role: 'Staff Engineer',
   department: 'Platform',
-  manager: { name: 'Алексей Смирнов', id: 'emp-5' },
+  manager: { name: 'Алексей Борщёв', id: 'emp-5' },
   birthday: '12 марта',
   tenure: '4 года 2 мес.',
   phone: '+7 (999) 123-45-67',
@@ -72,9 +72,9 @@ const ME = {
     { name: 'Интернет-банк 3.0', role: 'Staff Engineer', load: 40 },
   ],
   feedback: [
-    { id: 1, from: 'Алексей Смирнов', role: 'Руководитель', date: '20 фев 2026', text: 'Отличная работа над API Gateway. Павел показал высокий уровень архитектурного мышления и умение работать с командой.', type: 'positive' },
-    { id: 2, from: 'Мария Козлова', role: 'Product Manager', date: '5 фев 2026', text: 'Павел всегда доступен для обсуждения технических решений. Быстро реагирует на изменения в требованиях.', type: 'positive' },
-    { id: 3, from: 'Дмитрий Волков', role: 'DevOps Lead', date: '15 янв 2026', text: 'Код ревью от Павла всегда детальные и конструктивные. Помогает команде расти.', type: 'positive' },
+    { id: 1, from: 'Алексей Борщёв', role: 'Руководитель', date: '20 фев 2026', text: 'Отличная работа над API Gateway. Павел показал высокий уровень архитектурного мышления и умение работать с командой.', type: 'positive' },
+    { id: 2, from: 'Мария Ватрушкина', role: 'Product Manager', date: '5 фев 2026', text: 'Павел всегда доступен для обсуждения технических решений. Быстро реагирует на изменения в требованиях.', type: 'positive' },
+    { id: 3, from: 'Дмитрий Крокодилов', role: 'DevOps Lead', date: '15 янв 2026', text: 'Код ревью от Павла всегда детальные и конструктивные. Помогает команде расти.', type: 'positive' },
   ],
   idp: [
     { id: 1, goal: 'Получить сертификацию AWS Solutions Architect', status: 'in_progress', deadline: 'Q2 2026', progress: 60 },
