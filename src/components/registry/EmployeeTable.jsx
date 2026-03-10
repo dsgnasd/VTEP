@@ -170,7 +170,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
   return (
     <>
       {/* ── Mobile: card list ── */}
-      <div className="md:hidden space-y-2">
+      <div className="md:hidden space-y-2 animate-fade-in">
         {sorted.map((emp) => (
           <EmployeeCard
             key={emp.id}
@@ -183,7 +183,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
       </div>
 
       {/* ── Desktop: table ── */}
-      <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm animate-scale-in animation-delay-100">
         <table className="w-full min-w-[880px] text-[13px]">
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50/80">
