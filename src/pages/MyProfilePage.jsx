@@ -36,8 +36,8 @@ const ME = {
   manager: { name: 'Алексей Борщёв', id: 'emp-5' },
   birthday: '12 марта',
   tenure: '4 года 2 мес.',
-  phone: '+7 (999) 123-45-67',
-  location: 'Москва',
+  phone: '+375 29 357-54-89',
+  location: 'Минск',
   about:
     'Занимаюсь проектированием и разработкой высоконагруженных платформенных сервисов. Люблю чистую архитектуру, DDD и автоматизацию всего, что можно автоматизировать. Менторю младших инженеров, веду внутренний буткемп по Go.',
   skills: [
@@ -48,25 +48,20 @@ const ME = {
     { name: 'Terraform', level: 'Middle' },
     { name: 'React', level: 'Middle' },
   ],
-  completionScore: 60,
+  completionScore: 75,
   completionPoints: 60,
-  completionMax: 100,
+  completionMax: 80,
   completionDone: 4,
-  completionTotal: 7,
+  completionTotal: 6,
   vacation: {
     available: 10,
     used: 18,
     total: 28,
-    currentYearRemaining: 7,
-    carryover: 3,
-    workYearStart: '12.03.2025',
-    workYearEnd: '11.03.2026',
     next: { start: '23 июня', end: '7 июля' },
   },
   languages: [],
   domains: [],
   education: [],
-  archivedProjects: [],
   currentProjects: [
     { name: 'API Gateway', role: 'Lead Engineer', load: 100 },
     { name: 'Интернет-банк 3.0', role: 'Staff Engineer', load: 40 },
@@ -82,17 +77,6 @@ const ME = {
     { id: 3, goal: 'Выступить на внутреннем митапе по gRPC', status: 'planned', deadline: 'Q3 2026', progress: 0 },
     { id: 4, goal: 'Изучить Rust на уровне Middle', status: 'in_progress', deadline: 'Q4 2026', progress: 25 },
   ],
-  courses: [
-    { id: 1, name: 'AWS Solutions Architect', provider: 'Internal Academy', status: 'in_progress', progress: 60, deadline: 'Июнь 2026' },
-    { id: 2, name: 'Advanced Go Patterns', provider: 'Internal Academy', status: 'done', progress: 100, completedDate: 'Дек 2025' },
-    { id: 3, name: 'Kubernetes Security', provider: 'External', status: 'planned', progress: 0, deadline: 'Авг 2026' },
-  ],
-  achievements: [
-    { title: 'Mentor of the Year', icon: '🎓', date: '2025' },
-    { title: 'Hackathon Winner', icon: '🏆', date: 'Q4 2025' },
-    { title: '100 Code Reviews', icon: '✅', date: 'Ноябрь 2025' },
-    { title: 'Open Source Hero', icon: '📦', date: '2025' },
-  ],
 };
 
 const LANGUAGE_OPTIONS = ['Русский', 'Английский', 'Немецкий', 'Французский', 'Испанский', 'Китайский', 'Японский', 'Корейский', 'Итальянский', 'Португальский'];
@@ -103,7 +87,6 @@ const COMPLETION_ITEMS = [
   { label: 'Контактная информация', points: 10, done: true, tab: 'Обзор' },
   { label: 'Навыки и компетенции', points: 20, done: true, tab: 'Навыки и экспертиза' },
   { label: 'О себе', points: 15, done: true, tab: 'Обзор' },
-  { label: 'Проекты', points: 20, done: true, tab: 'Опыт' },
   { label: 'Образование', points: 10, done: false, tab: 'Опыт' },
   { label: 'Языки', points: 10, done: false, tab: 'Навыки и экспертиза' },
 ];
@@ -339,11 +322,6 @@ export default function MyProfilePage() {
           accent="text-amber-600"
           progress={ME.completionScore}
         />
-        <StatCard
-          value={ME.achievements.length}
-          label="Достижения"
-          accent="text-emerald-600"
-        />
       </section>
 
       {/* ═══════════════════════════════════════════════════════
@@ -440,24 +418,6 @@ export default function MyProfilePage() {
               <span>Доступно: {ME.vacation.available} дн.</span>
             </div>
 
-            {/* Balance breakdown */}
-            <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-500">Текущий год</span>
-                <span className="text-xs font-medium text-gray-700">{ME.vacation.currentYearRemaining} дн.</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-500">Перенос</span>
-                <span className="text-xs font-medium text-gray-700">{ME.vacation.carryover} дн.</span>
-              </div>
-            </div>
-
-            {/* Work year dates */}
-            <div className="flex items-center gap-2 mt-3 text-[11px] text-gray-500">
-              {Icon.calendar}
-              <span>{ME.vacation.workYearStart} — {ME.vacation.workYearEnd}</span>
-            </div>
-
             {ME.vacation.next && (
               <div className="flex items-center gap-2.5 mt-4 p-3 rounded-lg bg-blue-50">
                 <div className="text-blue-500 flex-shrink-0">{Icon.calendar}</div>
@@ -478,31 +438,6 @@ export default function MyProfilePage() {
             </button>
           </div>
 
-          {/* Achievements */}
-          <div className="border border-gray-200 rounded-xl p-5 bg-white">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Достижения
-              </h3>
-              <span className="text-xs font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
-                {ME.achievements.length}
-              </span>
-            </div>
-            <div className="space-y-2">
-              {ME.achievements.map((a) => (
-                <div
-                  key={a.title}
-                  className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 transition -mx-1"
-                >
-                  <span className="text-xl flex-shrink-0 w-8 text-center">{a.icon}</span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-gray-800 truncate">{a.title}</p>
-                    <p className="text-[11px] text-gray-500">{a.date}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -725,19 +660,11 @@ function SkillsTab() {
 /* ── Experience tab: current projects, education, archived projects ── */
 function ExperienceTab() {
   const [edu, setEdu] = useState(ME.education);
-  const [projects, setProjects] = useState(ME.archivedProjects);
-
   // Education form
   const emptyEdu = { institution: '', specialty: '', degree: '', endYear: '' };
   const [eduForm, setEduForm] = useState(emptyEdu);
   const [eduFormOpen, setEduFormOpen] = useState(false);
   const [editingEduIdx, setEditingEduIdx] = useState(null);
-
-  // Project form
-  const emptyProj = { name: '', role: '', period: '', description: '' };
-  const [projForm, setProjForm] = useState(emptyProj);
-  const [projFormOpen, setProjFormOpen] = useState(false);
-  const [editingProjIdx, setEditingProjIdx] = useState(null);
 
   // ── Education CRUD ──
   const openAddEdu = () => { setEduForm(emptyEdu); setEditingEduIdx(null); setEduFormOpen(true); };
@@ -753,21 +680,6 @@ function ExperienceTab() {
   };
   const removeEdu = (idx) => setEdu((prev) => prev.filter((_, i) => i !== idx));
   const cancelEdu = () => { setEduFormOpen(false); setEditingEduIdx(null); };
-
-  // ── Project CRUD ──
-  const openAddProj = () => { setProjForm(emptyProj); setEditingProjIdx(null); setProjFormOpen(true); };
-  const openEditProj = (idx) => { setProjForm({ ...projects[idx] }); setEditingProjIdx(idx); setProjFormOpen(true); };
-  const saveProj = () => {
-    if (!projForm.name.trim()) return;
-    if (editingProjIdx !== null) {
-      setProjects((prev) => prev.map((p, i) => (i === editingProjIdx ? { ...projForm } : p)));
-    } else {
-      setProjects((prev) => [...prev, { ...projForm }]);
-    }
-    setProjForm(emptyProj); setProjFormOpen(false); setEditingProjIdx(null);
-  };
-  const removeProj = (idx) => setProjects((prev) => prev.filter((_, i) => i !== idx));
-  const cancelProj = () => { setProjFormOpen(false); setEditingProjIdx(null); };
 
   const inputCls = 'w-full h-9 px-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20';
 
@@ -909,128 +821,7 @@ function ExperienceTab() {
         )}
       </div>
 
-      {/* ── Internal Courses ── */}
-      <div>
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-          Курсы и обучение
-        </h3>
-        {ME.courses.length > 0 ? (
-          <div className="space-y-3">
-            {ME.courses.map((c) => (
-              <div key={c.id} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                  c.status === 'done' ? 'bg-emerald-50' : c.status === 'in_progress' ? 'bg-blue-50' : 'bg-gray-50'
-                }`}>
-                  {c.status === 'done' ? (
-                    <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342" />
-                    </svg>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">{c.name}</p>
-                  <p className="text-xs text-gray-500">{c.provider} · {c.status === 'done' ? c.completedDate : c.deadline}</p>
-                </div>
-                {c.status === 'in_progress' && (
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 rounded-full" style={{ width: `${c.progress}%` }} />
-                    </div>
-                    <span className="text-xs font-medium text-gray-600 tabular-nums">{c.progress}%</span>
-                  </div>
-                )}
-                {c.status === 'done' && (
-                  <span className="text-xs font-medium text-emerald-600">Завершён</span>
-                )}
-                {c.status === 'planned' && (
-                  <span className="text-xs font-medium text-gray-400">Запланирован</span>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500">Нет курсов.</p>
-        )}
-      </div>
 
-      {/* ── Archived Projects ── */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            Архивные проекты
-          </h3>
-          {!projFormOpen && (
-            <button onClick={openAddProj} className="text-xs font-medium text-blue-600 hover:text-blue-700 transition flex items-center gap-1">
-              {addBtnInline} Добавить
-            </button>
-          )}
-        </div>
-
-        {projects.length > 0 && (
-          <div className="space-y-3 mb-4">
-            {projects.map((proj, idx) => (
-              <div key={idx} className="group flex items-start gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
-                <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                  </svg>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">{proj.name}</p>
-                  {proj.role && <p className="text-sm text-gray-500">{proj.role}</p>}
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {proj.period}
-                  </p>
-                  {proj.description && (
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">{proj.description}</p>
-                  )}
-                </div>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {editBtn(() => openEditProj(idx))}
-                  {deleteBtn(() => removeProj(idx))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {projFormOpen && (
-          <div className="p-4 rounded-lg border border-gray-200 bg-gray-50/50 space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Название проекта *</label>
-                <input type="text" value={projForm.name} onChange={(e) => setProjForm((f) => ({ ...f, name: e.target.value }))} placeholder="Platform v2" className={inputCls} />
-              </div>
-              <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Роль</label>
-                <input type="text" value={projForm.role} onChange={(e) => setProjForm((f) => ({ ...f, role: e.target.value }))} placeholder="Tech Lead" className={inputCls} />
-              </div>
-            </div>
-            <div className="max-w-[200px]">
-              <label className="text-xs font-medium text-gray-500 mb-1.5 block">Период</label>
-              <input type="text" value={projForm.period} onChange={(e) => setProjForm((f) => ({ ...f, period: e.target.value }))} placeholder="2023 — 2024" className={inputCls} />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-500 mb-1.5 block">Описание</label>
-              <textarea value={projForm.description} onChange={(e) => setProjForm((f) => ({ ...f, description: e.target.value }))} rows={2} placeholder="Краткое описание проекта и достижений..." className={`${inputCls} h-auto py-2 resize-y`} />
-            </div>
-            <div className="flex items-center gap-2 pt-1">
-              <button onClick={saveProj} className="h-8 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition shadow-sm">
-                {editingProjIdx !== null ? 'Сохранить' : 'Добавить'}
-              </button>
-              <button onClick={cancelProj} className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition">Отмена</button>
-            </div>
-          </div>
-        )}
-
-        {projects.length === 0 && !projFormOpen && (
-          <p className="text-sm text-gray-500">Нет записей. Добавьте завершённые проекты.</p>
-        )}
-      </div>
     </div>
   );
 }
