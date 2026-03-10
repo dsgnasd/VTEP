@@ -74,13 +74,13 @@ export default function RegistryPage({ search }) {
   return (
     <div className="space-y-6">
       {/* Заголовок */}
-      <div>
+      <div className="animate-fade-in">
         <h1 className="text-xl font-semibold text-gray-900">Реестр сотрудников</h1>
         <p className="mt-1 text-sm text-gray-500">Поиск, сравнение сотрудников и управление командами</p>
       </div>
 
       {/* Вкладки */}
-      <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
+      <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg animate-fade-in animation-delay-100">
         {VIEW_TABS.map((tab) => (
           <button
             key={tab}

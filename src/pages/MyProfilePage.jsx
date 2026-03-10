@@ -182,7 +182,7 @@ export default function MyProfilePage() {
            Actions pinned top-right.
            UX: One glance = "who is this person".
          ═══════════════════════════════════════════════════════ */}
-      <section className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+      <section className="bg-white border border-gray-200 rounded-xl overflow-hidden animate-fade-in">
         {/* Subtle top accent — brand presence without decoration */}
         <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-400" />
 
@@ -304,23 +304,23 @@ export default function MyProfilePage() {
            tenure, vacation balance, profile score, awards.
            Numbers are large; labels are micro.
          ═══════════════════════════════════════════════════════ */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-slide-up animation-delay-100">
         <StatCard
           value={ME.tenure}
           label="В компании"
-          accent="text-gray-900"
+          accent="text-indigo-700 dark:text-indigo-300"
+          bg="bg-indigo-50 dark:bg-indigo-900/20"
+          iconBg="bg-indigo-100 dark:bg-indigo-800/40"
+          icon={<svg className="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" /></svg>}
         />
         <StatCard
           value={`${ME.vacation.available} дн.`}
           label="Отпуск доступен"
-          accent="text-blue-600"
+          accent="text-blue-700 dark:text-blue-300"
+          bg="bg-blue-50 dark:bg-blue-900/20"
+          iconBg="bg-blue-100 dark:bg-blue-800/40"
+          icon={<svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>}
           sub={`из ${ME.vacation.total}`}
-        />
-        <StatCard
-          value={`${ME.completionScore}%`}
-          label="Профиль заполнен"
-          accent="text-amber-600"
-          progress={ME.completionScore}
         />
       </section>
 
@@ -330,7 +330,7 @@ export default function MyProfilePage() {
            profile < 100%.  Disappears forever on dismiss.
          ═══════════════════════════════════════════════════════ */}
       {nudgeVisible && ME.completionScore < 100 && (
-        <section className="relative flex items-center gap-4 bg-amber-50 rounded-xl px-5 py-3.5">
+        <section className="relative flex items-center gap-4 bg-amber-50 rounded-xl px-5 py-3.5 animate-slide-down animation-delay-200">
           <div className="flex-1 flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
               <span className="text-base">💡</span>
@@ -358,7 +358,7 @@ export default function MyProfilePage() {
          ═══════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left — Tabs (3/5) */}
-        <section className="lg:col-span-3 bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <section className="lg:col-span-3 bg-white border border-gray-200 rounded-xl overflow-hidden animate-slide-up animation-delay-200">
           {/* Tab bar */}
           <div className="px-6 pt-4">
             <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
@@ -389,8 +389,8 @@ export default function MyProfilePage() {
           </div>
         </section>
 
-        {/* Right — Vacation + Achievements (2/5) */}
-        <div className="lg:col-span-2 space-y-5">
+        {/* Right — Vacation (2/5) */}
+        <div className="lg:col-span-2 space-y-5 animate-slide-up animation-delay-300">
           {/* Vacation widget */}
           <div className="border border-gray-200 rounded-xl p-5 bg-white">
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
@@ -1156,16 +1156,23 @@ function ContactChip({ icon, href, children }) {
   );
 }
 
-function StatCard({ value, label, accent, sub, progress }) {
+function StatCard({ value, label, accent, sub, progress, bg, iconBg, icon }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">
-      <div className="flex items-baseline gap-1.5">
-        <span className={`text-xl font-bold ${accent}`}>{value}</span>
-        {sub && <span className="text-xs text-gray-500">{sub}</span>}
+    <div className={`${bg} rounded-xl px-5 py-4 border border-transparent`}>
+      <div className="flex items-center gap-3">
+        <div className={`w-10 h-10 rounded-lg ${iconBg} flex items-center justify-center flex-shrink-0`}>
+          {icon}
+        </div>
+        <div className="min-w-0">
+          <div className="flex items-baseline gap-1.5">
+            <span className={`text-xl font-bold ${accent}`}>{value}</span>
+            {sub && <span className="text-xs text-gray-500 dark:text-gray-400">{sub}</span>}
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{label}</p>
+        </div>
       </div>
-      <p className="text-xs text-gray-500 mt-1">{label}</p>
       {progress != null && (
-        <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden mt-2">
+        <div className="w-full h-2 bg-white/60 dark:bg-white/10 rounded-full overflow-hidden mt-3">
           <div
             className="h-full bg-amber-500 rounded-full transition-all"
             style={{ width: `${progress}%` }}
