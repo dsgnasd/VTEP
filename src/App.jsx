@@ -2,13 +2,11 @@ import { useState, useCallback, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar';
 import Topbar from './components/layout/Topbar';
-import DashboardPage from './pages/DashboardPage';
 import RegistryPage from './pages/RegistryPage';
 import ProfilePage from './pages/ProfilePage';
 import MyProfilePage from './pages/MyProfilePage';
 import RequestsPage from './pages/RequestsPage';
 import ProjectsPage from './pages/ProjectsPage';
-import TrainingPage from './pages/TrainingPage';
 
 // ──────────────────────────────────────────────────────────────
 // App — root layout with collapsible sidebar + responsive topbar.
@@ -79,13 +77,12 @@ export default function App() {
 
         <main className="flex-1 min-w-0 p-4 sm:p-6">
           <Routes>
-            <Route path="/" element={<DashboardPage />} />
+            <Route path="/" element={<MyProfilePage />} />
             <Route path="/registry" element={<RegistryPage search={search} />} />
             <Route path="/employee/:id" element={<ProfilePage />} />
             <Route path="/my-profile" element={<MyProfilePage />} />
             <Route path="/requests" element={<RequestsPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/training" element={<TrainingPage />} />
           </Routes>
         </main>
       </div>
