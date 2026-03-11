@@ -188,8 +188,8 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50/80">
               {selectable && (
-                <th className="w-8 sticky left-0 z-10 bg-gray-50/80">
-                  <div className="flex items-center justify-center h-full">
+                <th className="w-10 min-w-[40px] sticky left-0 z-10 bg-gray-50/80">
+                  <div className="flex items-center justify-center h-full py-2.5">
                     <input
                       type="checkbox"
                       checked={allVisibleSelected}
@@ -207,8 +207,8 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   key={col.key}
                   onClick={() => handleSort(col.key)}
                   className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 transition-colors
-                    ${col.sticky ? 'px-2' : 'px-4'}
-                    ${col.sticky && selectable ? 'sticky left-8 z-10 bg-gray-50/80' : ''}
+                    ${col.sticky && selectable ? 'pl-1 pr-4' : 'px-4'}
+                    ${col.sticky && selectable ? 'sticky left-10 z-10 bg-gray-50/80' : ''}
                     ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80' : ''}`}
                 >
                   <span className="inline-flex items-center gap-1">
@@ -241,8 +241,8 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   }`}
                 >
                   {selectable && (
-                    <td className={`w-8 sticky left-0 z-10 ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
-                      <div className="flex items-center justify-center h-full">
+                    <td className={`w-10 min-w-[40px] sticky left-0 z-10 ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
+                      <div className="flex items-center justify-center h-full py-2.5">
                         <input
                           type="checkbox"
                           checked={isSelected}
@@ -253,7 +253,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                     </td>
                   )}
                   <td className={`sticky z-10 py-2.5 ${
-                    selectable ? 'left-8 px-2' : 'left-0 px-2'
+                    selectable ? 'left-10 pl-1 pr-4' : 'left-0 px-4'
                   } ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
                     <Link
                       to={`/employee/${emp.id}`}
