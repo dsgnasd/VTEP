@@ -14,7 +14,7 @@ import TeamsView from '../components/registry/TeamsView';
 // ──────────────────────────────────────────────────────────────
 
 export default function RegistryPage({ search }) {
-  const [view, setView] = useState('teams');
+  const [view, setView] = useState('table');
   const { filters, setFilter, resetFilters, filtered } =
     useEmployeeFilters(employees);
   const [searchParams] = useSearchParams();
@@ -70,9 +70,9 @@ export default function RegistryPage({ search }) {
     );
   }
 
-  const VIEW_TABS = ['Мои команды', 'Таблица', 'Таймлайн'];
-  const viewMap = { 'Таблица': 'table', 'Таймлайн': 'timeline', 'Мои команды': 'teams' };
-  const viewLabel = VIEW_TABS.find((t) => viewMap[t] === view) || 'Мои команды';
+  const VIEW_TABS = ['Таблица', 'Таймлайн'];
+  const viewMap = { 'Таблица': 'table', 'Таймлайн': 'timeline' };
+  const viewLabel = VIEW_TABS.find((t) => viewMap[t] === view) || 'Таблица';
 
   return (
     <div className="space-y-6">
@@ -82,7 +82,10 @@ export default function RegistryPage({ search }) {
         <p className="mt-1 text-sm text-gray-500">Поиск, сравнение сотрудников и управление командами</p>
       </div>
 
-      {/* Вкладки */}
+      {/* Мои команды — всегда видны */}
+      <TeamsView employees={employees} />
+
+      {/* Вкладки Таблица / Таймлайн */}
       <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
         {VIEW_TABS.map((tab) => (
           <button
@@ -99,73 +102,66 @@ export default function RegistryPage({ search }) {
         ))}
       </div>
 
-      {/* Teams view */}
-      {view === 'teams' ? (
-        <TeamsView employees={employees} />
+      {/* Фильтры */}
+      <FiltersPanel
+        filters={filters}
+        setFilter={setFilter}
+        resetFilters={resetFilters}
+        resultCount={filtered.length}
+      />
+
+      {/* Вид */}
+      {view === 'table' ? (
+        <EmployeeTable
+          employees={filtered}
+          selectedIds={selectedIds}
+          onToggleSelect={toggleSelect}
+        />
       ) : (
-        <>
-          {/* Фильтры */}
-          <FiltersPanel
-            filters={filters}
-            setFilter={setFilter}
-            resetFilters={resetFilters}
-            resultCount={filtered.length}
-          />
+        <TimelineView
+          employees={filtered}
+          selectedIds={selectedIds}
+          onToggleSelect={toggleSelect}
+        />
+      )}
 
-          {/* Вид */}
-          {view === 'table' ? (
-            <EmployeeTable
-              employees={filtered}
-              selectedIds={selectedIds}
-              onToggleSelect={toggleSelect}
-            />
-          ) : (
-            <TimelineView
-              employees={filtered}
-              selectedIds={selectedIds}
-              onToggleSelect={toggleSelect}
-            />
-          )}
-
-          {/* Floating Action Bar */}
-          <div
-            className={`fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none transition-all duration-300 ${
-              selectedIds.size >= 2
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-4'
-            }`}
+      {/* Floating Action Bar */}
+      <div
+        className={`fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none transition-all duration-300 ${
+          selectedIds.size >= 2
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4'
+        }`}
+      >
+        <div className="floating-bar pointer-events-auto flex items-center gap-3 px-5 py-3 text-white rounded-xl">
+          <span className="text-sm">
+            Выбрано <strong className="font-semibold">{selectedIds.size}</strong>
+          </span>
+          <button
+            onClick={handleCompare}
+            className="floating-bar-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
           >
-            <div className="floating-bar pointer-events-auto flex items-center gap-3 px-5 py-3 text-white rounded-xl">
-              <span className="text-sm">
-                Выбрано <strong className="font-semibold">{selectedIds.size}</strong>
-              </span>
-              <button
-                onClick={handleCompare}
-                className="floating-bar-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
-              >
-                Сравнить
-              </button>
-              <button
-                onClick={clearSelection}
-                className="p-1.5 hover:bg-white/15 rounded-lg transition-colors"
-                title="Сбросить выбор"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          </div>
+            Сравнить
+          </button>
+          <button
+            onClick={clearSelection}
+            className="p-1.5 hover:bg-white/15 rounded-lg transition-colors"
+            title="Сбросить выбор"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-          {/* Подсказка — появляется при выборе 1 сотрудника */}
-          {selectedIds.size === 1 && (
-            <div className="fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none">
-              <div className="floating-bar pointer-events-auto px-4 py-2.5 text-white/80 rounded-lg text-sm">
-                Выберите ещё хотя бы одного сотрудника для сравнения
-              </div>
-            </div>
-          )}
-        </>
+      {/* Подсказка — появляется при выборе 1 сотрудника */}
+      {selectedIds.size === 1 && (
+        <div className="fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none">
+          <div className="floating-bar pointer-events-auto px-4 py-2.5 text-white/80 rounded-lg text-sm">
+            Выберите ещё хотя бы одного сотрудника для сравнения
+          </div>
+        </div>
       )}
     </div>
   );
