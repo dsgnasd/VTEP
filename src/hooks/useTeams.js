@@ -24,11 +24,12 @@ export default function useTeams() {
     save(next);
   }, []);
 
-  const createTeam = useCallback((name, memberIds) => {
+  const createTeam = useCallback((name, memberIds, visibility = 'public') => {
     const team = {
       id: `team-${++idCounter}`,
       name,
       memberIds,
+      visibility,
       createdAt: new Date().toISOString(),
     };
     const next = [...load(), team];

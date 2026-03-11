@@ -24,10 +24,11 @@ function initials(name) {
 
 /* ── Team Modal (create / edit) ── */
 
-function TeamModal({ open, onClose, onSave, employees, initial }) {
+function TeamModal({ open, onClose, onSave, employees, initial, addOnly }) {
   const [name, setName] = useState(initial?.name || '');
   const [selected, setSelected] = useState(() => new Set(initial?.memberIds || []));
   const [search, setSearch] = useState('');
+  const [visibility, setVisibility] = useState(initial?.visibility || 'public');
 
   const toggle = useCallback((id) => {
     setSelected((prev) => {
@@ -55,7 +56,7 @@ function TeamModal({ open, onClose, onSave, employees, initial }) {
 
   const handleSave = () => {
     if (!name.trim() || selected.size === 0) return;
-    onSave(name.trim(), [...selected]);
+    onSave(name.trim(), [...selected], visibility);
     onClose();
   };
 
@@ -73,7 +74,7 @@ function TeamModal({ open, onClose, onSave, employees, initial }) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900">
-            {initial ? 'Редактировать команду' : 'Новая команда'}
+            {addOnly ? 'Добавить участников' : initial ? 'Редактировать команду' : 'Новая команда'}
           </h2>
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-500">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -85,17 +86,67 @@ function TeamModal({ open, onClose, onSave, employees, initial }) {
         {/* Body */}
         <div className="px-6 py-4 space-y-4 overflow-y-auto flex-1 min-h-0">
           {/* Name */}
-          <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block">Название</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Например: Backend Core Team"
-              className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
-              autoFocus
-            />
-          </div>
+          {addOnly ? (
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block">Команда</label>
+              <p className="text-sm text-gray-900 font-medium px-3 py-2.5">{name}</p>
+            </div>
+          ) : (
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block">Название</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Например: Backend Core Team"
+                className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                autoFocus
+              />
+            </div>
+          )}
+
+          {/* Visibility toggle */}
+          {!addOnly && (
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1.5 block">Видимость</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setVisibility('public')}
+                  className={`flex-1 flex items-center gap-2.5 px-3 py-2 rounded-lg border text-sm transition-colors ${
+                    visibility === 'public'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                  </svg>
+                  <div className="text-left">
+                    <p className="font-medium leading-tight">Публичная</p>
+                    <p className={`text-xs leading-tight ${visibility === 'public' ? 'text-blue-600' : 'text-gray-400'}`}>Участники видят</p>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setVisibility('private')}
+                  className={`flex-1 flex items-center gap-2.5 px-3 py-2 rounded-lg border text-sm transition-colors ${
+                    visibility === 'private'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                  </svg>
+                  <div className="text-left">
+                    <p className="font-medium leading-tight">Частная</p>
+                    <p className={`text-xs leading-tight ${visibility === 'private' ? 'text-blue-600' : 'text-gray-400'}`}>Только вы видите</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Search */}
           <div>
@@ -176,6 +227,8 @@ function TeamModal({ open, onClose, onSave, employees, initial }) {
 
 function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [renaming, setRenaming] = useState(false);
+  const [newName, setNewName] = useState(team.name);
   const members = useMemo(
     () => team.memberIds.map((id) => employees.find((e) => e.id === id)).filter(Boolean),
     [team.memberIds, employees]
@@ -207,7 +260,67 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
           </svg>
         </button>
-        <h2 className="text-lg font-semibold text-gray-900 flex-1">{team.name}</h2>
+        {renaming ? (
+          <form
+            className="flex-1 flex items-center gap-2"
+            onSubmit={(e) => { e.preventDefault(); if (newName.trim()) { onUpdate(team.id, { name: newName.trim() }); setRenaming(false); } }}
+          >
+            <input
+              autoFocus
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              className="flex-1 text-lg font-semibold text-gray-900 px-2 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+            />
+            <button type="submit" className="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-600 transition-colors" title="Сохранить">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+            </button>
+            <button type="button" onClick={() => { setNewName(team.name); setRenaming(false); }} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors" title="Отмена">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </form>
+        ) : (
+          <>
+            <h2 className="text-lg font-semibold text-gray-900 flex-1">{team.name}</h2>
+            <button
+              onClick={() => {
+                const next = (team.visibility || 'public') === 'public' ? 'private' : 'public';
+                onUpdate(team.id, { visibility: next });
+              }}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                (team.visibility || 'public') === 'private'
+                  ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+              }`}
+              title={(team.visibility || 'public') === 'private'
+                ? 'Частная команда — нажмите, чтобы сделать публичной'
+                : 'Публичная команда — нажмите, чтобы сделать частной'}
+            >
+              {(team.visibility || 'public') === 'private' ? (
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+              ) : (
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                </svg>
+              )}
+              {(team.visibility || 'public') === 'private' ? 'Частная' : 'Публичная'}
+            </button>
+            <button
+              onClick={() => setRenaming(true)}
+              className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
+              title="Переименовать"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z" />
+              </svg>
+            </button>
+          </>
+        )}
         <button
           onClick={() => { if (window.confirm(`Удалить команду «${team.name}»?`)) { onDelete(team.id); onBack(); } }}
           className="p-1.5 rounded-lg hover:bg-red-50 transition-colors text-gray-400 hover:text-red-500"
@@ -299,7 +412,8 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
         onClose={() => setModalOpen(false)}
         onSave={handleAddMembers}
         employees={employees.filter((e) => !team.memberIds.includes(e.id))}
-        initial={null}
+        initial={{ name: team.name, memberIds: [] }}
+        addOnly
       />
     </div>
   );
@@ -307,7 +421,7 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
 
 /* ── Team Card ── */
 
-function TeamCard({ team, employees, onOpen, onEdit, onDelete }) {
+function TeamCard({ team, employees, onOpen }) {
   const members = useMemo(
     () => team.memberIds.map((id) => employees.find((e) => e.id === id)).filter(Boolean),
     [team.memberIds, employees]
@@ -322,76 +436,70 @@ function TeamCard({ team, employees, onOpen, onEdit, onDelete }) {
     .filter((v) => new Date(v.endDate) >= new Date())
     .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))[0];
 
+  const isPrivate = team.visibility === 'private';
+
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-900 truncate pr-2">{team.name}</h3>
-        <div className="flex items-center gap-1 flex-shrink-0">
-          <button onClick={onEdit} className="p-1 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition" title="Редактировать">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z" />
+    <div
+      onClick={onOpen}
+      className="group relative bg-white border border-gray-200 rounded-xl p-4 flex flex-col cursor-pointer hover:border-blue-400 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+    >
+      {/* Visibility badge */}
+      <div className="flex items-center justify-between mb-3">
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
+          isPrivate ? 'bg-gray-100 text-gray-500' : 'bg-emerald-50 text-emerald-600'
+        }`}>
+          {isPrivate ? (
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
             </svg>
-          </button>
-          <button
-            onClick={() => { if (window.confirm(`Удалить команду «${team.name}»?`)) onDelete(); }}
-            className="p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition"
-            title="Удалить"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+          ) : (
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
             </svg>
-          </button>
-        </div>
+          )}
+          {isPrivate ? 'Частная' : 'Публичная'}
+        </span>
+        <svg className="w-4 h-4 text-gray-300 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
       </div>
 
-      {/* Avatars */}
-      <div className="flex items-center -space-x-2 mb-3">
-        {members.slice(0, 5).map((m) => (
-          <div key={m.id} className="w-7 h-7 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center" title={m.name}>
-            <span className="text-[9px] font-medium text-gray-600">{initials(m.name)}</span>
-          </div>
-        ))}
-        {members.length > 5 && (
-          <div className="w-7 h-7 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center">
-            <span className="text-[9px] font-medium text-gray-500">+{members.length - 5}</span>
-          </div>
-        )}
-      </div>
+      {/* Name */}
+      <h3 className="text-sm font-semibold text-gray-900 truncate mb-3 group-hover:text-blue-700 transition-colors">{team.name}</h3>
 
-      {/* Metrics */}
-      <div className="space-y-2 flex-1">
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-500">{members.length} участников</span>
-          <span className={`font-medium ${avgLoad > 100 ? 'text-red-600' : 'text-gray-700'}`}>{avgLoad}% загрузка</span>
+      {/* Avatars + metrics row */}
+      <div className="flex items-center gap-3 mt-auto">
+        <div className="flex items-center -space-x-2 flex-shrink-0">
+          {members.slice(0, 4).map((m) => (
+            <div key={m.id} className="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-700 border-2 border-gray-50 dark:border-gray-800 flex items-center justify-center" title={m.name}>
+              <span className="text-[9px] font-semibold text-gray-500 dark:text-gray-300">{initials(m.name)}</span>
+            </div>
+          ))}
+          {members.length > 4 && (
+            <div className="w-7 h-7 rounded-full bg-blue-50 dark:bg-blue-900/40 border-2 border-gray-50 dark:border-gray-800 flex items-center justify-center">
+              <span className="text-[9px] font-semibold text-blue-500 dark:text-blue-400">+{members.length - 4}</span>
+            </div>
+          )}
         </div>
-        <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className={`h-full rounded-full ${avgLoad > 100 ? 'bg-red-500' : avgLoad >= 80 ? 'bg-emerald-500' : 'bg-amber-500'}`}
-            style={{ width: `${Math.min(avgLoad, 100)}%` }}
-          />
+        <div className="flex items-center gap-2 text-xs text-gray-500 ml-auto">
+          <span className="flex items-center gap-1">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0" />
+            </svg>
+            {members.length}
+          </span>
+          <span className={`font-semibold ${avgLoad > 100 ? 'text-red-500' : avgLoad >= 80 ? 'text-emerald-600' : 'text-amber-500'}`}>
+            {avgLoad}%
+          </span>
         </div>
-        {nextVacation && (
-          <p className="text-xs text-gray-500 truncate">
-            Отпуск: {nextVacation.empName}, {new Date(nextVacation.startDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
-          </p>
-        )}
       </div>
-
-      {/* Open button */}
-      <button
-        onClick={onOpen}
-        className="mt-4 w-full py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-      >
-        Открыть
-      </button>
     </div>
   );
 }
 
 /* ── Main TeamsView ── */
 
-export default function TeamsView({ employees }) {
+export default function TeamsView({ employees, onDetailChange }) {
   const { teams, createTeam, updateTeam, deleteTeam } = useTeams();
   const [modalOpen, setModalOpen] = useState(false);
   const [editTeam, setEditTeam] = useState(null); // team object for editing
@@ -399,11 +507,16 @@ export default function TeamsView({ employees }) {
 
   const detailTeam = teams.find((t) => t.id === detailTeamId);
 
-  const handleSave = (name, memberIds) => {
+  const setDetail = (id) => {
+    setDetailTeamId(id);
+    onDetailChange?.(!!id);
+  };
+
+  const handleSave = (name, memberIds, visibility) => {
     if (editTeam) {
-      updateTeam(editTeam.id, { name, memberIds });
+      updateTeam(editTeam.id, { name, memberIds, visibility });
     } else {
-      createTeam(name, memberIds);
+      createTeam(name, memberIds, visibility);
     }
     setEditTeam(null);
   };
@@ -424,9 +537,9 @@ export default function TeamsView({ employees }) {
       <TeamDetail
         team={detailTeam}
         employees={employees}
-        onBack={() => setDetailTeamId(null)}
+        onBack={() => setDetail(null)}
         onUpdate={updateTeam}
-        onDelete={(id) => { deleteTeam(id); setDetailTeamId(null); }}
+        onDelete={(id) => { deleteTeam(id); setDetail(null); }}
       />
     );
   }
@@ -467,15 +580,13 @@ export default function TeamsView({ employees }) {
           </div>
         </div>
       ) : (
-        <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1">
+        <div className="flex gap-3 overflow-x-auto py-1 -mx-1 px-1">
           {teams.map((team) => (
             <div key={team.id} className="flex-shrink-0 w-64 sm:w-72">
               <TeamCard
                 team={team}
                 employees={employees}
-                onOpen={() => setDetailTeamId(team.id)}
-                onEdit={() => openEdit(team)}
-                onDelete={() => deleteTeam(team.id)}
+                onOpen={() => setDetail(team.id)}
               />
             </div>
           ))}

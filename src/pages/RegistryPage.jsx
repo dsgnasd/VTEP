@@ -20,6 +20,7 @@ export default function RegistryPage({ search }) {
   const [searchParams] = useSearchParams();
   const [selectedIds, setSelectedIds] = useState(() => new Set());
   const [compareSource, setCompareSource] = useState('table');
+  const [teamDetailOpen, setTeamDetailOpen] = useState(false);
 
   useEffect(() => {
     setFilter('search', search);
@@ -83,85 +84,90 @@ export default function RegistryPage({ search }) {
       </div>
 
       {/* Мои команды — всегда видны */}
-      <TeamsView employees={employees} />
+      <TeamsView employees={employees} onDetailChange={setTeamDetailOpen} />
 
-      {/* Вкладки Таблица / Таймлайн */}
-      <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
-        {VIEW_TABS.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setView(viewMap[tab])}
-            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
-              viewLabel === tab
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+      {/* Скрываем таблицу/таймлайн когда открыта детальная команда */}
+      {!teamDetailOpen && (
+        <>
+          {/* Вкладки Таблица / Таймлайн */}
+          <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
+            {VIEW_TABS.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setView(viewMap[tab])}
+                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
+                  viewLabel === tab
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Фильтры */}
+          <FiltersPanel
+            filters={filters}
+            setFilter={setFilter}
+            resetFilters={resetFilters}
+            resultCount={filtered.length}
+          />
+
+          {/* Вид */}
+          {view === 'table' ? (
+            <EmployeeTable
+              employees={filtered}
+              selectedIds={selectedIds}
+              onToggleSelect={toggleSelect}
+            />
+          ) : (
+            <TimelineView
+              employees={filtered}
+              selectedIds={selectedIds}
+              onToggleSelect={toggleSelect}
+            />
+          )}
+
+          {/* Floating Action Bar */}
+          <div
+            className={`fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none transition-all duration-300 ${
+              selectedIds.size >= 2
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-4'
             }`}
           >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      {/* Фильтры */}
-      <FiltersPanel
-        filters={filters}
-        setFilter={setFilter}
-        resetFilters={resetFilters}
-        resultCount={filtered.length}
-      />
-
-      {/* Вид */}
-      {view === 'table' ? (
-        <EmployeeTable
-          employees={filtered}
-          selectedIds={selectedIds}
-          onToggleSelect={toggleSelect}
-        />
-      ) : (
-        <TimelineView
-          employees={filtered}
-          selectedIds={selectedIds}
-          onToggleSelect={toggleSelect}
-        />
-      )}
-
-      {/* Floating Action Bar */}
-      <div
-        className={`fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none transition-all duration-300 ${
-          selectedIds.size >= 2
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-4'
-        }`}
-      >
-        <div className="floating-bar pointer-events-auto flex items-center gap-3 px-5 py-3 text-white rounded-xl">
-          <span className="text-sm">
-            Выбрано <strong className="font-semibold">{selectedIds.size}</strong>
-          </span>
-          <button
-            onClick={handleCompare}
-            className="floating-bar-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
-          >
-            Сравнить
-          </button>
-          <button
-            onClick={clearSelection}
-            className="p-1.5 hover:bg-white/15 rounded-lg transition-colors"
-            title="Сбросить выбор"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Подсказка — появляется при выборе 1 сотрудника */}
-      {selectedIds.size === 1 && (
-        <div className="fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none">
-          <div className="floating-bar pointer-events-auto px-4 py-2.5 text-white/80 rounded-lg text-sm">
-            Выберите ещё хотя бы одного сотрудника для сравнения
+            <div className="floating-bar pointer-events-auto flex items-center gap-3 px-5 py-3 text-white rounded-xl">
+              <span className="text-sm">
+                Выбрано <strong className="font-semibold">{selectedIds.size}</strong>
+              </span>
+              <button
+                onClick={handleCompare}
+                className="floating-bar-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
+              >
+                Сравнить
+              </button>
+              <button
+                onClick={clearSelection}
+                className="p-1.5 hover:bg-white/15 rounded-lg transition-colors"
+                title="Сбросить выбор"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
+
+          {/* Подсказка — появляется при выборе 1 сотрудника */}
+          {selectedIds.size === 1 && (
+            <div className="fixed bottom-6 inset-x-0 z-50 flex justify-center lg:pl-60 pointer-events-none">
+              <div className="floating-bar pointer-events-auto px-4 py-2.5 text-white/80 rounded-lg text-sm">
+                Выберите ещё хотя бы одного сотрудника для сравнения
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
