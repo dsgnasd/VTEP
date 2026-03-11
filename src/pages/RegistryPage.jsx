@@ -19,6 +19,7 @@ export default function RegistryPage({ search }) {
     useEmployeeFilters(employees);
   const [searchParams] = useSearchParams();
   const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [compareSource, setCompareSource] = useState('table');
 
   useEffect(() => {
     setFilter('search', search);
@@ -45,12 +46,13 @@ export default function RegistryPage({ search }) {
   }, []);
 
   const handleCompare = useCallback(() => {
+    setCompareSource(view);
     setView('compare');
-  }, []);
+  }, [view]);
 
   const handleBackFromCompare = useCallback(() => {
-    setView('table');
-  }, []);
+    setView(compareSource);
+  }, [compareSource]);
 
   const selectedEmployees = useMemo(
     () => filtered.filter((e) => selectedIds.has(e.id)),
@@ -63,6 +65,7 @@ export default function RegistryPage({ search }) {
       <CompareView
         employees={selectedEmployees}
         onBack={handleBackFromCompare}
+        defaultTab={compareSource === 'timeline' ? 'timeline' : 'profiles'}
       />
     );
   }
