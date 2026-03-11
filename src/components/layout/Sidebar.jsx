@@ -68,14 +68,14 @@ function NavContent({ isCompact, onItemClick, light }) {
 
       {/* Navigation */}
       <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
-        {NAV_ITEMS.map((item, idx) => (
+        {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             end={item.to === '/'}
             onClick={onItemClick}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-200 animate-slide-up ${idx === 0 ? '' : idx === 1 ? 'animation-delay-100' : idx === 2 ? 'animation-delay-200' : 'animation-delay-300'}
+              `flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-200
                ${isCompact ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}
                ${isActive
                   ? light

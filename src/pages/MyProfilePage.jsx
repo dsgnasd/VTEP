@@ -182,7 +182,7 @@ export default function MyProfilePage() {
            Actions pinned top-right.
            UX: One glance = "who is this person".
          ═══════════════════════════════════════════════════════ */}
-      <section className="bg-white border border-gray-200 rounded-xl overflow-hidden animate-fade-in">
+      <section className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         {/* Subtle top accent — brand presence without decoration */}
         <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-400" />
 
@@ -304,7 +304,7 @@ export default function MyProfilePage() {
            tenure, vacation balance, profile score, awards.
            Numbers are large; labels are micro.
          ═══════════════════════════════════════════════════════ */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-slide-up animation-delay-100">
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <StatCard
           value={ME.tenure}
           label="В компании"
@@ -330,7 +330,7 @@ export default function MyProfilePage() {
            profile < 100%.  Disappears forever on dismiss.
          ═══════════════════════════════════════════════════════ */}
       {nudgeVisible && ME.completionScore < 100 && (
-        <section className="relative flex items-center gap-4 bg-amber-50 rounded-xl px-5 py-3.5 animate-slide-down animation-delay-200">
+        <section className="relative flex items-center gap-4 bg-amber-50 rounded-xl px-5 py-3.5">
           <div className="flex-1 flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
               <span className="text-base">💡</span>
@@ -358,7 +358,7 @@ export default function MyProfilePage() {
          ═══════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left — Tabs (3/5) */}
-        <section className="lg:col-span-3 bg-white border border-gray-200 rounded-xl overflow-hidden animate-slide-up animation-delay-200">
+        <section className="lg:col-span-3 bg-white border border-gray-200 rounded-xl overflow-hidden">
           {/* Tab bar */}
           <div className="px-6 pt-4">
             <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
@@ -390,7 +390,7 @@ export default function MyProfilePage() {
         </section>
 
         {/* Right — Vacation (2/5) */}
-        <div className="lg:col-span-2 space-y-5 animate-slide-up animation-delay-300">
+        <div className="lg:col-span-2 space-y-5">
           {/* Vacation widget */}
           <div className="border border-gray-200 rounded-xl p-5 bg-white">
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
