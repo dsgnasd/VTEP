@@ -188,24 +188,27 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50/80">
               {selectable && (
-                <th className="w-10 px-3 py-2.5 sticky left-0 z-10 bg-gray-50/80 text-center">
-                  <input
-                    type="checkbox"
-                    checked={allVisibleSelected}
-                    ref={(el) => {
-                      if (el) el.indeterminate = someSelected && !allVisibleSelected;
-                    }}
-                    onChange={handleSelectAll}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                  />
+                <th className="w-8 sticky left-0 z-10 bg-gray-50/80">
+                  <div className="flex items-center justify-center h-full">
+                    <input
+                      type="checkbox"
+                      checked={allVisibleSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = someSelected && !allVisibleSelected;
+                      }}
+                      onChange={handleSelectAll}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    />
+                  </div>
                 </th>
               )}
               {COLUMNS.map((col) => (
                 <th
                   key={col.key}
                   onClick={() => handleSort(col.key)}
-                  className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 px-4 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 transition-colors
-                    ${col.sticky && selectable ? 'sticky left-10 z-10 bg-gray-50/80' : ''}
+                  className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 transition-colors
+                    ${col.sticky ? 'px-2' : 'px-4'}
+                    ${col.sticky && selectable ? 'sticky left-8 z-10 bg-gray-50/80' : ''}
                     ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80' : ''}`}
                 >
                   <span className="inline-flex items-center gap-1">
@@ -238,17 +241,19 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   }`}
                 >
                   {selectable && (
-                    <td className={`w-10 px-3 py-2.5 sticky left-0 z-10 text-center ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => onToggleSelect(emp.id)}
-                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                      />
+                    <td className={`w-8 sticky left-0 z-10 ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
+                      <div className="flex items-center justify-center h-full">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => onToggleSelect(emp.id)}
+                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        />
+                      </div>
                     </td>
                   )}
                   <td className={`sticky z-10 py-2.5 ${
-                    selectable ? 'left-10 px-4' : 'left-0 px-4'
+                    selectable ? 'left-8 px-2' : 'left-0 px-2'
                   } ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
                     <Link
                       to={`/employee/${emp.id}`}

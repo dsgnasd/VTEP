@@ -14,7 +14,7 @@ import TeamsView from '../components/registry/TeamsView';
 // ──────────────────────────────────────────────────────────────
 
 export default function RegistryPage({ search }) {
-  const [view, setView] = useState('table');
+  const [view, setView] = useState('teams');
   const { filters, setFilter, resetFilters, filtered } =
     useEmployeeFilters(employees);
   const [searchParams] = useSearchParams();
@@ -67,9 +67,9 @@ export default function RegistryPage({ search }) {
     );
   }
 
-  const VIEW_TABS = ['Таблица', 'Таймлайн', 'Мои команды'];
+  const VIEW_TABS = ['Мои команды', 'Таблица', 'Таймлайн'];
   const viewMap = { 'Таблица': 'table', 'Таймлайн': 'timeline', 'Мои команды': 'teams' };
-  const viewLabel = VIEW_TABS.find((t) => viewMap[t] === view) || 'Таблица';
+  const viewLabel = VIEW_TABS.find((t) => viewMap[t] === view) || 'Мои команды';
 
   return (
     <div className="space-y-6">

@@ -61,20 +61,22 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
       <div className="min-w-[900px]">
         {/* Заголовок месяцев */}
         <div className="flex border-b border-gray-200 bg-gray-50/80 sticky top-0 z-10">
-          <div className="w-52 min-w-[208px] flex-shrink-0 px-4 py-3 sticky left-0 bg-gray-50/80 z-20 border-r border-gray-200">
-            <div className="flex items-center gap-2">
+          <div className="w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 bg-gray-50/80 z-20 border-r border-gray-200">
+            <div className="flex items-center">
               {selectable && (
-                <input
-                  type="checkbox"
-                  checked={allVisibleSelected}
-                  ref={(el) => {
-                    if (el) el.indeterminate = someSelected && !allVisibleSelected;
-                  }}
-                  onChange={handleSelectAll}
-                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer flex-shrink-0"
-                />
+                <div className="w-8 flex-shrink-0 flex items-center justify-center">
+                  <input
+                    type="checkbox"
+                    checked={allVisibleSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someSelected && !allVisibleSelected;
+                    }}
+                    onChange={handleSelectAll}
+                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                  />
+                </div>
               )}
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 px-2">
                 Сотрудник
               </span>
             </div>
@@ -104,21 +106,23 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                   : 'hover:bg-gray-50/40'
               }`}
             >
-              <div className={`w-52 min-w-[208px] flex-shrink-0 px-4 py-2.5 sticky left-0 z-10 border-r border-gray-200 ${
+              <div className={`w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 z-10 border-r border-gray-200 ${
                 isSelected ? 'bg-blue-50' : 'bg-white'
               }`}>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center">
                   {selectable && (
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => onToggleSelect(emp.id)}
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer flex-shrink-0"
-                    />
+                    <div className="w-8 flex-shrink-0 flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => onToggleSelect(emp.id)}
+                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      />
+                    </div>
                   )}
                   <Link
                     to={`/employee/${emp.id}`}
-                    className="text-[13px] font-medium text-gray-800 hover:text-blue-600 truncate transition-colors"
+                    className="text-[13px] font-medium text-gray-900 hover:text-blue-600 truncate transition-colors px-2"
                     title={emp.name}
                   >
                     {shortName(emp.name)}
@@ -126,7 +130,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                 </div>
               </div>
 
-              <div className="flex-1 relative h-10">
+              <div className="flex-1 relative h-[42px]">
                 {emp.allocations.map((a) => {
                   const start = dayOffset(a.startDate);
                   const end = dayOffset(a.endDate);
