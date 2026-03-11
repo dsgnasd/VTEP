@@ -48,11 +48,11 @@ const ME = {
     { name: 'Terraform', level: 'Middle' },
     { name: 'React', level: 'Middle' },
   ],
-  completionScore: 75,
-  completionPoints: 60,
-  completionMax: 80,
-  completionDone: 4,
-  completionTotal: 6,
+  completionScore: 45,
+  completionPoints: 45,
+  completionMax: 100,
+  completionDone: 2,
+  completionTotal: 4,
   vacation: {
     available: 10,
     used: 18,
@@ -66,6 +66,7 @@ const ME = {
     { name: 'API Gateway', role: 'Lead Engineer', load: 100 },
     { name: 'Интернет-банк 3.0', role: 'Staff Engineer', load: 40 },
   ],
+  archivedProjects: [],
   feedback: [
     { id: 1, from: 'Алексей Борщёв', role: 'Руководитель', date: '20 фев 2026', text: 'Отличная работа над API Gateway. Павел показал высокий уровень архитектурного мышления и умение работать с командой.', type: 'positive' },
     { id: 2, from: 'Мария Ватрушкина', role: 'Product Manager', date: '5 фев 2026', text: 'Павел всегда доступен для обсуждения технических решений. Быстро реагирует на изменения в требованиях.', type: 'positive' },
@@ -83,15 +84,13 @@ const LANGUAGE_OPTIONS = ['Русский', 'Английский', 'Немец�
 const LANGUAGE_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Родной'];
 
 const COMPLETION_ITEMS = [
-  { label: 'Основная информация', points: 15, done: true, tab: 'Обзор' },
-  { label: 'Контактная информация', points: 10, done: true, tab: 'Обзор' },
-  { label: 'Навыки и компетенции', points: 20, done: true, tab: 'Навыки и экспертиза' },
-  { label: 'О себе', points: 15, done: true, tab: 'Обзор' },
-  { label: 'Образование', points: 10, done: false, tab: 'Опыт' },
-  { label: 'Языки', points: 10, done: false, tab: 'Навыки и экспертиза' },
+  { label: 'Контактная информация', points: 20, done: true, tab: 'Обзор' },
+  { label: 'О себе', points: 25, done: true, tab: 'Обзор' },
+  { label: 'Образование', points: 30, done: false, tab: 'Опыт' },
+  { label: 'Языки', points: 25, done: false, tab: 'Компетенции' },
 ];
 
-const TABS = ['Обзор', 'Навыки и экспертиза', 'Активность', 'Опыт', 'ИПР', 'Фидбэки'];
+const TABS = ['Обзор', 'Компетенции', 'Активность', 'Опыт', 'ИПР', 'Фидбэки'];
 
 const SKILL_COLORS = {
   Lead: 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700/40',
@@ -160,17 +159,28 @@ export default function MyProfilePage() {
   const [nudgeVisible, setNudgeVisible] = useState(true);
   const [vacationModalOpen, setVacationModalOpen] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [profileData, setProfileData] = useState({ phone: ME.phone, about: ME.about });
-  const [editDraft, setEditDraft] = useState({ phone: ME.phone, about: ME.about });
+  const [profileData, setProfileData] = useState({ phone: ME.phone, about: ME.about, avatar: null });
+  const [editDraft, setEditDraft] = useState({ phone: ME.phone, about: ME.about, avatar: null });
+  const avatarInputRef = useRef(null);
 
   const startEditing = () => {
-    setEditDraft({ phone: profileData.phone, about: profileData.about });
+    setEditDraft({ phone: profileData.phone, about: profileData.about, avatar: profileData.avatar });
     setEditing(true);
   };
-  const cancelEditing = () => setEditing(false);
+  const cancelEditing = () => {
+    if (editDraft.avatar && editDraft.avatar !== profileData.avatar) URL.revokeObjectURL(editDraft.avatar);
+    setEditing(false);
+  };
   const saveEditing = () => {
+    if (profileData.avatar && profileData.avatar !== editDraft.avatar) URL.revokeObjectURL(profileData.avatar);
     setProfileData({ ...editDraft });
     setEditing(false);
+  };
+  const handleAvatarChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setEditDraft((d) => ({ ...d, avatar: url }));
   };
 
   return (
@@ -190,8 +200,38 @@ export default function MyProfilePage() {
           {/* Top row: identity + actions */}
           <div className="flex flex-col sm:flex-row sm:items-start gap-5">
             {/* Avatar */}
-            <div className="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 shadow-lg shadow-blue-600/20">
-              {ME.initials}
+            <div
+              className={`relative w-[72px] h-[72px] rounded-full flex-shrink-0 shadow-lg shadow-blue-600/20 overflow-hidden ${editing ? 'cursor-pointer group' : ''}`}
+              onClick={editing ? () => avatarInputRef.current?.click() : undefined}
+            >
+              {(editing ? editDraft.avatar : profileData.avatar) ? (
+                <img
+                  src={editing ? editDraft.avatar : profileData.avatar}
+                  alt={ME.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-2xl font-bold text-white">
+                  {ME.initials}
+                </div>
+              )}
+              {editing && (
+                <>
+                  <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg className="w-5 h-5 text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                    </svg>
+                    <span className="text-[9px] font-bold text-white tracking-wide drop-shadow uppercase">Фото</span>
+                  </div>
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleAvatarChange}
+                  />
+                </>
+              )}
             </div>
 
             {/* Name block */}
@@ -217,7 +257,7 @@ export default function MyProfilePage() {
                 <ContactChip icon={Icon.phone} href={editing ? undefined : `tel:${profileData.phone.replace(/\D/g, '')}`}>
                   {profileData.phone}
                 </ContactChip>
-                <ContactChip icon={Icon.pin}>{ME.location}</ContactChip>
+
                 <ContactChip icon={Icon.people} href="#">
                   {ME.manager.name}
                 </ContactChip>
@@ -299,32 +339,6 @@ export default function MyProfilePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-           2. STAT STRIP — key numbers at a glance
-           UX: "Dashboard KPI" pattern — user instantly sees
-           tenure, vacation balance, profile score, awards.
-           Numbers are large; labels are micro.
-         ═══════════════════════════════════════════════════════ */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <StatCard
-          value={ME.tenure}
-          label="В компании"
-          accent="text-indigo-700 dark:text-indigo-300"
-          bg="bg-indigo-50 dark:bg-indigo-900/20"
-          iconBg="bg-indigo-100 dark:bg-indigo-800/40"
-          icon={<svg className="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" /></svg>}
-        />
-        <StatCard
-          value={`${ME.vacation.available} дн.`}
-          label="Отпуск доступен"
-          accent="text-blue-700 dark:text-blue-300"
-          bg="bg-blue-50 dark:bg-blue-900/20"
-          iconBg="bg-blue-100 dark:bg-blue-800/40"
-          icon={<svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" /></svg>}
-          sub={`из ${ME.vacation.total}`}
-        />
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════
            3. COMPLETION NUDGE — slim, contextual, dismissible
            UX: motivates without dominating.  Appears only when
            profile < 100%.  Disappears forever on dismiss.
@@ -381,7 +395,7 @@ export default function MyProfilePage() {
           {/* Tab content */}
           <div className="p-6">
             {activeTab === 'Обзор' && <OverviewTab onNavigate={setActiveTab} />}
-            {activeTab === 'Навыки и экспертиза' && <SkillsTab />}
+            {activeTab === 'Компетенции' && <SkillsTab />}
             {activeTab === 'Активность' && <ActivityTab />}
             {activeTab === 'Опыт' && <ExperienceTab />}
             {activeTab === 'ИПР' && <IDPTab />}
@@ -459,26 +473,11 @@ export default function MyProfilePage() {
 function OverviewTab({ onNavigate }) {
   const [checklistOpen, setChecklistOpen] = useState(true);
   const completionPct = Math.round(
-    (ME.completionDone / ME.completionTotal) * 100
+    (ME.completionPoints / ME.completionMax) * 100
   );
 
   return (
     <div className="space-y-6">
-      {/* Quick info grid */}
-      <div>
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-          Информация
-        </h3>
-        <div className="grid grid-cols-2 gap-4">
-          <InfoCell label="Должность" value={ME.role} />
-          <InfoCell label="Отдел" value={ME.department} />
-          <InfoCell label="Руководитель" value={ME.manager.name} isLink />
-          <InfoCell label="День рождения" value={ME.birthday} />
-          <InfoCell label="В компании" value={ME.tenure} />
-          <InfoCell label="Локация" value={ME.location} />
-        </div>
-      </div>
-
       {/* Completion checklist — collapsible */}
       <div>
         <button
@@ -578,26 +577,6 @@ function SkillsTab() {
 
   return (
     <div className="space-y-8">
-      {/* Skills */}
-      <div>
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-          Навыки и компетенции
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          {ME.skills.map((s) => (
-            <span
-              key={s.name}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border ${
-                SKILL_COLORS[s.level] || 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-700/40 dark:text-gray-300 dark:border-gray-600/40'
-              }`}
-            >
-              {s.name}
-              <span className="text-[10px] opacity-60 font-normal">{s.level}</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* Languages */}
       <div>
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
@@ -653,6 +632,26 @@ function SkillsTab() {
           </button>
         </div>
       </div>
+
+      {/* Skills → Компетенции */}
+      <div>
+        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+          Компетенции
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {ME.skills.map((s) => (
+            <span
+              key={s.name}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border ${
+                SKILL_COLORS[s.level] || 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-700/40 dark:text-gray-300 dark:border-gray-600/40'
+              }`}
+            >
+              {s.name}
+              <span className="text-[10px] opacity-60 font-normal">{s.level}</span>
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -705,38 +704,6 @@ function ExperienceTab() {
 
   return (
     <div className="space-y-8">
-      {/* ── Current Projects ── */}
-      <div>
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-          Текущие проекты
-        </h3>
-        {ME.currentProjects.length > 0 ? (
-          <div className="space-y-3">
-            {ME.currentProjects.map((proj) => (
-              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
-                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
-                  </svg>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">{proj.name}</p>
-                  <p className="text-xs text-gray-500">{proj.role}</p>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${proj.load}%` }} />
-                  </div>
-                  <span className="text-xs font-medium text-gray-600 tabular-nums">{proj.load}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500">Нет активных проектов.</p>
-        )}
-      </div>
-
       {/* ── Education ── */}
       <div>
         <div className="flex items-center justify-between mb-4">
@@ -821,7 +788,61 @@ function ExperienceTab() {
         )}
       </div>
 
+      {/* ── Current Projects ── */}
+      <div>
+        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+          Текущие проекты
+        </h3>
+        {ME.currentProjects.length > 0 ? (
+          <div className="space-y-3">
+            {ME.currentProjects.map((proj) => (
+              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800">{proj.name}</p>
+                  <p className="text-xs text-gray-500">{proj.role}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${proj.load}%` }} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 tabular-nums">{proj.load}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Нет активных проектов.</p>
+        )}
+      </div>
 
+      {/* ── Archived Projects (hidden when empty) ── */}
+      {ME.archivedProjects.length > 0 && (
+        <div>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+            Архивные проекты
+          </h3>
+          <div className="space-y-3">
+            {ME.archivedProjects.map((proj) => (
+              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition opacity-70">
+                <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800">{proj.name}</p>
+                  <p className="text-xs text-gray-500">{proj.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1153,33 +1174,6 @@ function ContactChip({ icon, href, children }) {
       <span className="text-gray-500">{icon}</span>
       {children}
     </Wrapper>
-  );
-}
-
-function StatCard({ value, label, accent, sub, progress, bg, iconBg, icon }) {
-  return (
-    <div className={`${bg} rounded-xl px-5 py-4 border border-transparent`}>
-      <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-lg ${iconBg} flex items-center justify-center flex-shrink-0`}>
-          {icon}
-        </div>
-        <div className="min-w-0">
-          <div className="flex items-baseline gap-1.5">
-            <span className={`text-xl font-bold ${accent}`}>{value}</span>
-            {sub && <span className="text-xs text-gray-500 dark:text-gray-400">{sub}</span>}
-          </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{label}</p>
-        </div>
-      </div>
-      {progress != null && (
-        <div className="w-full h-2 bg-white/60 dark:bg-white/10 rounded-full overflow-hidden mt-3">
-          <div
-            className="h-full bg-amber-500 rounded-full transition-all"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      )}
-    </div>
   );
 }
 
