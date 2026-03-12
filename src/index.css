@@ -71,6 +71,9 @@ html:not(.dark) .bg-blue-500 {
   background-color: #1e293b !important;
   box-shadow: 0 0 0 1px rgba(148,163,184,.06), 0 1px 4px rgba(0,0,0,.25) !important;
 }
+/* Sticky cells (name, checkbox) must follow row hover */
+.dark .group:hover > .bg-white { background-color: #242e4a !important; box-shadow: none !important; }
+.dark .group:hover > .bg-blue-50 { background-color: rgba(99,102,241,.2) !important; }
 
 /* Subtle card backgrounds */
 .dark .bg-gray-100 { background-color: #293548 !important; }
@@ -81,6 +84,7 @@ html:not(.dark) .bg-blue-500 {
 .dark .bg-gray-50\/50  { background-color: rgba(30,41,59,.5) !important; }
 .dark .hover\:bg-gray-50:hover  { background-color: rgba(99,102,241,.08) !important; }
 .dark .hover\:bg-gray-50\/60:hover { background-color: rgba(99,102,241,.06) !important; }
+
 
 /* Selected row backgrounds */
 .dark .bg-blue-50    { background-color: rgba(99,102,241,.15) !important; }

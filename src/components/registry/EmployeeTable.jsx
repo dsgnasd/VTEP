@@ -234,14 +234,16 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
               return (
                 <tr
                   key={emp.id}
-                  className={`transition-colors ${
+                  className={`group transition-colors ${
                     isSelected
                       ? 'bg-blue-50/60 hover:bg-blue-50'
-                      : 'hover:bg-gray-50/60'
+                      : 'hover:bg-gray-50'
                   }`}
                 >
                   {selectable && (
-                    <td className={`w-10 min-w-[40px] sticky left-0 z-10 ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
+                    <td className={`w-10 min-w-[40px] sticky left-0 z-10 transition-colors ${
+                      isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
+                    }`}>
                       <div className="flex items-center justify-center h-full py-2.5">
                         <input
                           type="checkbox"
@@ -252,9 +254,10 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                       </div>
                     </td>
                   )}
-                  <td className={`sticky z-10 py-2.5 ${
+                  <td className={`sticky z-10 py-2.5 transition-colors ${
                     selectable ? 'left-10 pl-1 pr-4' : 'left-0 px-4'
-                  } ${isSelected ? 'bg-blue-50' : 'bg-white'}`}>
+                  } ${isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
+                  }`}>
                     <Link
                       to={`/employee/${emp.id}`}
                       className="font-medium text-gray-900 hover:text-blue-600 transition-colors whitespace-nowrap"

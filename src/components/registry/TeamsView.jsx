@@ -576,7 +576,6 @@ export default function TeamsView({ employees, onDetailChange }) {
           </div>
           <div>
             <p className="text-sm font-medium text-gray-700">Команд пока нет</p>
-            <p className="text-xs text-gray-500">Группируйте сотрудников для быстрого просмотра загрузки</p>
           </div>
         </div>
       ) : (

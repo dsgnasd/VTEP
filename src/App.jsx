@@ -18,17 +18,12 @@ export default function App() {
   const [search, setSearch] = useState('');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [themeMode, setThemeMode] = useState(() => localStorage.getItem('theme') || 'system');
-  const [systemDark, setSystemDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const [themeMode, setThemeMode] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    return saved === 'light' || saved === 'dark' ? saved : 'dark';
+  });
 
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e) => setSystemDark(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  const isDark = themeMode === 'dark' || (themeMode === 'system' && systemDark);
+  const isDark = themeMode === 'dark';
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);
@@ -36,7 +31,7 @@ export default function App() {
   }, [isDark, themeMode]);
 
   const cycleTheme = useCallback(() => {
-    setThemeMode((m) => (m === 'light' ? 'dark' : m === 'dark' ? 'system' : 'light'));
+    setThemeMode((m) => (m === 'light' ? 'dark' : 'light'));
   }, []);
 
   const toggleSidebar = useCallback(() => {
