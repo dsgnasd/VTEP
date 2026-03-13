@@ -5,7 +5,7 @@ import Card from '../components/ui/Card';
 import Field from '../components/ui/Field';
 import Input from '../components/ui/Input';
 import Select from '../components/ui/Select';
-import TabbedCard from '../components/ui/TabbedCard';
+import Tabs from '../components/ui/Tabs';
 import Textarea from '../components/ui/Textarea';
 
 // ──────────────────────────────────────────────────────────────
@@ -99,6 +99,7 @@ const getCompletionItems = (hasAvatar) => [
 ];
 
 const TABS = ['Обзор', 'Компетенции', 'Опыт', 'ИПР', 'Фидбэки'];
+const PROFILE_TAB_OPTIONS = TABS.map((tab) => ({ value: tab, label: tab }));
 
 const SKILL_COLORS = {
   Lead: 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700/40',
@@ -387,20 +388,12 @@ export default function MyProfilePage() {
          ═══════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-5 ui-grid-gap">
         {/* Left — Tabs (3/5) */}
-        <TabbedCard
-          className="lg:col-span-3"
-          tabs={TABS.map((tab) => ({ value: tab, label: tab }))}
-          value={activeTab}
-          onChange={setActiveTab}
-          headerClassName="px-5 sm:px-7"
-          bodyClassName="px-5 sm:px-7 pt-4"
-        >
-          {activeTab === 'Обзор' && <OverviewTab onNavigate={setActiveTab} hasAvatar={!!profileData.avatar} onAvatarUpload={() => avatarInputRef.current?.click()} />}
-          {activeTab === 'Компетенции' && <SkillsTab />}
-          {activeTab === 'Опыт' && <ExperienceTab />}
-          {activeTab === 'ИПР' && <IDPTab />}
-          {activeTab === 'Фидбэки' && <FeedbackTab />}
-        </TabbedCard>
+        <ProfileTabsPanel
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          hasAvatar={!!profileData.avatar}
+          onAvatarUpload={() => avatarInputRef.current?.click()}
+        />
 
         {/* Right — Vacation (2/5) */}
         <div className="lg:col-span-2 ui-section-stack">
@@ -468,6 +461,38 @@ export default function MyProfilePage() {
    so the main component stays readable.
    ═══════════════════════════════════════════════════════════════ */
 
+function ProfileTabsPanel({ activeTab, onTabChange, hasAvatar, onAvatarUpload }) {
+  return (
+    <Card padding="none" className="lg:col-span-3 overflow-hidden">
+      <div className="px-1.5 pt-1.5 sm:px-2 sm:pt-2">
+        <Tabs
+          tabs={PROFILE_TAB_OPTIONS}
+          value={activeTab}
+          onChange={onTabChange}
+          listClassName="gap-0.5 p-0"
+          triggerClassName="px-3 py-1.5"
+        />
+      </div>
+
+      <div className="mx-1.5 border-b border-gray-100 dark:border-gray-700/70 sm:mx-2" />
+
+      <div className="px-1.5 py-2.5 sm:px-2 sm:py-3">
+        {activeTab === 'Обзор' && (
+          <OverviewTab
+            onNavigate={onTabChange}
+            hasAvatar={hasAvatar}
+            onAvatarUpload={onAvatarUpload}
+          />
+        )}
+        {activeTab === 'Компетенции' && <SkillsTab />}
+        {activeTab === 'Опыт' && <ExperienceTab />}
+        {activeTab === 'ИПР' && <IDPTab />}
+        {activeTab === 'Фидбэки' && <FeedbackTab />}
+      </div>
+    </Card>
+  );
+}
+
 /* ── Overview tab: info + completion checklist ── */
 function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
   const [checklistOpen, setChecklistOpen] = useState(true);
@@ -477,12 +502,11 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
   const completionPct = Math.round((donePoints / totalPoints) * 100);
 
   return (
-    <div className="ui-section-stack">
-      {/* Completion checklist — collapsible */}
-      <div className="ui-section-stack">
+    <section className="space-y-3">
+      <div className="space-y-3">
         <button
           onClick={() => setChecklistOpen((o) => !o)}
-          className="flex items-center justify-between w-full group pb-0.5"
+          className="flex w-full items-center justify-between gap-3"
         >
           <h3 className="ui-section-label">
             Заполненность профиля
@@ -510,13 +534,11 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
 
         {/* Collapsible list */}
         {checklistOpen && (
-          <div className="space-y-1">
+          <div className="divide-y divide-gray-100/70 dark:divide-gray-700/60">
             {items.map((item) => (
               <div
                 key={item.label}
-                className={`flex items-center justify-between gap-4 py-2.5 px-1 rounded-lg transition ${
-                  item.done ? '' : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
-                }`}
+                className="flex items-center justify-between gap-3 py-2"
               >
                 <div className="flex min-w-0 items-center gap-2.5">
                   {item.done ? (
@@ -553,7 +575,7 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 
