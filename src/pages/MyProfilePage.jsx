@@ -196,7 +196,7 @@ export default function MyProfilePage() {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto space-y-6">
+    <div className="max-w-screen-xl mx-auto ui-page-stack">
 
       {/* ═══════════════════════════════════════════════════════
            1. HERO HEADER — single identity block
@@ -204,11 +204,11 @@ export default function MyProfilePage() {
            Actions pinned top-right.
            UX: One glance = "who is this person".
          ═══════════════════════════════════════════════════════ */}
-      <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+      <section className="ui-card overflow-hidden">
         {/* Subtle top accent — brand presence without decoration */}
         <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-400" />
 
-        <div className="p-6 sm:p-8">
+        <div className="p-5 sm:p-7">
           {/* Top row: identity + actions */}
           <div className="flex flex-col sm:flex-row sm:items-start gap-5">
             {/* Avatar */}
@@ -318,26 +318,26 @@ export default function MyProfilePage() {
           </div>
 
           {/* Bio + edit fields — inside the identity block for cohesion */}
-          <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 max-w-2xl">
+          <div className="mt-6 border-t border-gray-100 dark:border-gray-700 pt-5 max-w-2xl">
             {editing ? (
-              <div className="space-y-4">
+              <div className="ui-form-stack">
                 <div>
                   <Field label="Телефон">
                     <Input
-                    type="tel"
-                    value={editDraft.phone}
-                    onChange={(e) => setEditDraft((d) => ({ ...d, phone: e.target.value }))}
-                    className="sm:w-56"
+                      type="tel"
+                      value={editDraft.phone}
+                      onChange={(e) => setEditDraft((d) => ({ ...d, phone: e.target.value }))}
+                      className="sm:w-56"
                     />
                   </Field>
                 </div>
                 <div>
                   <Field label="О себе">
                     <Textarea
-                    value={editDraft.about}
-                    onChange={(e) => setEditDraft((d) => ({ ...d, about: e.target.value }))}
-                    rows={4}
-                    className="leading-relaxed"
+                      value={editDraft.about}
+                      onChange={(e) => setEditDraft((d) => ({ ...d, about: e.target.value }))}
+                      rows={4}
+                      className="leading-relaxed"
                     />
                   </Field>
                 </div>
@@ -359,7 +359,7 @@ export default function MyProfilePage() {
            profile < 100%.  Disappears forever on dismiss.
          ═══════════════════════════════════════════════════════ */}
       {nudgeVisible && ME.completionScore < 100 && (
-        <section className="relative flex items-center gap-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-xl px-5 py-3.5">
+        <section className="relative flex items-center gap-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-xl px-5 py-4">
           <div className="flex-1 flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center flex-shrink-0">
               <span className="text-base">💡</span>
@@ -385,11 +385,11 @@ export default function MyProfilePage() {
       {/* ═══════════════════════════════════════════════════════
            4. TABS + SIDEBAR — tabs left, vacation & achievements right
          ═══════════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 ui-grid-gap">
         {/* Left — Tabs (3/5) */}
         <Card as="section" padding="none" className="lg:col-span-3 overflow-hidden">
           {/* Tab bar */}
-          <div className="px-6 pt-4">
+          <div className="ui-card-header border-b border-gray-100 dark:border-gray-700/70">
             <Tabs
               tabs={TABS.map((tab) => ({ value: tab, label: tab }))}
               value={activeTab}
@@ -398,7 +398,7 @@ export default function MyProfilePage() {
           </div>
 
           {/* Tab content */}
-          <div className="p-6">
+          <div className="ui-card-body">
             {activeTab === 'Обзор' && <OverviewTab onNavigate={setActiveTab} hasAvatar={!!profileData.avatar} onAvatarUpload={() => avatarInputRef.current?.click()} />}
             {activeTab === 'Компетенции' && <SkillsTab />}
             {activeTab === 'Опыт' && <ExperienceTab />}
@@ -408,7 +408,7 @@ export default function MyProfilePage() {
         </Card>
 
         {/* Right — Vacation (2/5) */}
-        <div className="lg:col-span-2 space-y-5">
+        <div className="lg:col-span-2 ui-section-stack">
           {/* Vacation widget */}
           <Card>
             <h3 className="ui-section-label mb-4">

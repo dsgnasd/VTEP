@@ -358,7 +358,7 @@ function CompareView({ employees, allEmployees, onBack, defaultTab = 'timeline' 
   ];
 
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto">
+    <div className="ui-page-stack max-w-screen-xl mx-auto">
       {/* Хедер */}
       <div>
         <div className="flex items-center justify-between">
@@ -440,7 +440,7 @@ function CompareView({ employees, allEmployees, onBack, defaultTab = 'timeline' 
       {tab === 'timeline' ? (
         <>
           <TimelineTab employees={employees} ranges={ranges} monthWidths={monthWidths} />
-          <div className="flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex flex-wrap ui-grid-gap text-xs text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-2 rounded-sm bg-emerald-500" />
               Загрузка ≥80%

@@ -84,7 +84,7 @@ export default function RegistryPage({ search }) {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+        <div className="ui-page-stack">
         <PageHeader
           title="Реестр сотрудников"
           description="Поиск, сравнение сотрудников и управление командами"
@@ -102,7 +102,7 @@ export default function RegistryPage({ search }) {
 
   if (error) {
     return (
-      <div className="space-y-6">
+        <div className="ui-page-stack">
         <PageHeader
           title="Реестр сотрудников"
           description="Поиск, сравнение сотрудников и управление командами"
@@ -119,7 +119,7 @@ export default function RegistryPage({ search }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="ui-page-stack">
       <PageHeader
         title="Реестр сотрудников"
         description="Поиск, сравнение сотрудников и управление командами"

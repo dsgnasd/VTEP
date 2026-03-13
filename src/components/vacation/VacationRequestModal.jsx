@@ -245,7 +245,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
               </span>
             )}
           </div>
-          <div className="border border-gray-200 dark:border-gray-600 rounded-xl p-3">
+          <div className="border border-gray-200 dark:border-gray-600 rounded-xl p-3 sm:p-4">
             <DateRangePicker
               startDate={form.startDate}
               endDate={form.endDate}
@@ -362,7 +362,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/80 flex-shrink-0">
+      <div className="ui-card-footer border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/80 flex-shrink-0">
         <Button
           type="button"
           onClick={onClose}

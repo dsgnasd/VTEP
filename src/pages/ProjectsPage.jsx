@@ -236,7 +236,7 @@ export default function ProjectsPage() {
   const [activeTab, setActiveTab] = useState('Текущие');
 
   return (
-    <div className="space-y-6">
+    <div className="ui-page-stack">
       {/* Header */}
       <PageHeader
         title="Проекты"
@@ -255,7 +255,7 @@ export default function ProjectsPage() {
       />
 
       {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid ui-grid-gap grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {activeTab === 'Текущие' &&
           CURRENT_PROJECTS.map((p) => <CurrentCard key={p.id} project={p} />)}
         {activeTab === 'Архивные' &&

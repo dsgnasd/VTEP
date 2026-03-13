@@ -3,8 +3,8 @@ import { cn } from '../../lib/cn';
 const PADDING_CLASS = {
   none: '',
   sm: 'p-4',
-  md: 'p-5',
-  lg: 'p-6',
+  md: 'ui-card-section',
+  lg: 'p-6 sm:p-7',
 };
 
 export default function Card({

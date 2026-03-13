@@ -88,7 +88,7 @@ export default function RequestsPage() {
   const [activeTab, setActiveTab] = useState('Отпуск');
 
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto">
+    <div className="ui-page-stack max-w-screen-xl mx-auto">
       {/* Header */}
       <PageHeader
         title="Заявки"
@@ -112,7 +112,7 @@ export default function RequestsPage() {
 
       {/* Content */}
       {activeTab === 'Отпуск' ? (
-        <div className="space-y-4">
+        <div className="ui-section-stack">
           <VacationBalancePanel balance={VACATION_BALANCE} />
 
           {/* Legal info block — accordion */}

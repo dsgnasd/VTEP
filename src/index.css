@@ -71,6 +71,18 @@
     @apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
   }
 
+  .ui-page-stack {
+    @apply space-y-6;
+  }
+
+  .ui-section-stack {
+    @apply space-y-4;
+  }
+
+  .ui-grid-gap {
+    @apply gap-4;
+  }
+
   .ui-page-title {
     @apply text-[22px] sm:text-2xl font-semibold tracking-[-0.03em];
   }
@@ -97,6 +109,30 @@
 
   .ui-card-hover {
     @apply transition-all duration-200;
+  }
+
+  .ui-card-section {
+    @apply p-5 sm:p-6;
+  }
+
+  .ui-card-header {
+    @apply flex items-center justify-between px-5 py-4 sm:px-6;
+  }
+
+  .ui-card-body {
+    @apply px-5 py-4 sm:px-6;
+  }
+
+  .ui-card-footer {
+    @apply flex items-center justify-end gap-3 px-5 py-4 sm:px-6;
+  }
+
+  .ui-form-stack {
+    @apply space-y-4;
+  }
+
+  .ui-form-grid {
+    @apply grid grid-cols-1 gap-3 sm:grid-cols-2;
   }
 
   .ui-tab-trigger {

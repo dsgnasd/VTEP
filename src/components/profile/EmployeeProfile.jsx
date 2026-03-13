@@ -40,7 +40,7 @@ function EmployeeProfile({ employee }) {
   const monthLabels = ['Янв', 'Фев', 'Мар'];
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto ui-page-stack">
       {/* ── Заголовок ── */}
       <Card padding="lg">
         <div className="flex items-start gap-5">
@@ -182,7 +182,7 @@ function EmployeeProfile({ employee }) {
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 ui-grid-gap">
         {/* ── Достижения ── */}
         <Card padding="lg">
           <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Достижения</h2>

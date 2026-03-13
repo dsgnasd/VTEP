@@ -68,16 +68,16 @@ export default function VacationBalancePanel({ balance }) {
   const carryPct = total > 0 ? (carryover / total) * 100 : 0;
 
   return (
-    <div className="space-y-4">
+    <div className="ui-section-stack">
       {/* ── Zone 1: Stat cards ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <StatCard value={available} label="Общий остаток" accent="text-blue-600" />
         <StatCard value={currentYearRemaining} label="Текущий рабочий год" accent="text-emerald-600" />
         <StatCard value={carryover} label="Перешло с прошлого года" accent="text-amber-600" />
       </div>
 
       {/* ── Zone 2: Work year ── */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+      <Card>
         <h3 className="ui-section-label mb-4">
           Рабочий год
         </h3>
@@ -97,10 +97,10 @@ export default function VacationBalancePanel({ balance }) {
           <span>Начало: {workYearStart}</span>
           <span>Окончание: {workYearEnd}</span>
         </div>
-      </div>
+      </Card>
 
       {/* ── Zone 3: Usage breakdown ── */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+      <Card>
         <h3 className="ui-section-label mb-4">
           Использование отпуска
         </h3>
@@ -116,7 +116,8 @@ export default function VacationBalancePanel({ balance }) {
           <LegendItem color="bg-emerald-400" label="Текущий год" value={`${currentYearRemaining} дн.`} />
           <LegendItem color="bg-amber-400" label="Перенос" value={`${carryover} дн.`} />
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
+import Card from '../ui/Card';
