@@ -8,28 +8,53 @@ export default function TabbedCard({
   value,
   onChange,
   headerAction,
+  divider = false,
+  tabsInside = false,
   className,
   headerClassName,
+  dividerClassName,
   bodyClassName,
   tabsListClassName = 'gap-1 p-0',
   tabsTriggerClassName = 'px-2.5 sm:px-3 py-1.5',
   children,
 }) {
+  const tabsNode = (
+    <Tabs
+      tabs={tabs}
+      value={value}
+      onChange={onChange}
+      listClassName={tabsListClassName}
+      triggerClassName={tabsTriggerClassName}
+    />
+  );
+
   return (
     <Card as={as} padding="none" className={cn('overflow-hidden', className)}>
-      <div className={cn('ui-card-header px-3 sm:px-4 py-3 border-b border-gray-100 dark:border-gray-700/70', headerClassName)}>
-        <div className="min-w-0 flex-1">
-          <Tabs
-            tabs={tabs}
-            value={value}
-            onChange={onChange}
-            listClassName={tabsListClassName}
-            triggerClassName={tabsTriggerClassName}
-          />
-        </div>
-        {headerAction ? <div className="ml-3 flex-shrink-0">{headerAction}</div> : null}
-      </div>
-      <div className={cn('ui-card-body px-3 sm:px-4 pt-4', bodyClassName)}>
+      {!tabsInside ? (
+        <>
+          <div className={cn('flex items-center justify-between', headerClassName || 'px-5 py-4 sm:px-6')}>
+            <div className="min-w-0 flex-1">{tabsNode}</div>
+            {headerAction ? <div className="ml-3 flex-shrink-0">{headerAction}</div> : null}
+          </div>
+          {divider ? (
+            <div className={cn('border-b border-gray-100 dark:border-gray-700/70', dividerClassName || 'mx-5 sm:mx-6')} />
+          ) : null}
+        </>
+      ) : null}
+      <div className={cn(bodyClassName || 'px-5 py-4 sm:px-6')}>
+        {tabsInside ? (
+          <>
+            <div className={cn('min-w-0', headerClassName)}>
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">{tabsNode}</div>
+                {headerAction ? <div className="flex-shrink-0">{headerAction}</div> : null}
+              </div>
+            </div>
+            {divider ? (
+              <div className={cn('mt-4 border-b border-gray-100 dark:border-gray-700/70', dividerClassName)} />
+            ) : null}
+          </>
+        ) : null}
         {children}
       </div>
     </Card>

@@ -473,9 +473,6 @@ function ProfileTabsPanel({ activeTab, onTabChange, hasAvatar, onAvatarUpload })
           triggerClassName="px-3 py-1.5"
         />
       </div>
-
-      <div className="mx-1.5 border-b border-gray-100 dark:border-gray-700/70 sm:mx-2" />
-
       <div className="px-1.5 py-2.5 sm:px-2 sm:py-3">
         {activeTab === 'Обзор' && (
           <OverviewTab
@@ -534,11 +531,11 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
 
         {/* Collapsible list */}
         {checklistOpen && (
-          <div className="divide-y divide-gray-100/70 dark:divide-gray-700/60">
+          <div className="space-y-1">
             {items.map((item) => (
               <div
                 key={item.label}
-                className="flex items-center justify-between gap-3 py-2"
+                className="flex items-center justify-between gap-3 rounded-lg py-2"
               >
                 <div className="flex min-w-0 items-center gap-2.5">
                   {item.done ? (
