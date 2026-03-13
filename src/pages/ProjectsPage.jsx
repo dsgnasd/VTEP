@@ -236,8 +236,8 @@ export default function ProjectsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Проекты</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Проекты</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Каталог проектов компании и распределение ресурсов
         </p>
       </div>
@@ -252,9 +252,9 @@ export default function ProjectsPage() {
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
                 activeTab === tab
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
-            >
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                }`}
+              >
               {tab}
               <span className="ml-1.5 text-[11px] opacity-70">
                 {tab === 'Текущие' ? CURRENT_PROJECTS.length : ARCHIVED_PROJECTS.length}

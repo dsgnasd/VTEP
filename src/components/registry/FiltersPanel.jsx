@@ -85,7 +85,7 @@ function SingleSelect({ options, selected, onChange, placeholder = 'Все' }) {
       <button
         onClick={() => onChange('')}
         className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${
-          !selected ? 'font-medium text-blue-600' : 'text-gray-600 dark:text-gray-400'
+          !selected ? 'font-medium text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
         }`}
       >
         {placeholder}
@@ -96,7 +96,7 @@ function SingleSelect({ options, selected, onChange, placeholder = 'Все' }) {
           onClick={() => onChange(typeof opt === 'string' ? opt : opt.value)}
           className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${
             selected === (typeof opt === 'string' ? opt : opt.value)
-              ? 'font-medium text-blue-600'
+              ? 'font-medium text-blue-600 dark:text-blue-400'
               : 'text-gray-700 dark:text-gray-300'
           }`}
         >
@@ -115,7 +115,7 @@ function FilterChip({ category, label, onRemove }) {
       <span className="font-medium max-w-[140px] truncate">{label}</span>
       <button
         onClick={onRemove}
-        className="ml-0.5 p-0.5 rounded hover:bg-blue-100 transition-colors"
+        className="ml-0.5 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
       >
         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

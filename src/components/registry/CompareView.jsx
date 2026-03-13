@@ -128,7 +128,7 @@ function TimelineTab({ employees, ranges, monthWidths }) {
             <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2 sticky left-0 bg-white dark:bg-gray-800 z-10 border-r border-gray-200 dark:border-gray-700">
               <Link
                 to={`/employee/${emp.id}`}
-                className="text-sm font-medium text-gray-800 dark:text-gray-100 hover:text-blue-600 truncate block transition-colors"
+                className="text-sm font-medium text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 truncate block transition-colors"
               >
                 {emp.name}
               </Link>
@@ -201,7 +201,7 @@ function ProfilesTab({ employees, skillMatrix }) {
               <div>
                 <Link
                   to={`/employee/${emp.id}`}
-                  className="font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors"
+                  className="font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   {emp.name}
                 </Link>
@@ -262,7 +262,7 @@ function ProfilesTab({ employees, skillMatrix }) {
                 ) : (
                   <div className="space-y-0.5">
                     {emp.vacation.map((v, i) => (
-                      <p key={i} className="text-xs text-red-600">
+                      <p key={i} className="text-xs text-red-600 dark:text-red-400">
                         {new Date(v.startDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
                         {' – '}
                         {new Date(v.endDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
@@ -307,7 +307,7 @@ function ProfilesTab({ employees, skillMatrix }) {
                     return (
                       <td key={emp.id} className="text-center px-3 py-1.5">
                         {level ? (
-                          <span className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-medium ${LEVEL_COLORS[level] || 'bg-gray-100 text-gray-600'}`}>
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-medium ${LEVEL_COLORS[level] || 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}>
                             {level}
                           </span>
                         ) : (

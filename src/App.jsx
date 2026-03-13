@@ -99,7 +99,7 @@ export default function App() {
   const mainMargin = sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60';
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors">
       {/* Sidebar */}
       <Sidebar
         collapsed={sidebarCollapsed}

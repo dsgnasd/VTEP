@@ -186,9 +186,9 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
       <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm">
         <table className="w-full min-w-[880px] text-[13px]">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/50">
+            <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/60">
               {selectable && (
-                <th className="w-10 min-w-[40px] sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800">
+                <th className="w-10 min-w-[40px] sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60">
                   <div className="flex items-center justify-center h-full py-2.5">
                     <input
                       type="checkbox"
@@ -208,8 +208,8 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   onClick={() => handleSort(col.key)}
                   className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors
                     ${col.sticky && selectable ? 'pl-1 pr-4' : 'px-4'}
-                    ${col.sticky && selectable ? 'sticky left-10 z-10 bg-gray-50/80 dark:bg-gray-800' : ''}
-                    ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800' : ''}`}
+                    ${col.sticky && selectable ? 'sticky left-10 z-10 bg-gray-50/80 dark:bg-gray-800/60' : ''}
+                    ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60' : ''}`}
                 >
                   <span className="inline-flex items-center gap-1">
                     {col.label}
@@ -256,11 +256,11 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   )}
                   <td className={`sticky z-10 py-2.5 transition-colors ${
                     selectable ? 'left-10 pl-1 pr-4' : 'left-0 px-4'
-                  } ${isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
+                    } ${isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
                   }`}>
                     <Link
                       to={`/employee/${emp.id}`}
-                      className="font-medium text-gray-900 hover:text-blue-600 transition-colors whitespace-nowrap"
+                      className="font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors whitespace-nowrap"
                       title={emp.name}
                     >
                       {shortName(emp.name)}
@@ -268,12 +268,12 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   </td>
 
                   <td className="px-4 py-2.5" title={emp.role}>
-                    <span className="block max-w-[180px] truncate text-gray-600">
+                    <span className="block max-w-[180px] truncate text-gray-600 dark:text-gray-400">
                       {emp.role}
                     </span>
                   </td>
 
-                  <td className="px-4 py-2.5 text-gray-600 whitespace-nowrap">
+                  <td className="px-4 py-2.5 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                     {emp.team}
                   </td>
 
@@ -282,13 +282,13 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                       {emp.allocations.slice(0, 2).map((a) => (
                         <span
                           key={a.projectId}
-                          className="inline-block px-1.5 py-0.5 rounded bg-slate-100 text-xs text-gray-600 whitespace-nowrap"
+                          className="inline-block px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-700 text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap"
                         >
                           {a.projectName}
                         </span>
                       ))}
                       {emp.allocations.length > 2 && (
-                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                           +{emp.allocations.length - 2}
                         </span>
                       )}
@@ -297,7 +297,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
 
                   <td className="px-4 py-2.5">
                     <div className="flex items-center gap-2">
-                      <div className="w-14 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="w-14 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
                             emp.totalAllocation >= 80
@@ -309,7 +309,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                           style={{ width: `${emp.totalAllocation}%` }}
                         />
                       </div>
-                      <span className="text-xs text-gray-500 tabular-nums w-8">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums w-8">
                         {emp.totalAllocation}%
                       </span>
                     </div>
@@ -325,7 +325,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                         <SkillTag key={s.name} name={s.name} />
                       ))}
                       {emp.skills.length > 3 && (
-                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                           +{emp.skills.length - 3}
                         </span>
                       )}

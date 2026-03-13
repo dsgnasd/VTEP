@@ -607,7 +607,7 @@ export default function TeamsView({ employees, onDetailChange }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Мои команды</h2>
+          <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Мои команды</h2>
           {teams.length > 0 && (
             <span className="text-xs text-gray-400">{teams.length}</span>
           )}

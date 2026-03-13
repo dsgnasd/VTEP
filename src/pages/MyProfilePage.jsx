@@ -273,7 +273,7 @@ export default function MyProfilePage() {
                 <>
                   <button
                     onClick={saveEditing}
-                    className="inline-flex items-center gap-1.5 h-10 sm:h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition shadow-sm"
+                    className="inline-flex items-center gap-1.5 h-10 sm:h-9 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -291,7 +291,7 @@ export default function MyProfilePage() {
                 <>
                   <button
                     onClick={startEditing}
-                    className="inline-flex items-center gap-1.5 h-10 sm:h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition shadow-sm"
+                    className="inline-flex items-center gap-1.5 h-10 sm:h-9 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20"
                   >
                     {Icon.edit}
                     Редактировать
@@ -629,7 +629,7 @@ function SkillsTab() {
           </div>
           <button
             onClick={addLanguage}
-            className="h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition shadow-sm"
+            className="h-9 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20"
           >
             Добавить
           </button>
@@ -778,7 +778,7 @@ function ExperienceTab() {
               <input type="number" value={eduForm.endYear} onChange={(e) => setEduForm((f) => ({ ...f, endYear: e.target.value }))} placeholder="2020" min="1970" max="2030" className={inputCls} />
             </div>
             <div className="flex items-center gap-2 pt-1">
-              <button onClick={saveEdu} className="h-8 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition shadow-sm">
+              <button onClick={saveEdu} className="h-8 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20">
                 {editingEduIdx !== null ? 'Сохранить' : 'Добавить'}
               </button>
               <button onClick={cancelEdu} className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">Отмена</button>

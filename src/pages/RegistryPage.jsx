@@ -80,8 +80,8 @@ export default function RegistryPage({ search }) {
     <div className="space-y-6">
       {/* Заголовок */}
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Реестр сотрудников</h1>
-        <p className="mt-1 text-sm text-gray-500">Поиск, сравнение сотрудников и управление командами</p>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Реестр сотрудников</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Поиск, сравнение сотрудников и управление командами</p>
       </div>
 
       {/* Мои команды — всегда видны */}
@@ -99,7 +99,7 @@ export default function RegistryPage({ search }) {
                 className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
                   viewLabel === tab
                     ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 {tab}

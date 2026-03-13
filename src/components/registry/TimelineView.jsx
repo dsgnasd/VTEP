@@ -60,8 +60,8 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
     <div className="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 shadow-sm overflow-x-auto">
       <div className="min-w-[900px]">
         {/* Заголовок месяцев */}
-        <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900 sticky top-0 z-10">
-          <div className="w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 bg-gray-50/80 dark:bg-gray-900 z-20 border-r border-gray-200 dark:border-gray-700">
+        <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/60 sticky top-0 z-10">
+          <div className="w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 bg-gray-50/80 dark:bg-gray-800/60 z-20 border-r border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
               {selectable && (
                 <div className="w-8 flex-shrink-0 flex items-center justify-center">
@@ -72,7 +72,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                       if (el) el.indeterminate = someSelected && !allVisibleSelected;
                     }}
                     onChange={handleSelectAll}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer"
                   />
                 </div>
               )}
@@ -116,13 +116,13 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => onToggleSelect(emp.id)}
-                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer"
                       />
                     </div>
                   )}
                   <Link
                     to={`/employee/${emp.id}`}
-                    className="text-[13px] font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 truncate transition-colors px-2"
+                    className="text-[13px] font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors px-2"
                     title={emp.name}
                   >
                     {shortName(emp.name)}
