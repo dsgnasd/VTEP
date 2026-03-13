@@ -5,8 +5,8 @@ import Card from '../components/ui/Card';
 import Field from '../components/ui/Field';
 import Input from '../components/ui/Input';
 import Select from '../components/ui/Select';
+import TabbedCard from '../components/ui/TabbedCard';
 import Textarea from '../components/ui/Textarea';
-import Tabs from '../components/ui/Tabs';
 
 // ──────────────────────────────────────────────────────────────
 // MyProfilePage — redesigned around core UX principles:
@@ -387,25 +387,20 @@ export default function MyProfilePage() {
          ═══════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-5 ui-grid-gap">
         {/* Left — Tabs (3/5) */}
-        <Card as="section" padding="none" className="lg:col-span-3 overflow-hidden">
-          {/* Tab bar */}
-          <div className="ui-card-header py-3.5 border-b border-gray-100 dark:border-gray-700/70">
-            <Tabs
-              tabs={TABS.map((tab) => ({ value: tab, label: tab }))}
-              value={activeTab}
-              onChange={setActiveTab}
-            />
-          </div>
-
-          {/* Tab content */}
-          <div className="ui-card-body pt-5">
-            {activeTab === 'Обзор' && <OverviewTab onNavigate={setActiveTab} hasAvatar={!!profileData.avatar} onAvatarUpload={() => avatarInputRef.current?.click()} />}
-            {activeTab === 'Компетенции' && <SkillsTab />}
-            {activeTab === 'Опыт' && <ExperienceTab />}
-            {activeTab === 'ИПР' && <IDPTab />}
-            {activeTab === 'Фидбэки' && <FeedbackTab />}
-          </div>
-        </Card>
+        <TabbedCard
+          className="lg:col-span-3"
+          tabs={TABS.map((tab) => ({ value: tab, label: tab }))}
+          value={activeTab}
+          onChange={setActiveTab}
+          headerClassName="px-5 sm:px-7"
+          bodyClassName="px-5 sm:px-7 pt-4"
+        >
+          {activeTab === 'Обзор' && <OverviewTab onNavigate={setActiveTab} hasAvatar={!!profileData.avatar} onAvatarUpload={() => avatarInputRef.current?.click()} />}
+          {activeTab === 'Компетенции' && <SkillsTab />}
+          {activeTab === 'Опыт' && <ExperienceTab />}
+          {activeTab === 'ИПР' && <IDPTab />}
+          {activeTab === 'Фидбэки' && <FeedbackTab />}
+        </TabbedCard>
 
         {/* Right — Vacation (2/5) */}
         <div className="lg:col-span-2 ui-section-stack">
@@ -519,7 +514,7 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
             {items.map((item) => (
               <div
                 key={item.label}
-                className={`flex items-center justify-between gap-4 py-2.5 px-3 rounded-lg transition ${
+                className={`flex items-center justify-between gap-4 py-2.5 px-1 rounded-lg transition ${
                   item.done ? '' : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
                 }`}
               >
