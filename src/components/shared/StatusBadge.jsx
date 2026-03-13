@@ -5,10 +5,10 @@ import { memo } from 'react';
 // ──────────────────────────────────────────────────────────────
 
 const STATUS_STYLES = {
-  Available: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  Partial: 'bg-amber-50 text-amber-700 border-amber-200',
-  Vacation: 'bg-red-50 text-red-700 border-red-200',
-  Bench: 'bg-gray-100 text-gray-600 border-gray-200',
+  Available: 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700',
+  Partial: 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-700',
+  Vacation: 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-700',
+  Bench: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700',
 };
 
 const STATUS_LABELS = {

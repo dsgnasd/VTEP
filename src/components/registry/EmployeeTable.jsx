@@ -43,8 +43,8 @@ function EmployeeCard({ emp, selectable, isSelected, onToggleSelect }) {
     <div
       className={`rounded-xl border p-3.5 transition-colors ${
         isSelected
-          ? 'border-blue-300 bg-blue-50/50'
-          : 'border-gray-200 bg-white'
+          ? 'border-blue-300 dark:border-blue-500/50 bg-blue-50/50 dark:bg-blue-500/10'
+          : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
       }`}
     >
       {/* Row 1: checkbox + name + status */}
@@ -61,20 +61,20 @@ function EmployeeCard({ emp, selectable, isSelected, onToggleSelect }) {
           <div className="flex items-center justify-between gap-2">
             <Link
               to={`/employee/${emp.id}`}
-              className="font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate"
+              className="font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate"
             >
               {shortName(emp.name)}
             </Link>
             <StatusBadge status={emp.status} />
           </div>
-          <p className="text-xs text-gray-500 mt-0.5 leading-snug">{emp.role}</p>
-          <p className="text-[11px] text-gray-500">{emp.team}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 leading-snug">{emp.role}</p>
+          <p className="text-[11px] text-gray-500 dark:text-gray-400">{emp.team}</p>
         </div>
       </div>
 
       {/* Row 2: allocation bar */}
       <div className="flex items-center gap-2 mt-2.5">
-        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+        <div className="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full ${
               emp.totalAllocation >= 80
@@ -86,7 +86,7 @@ function EmployeeCard({ emp, selectable, isSelected, onToggleSelect }) {
             style={{ width: `${emp.totalAllocation}%` }}
           />
         </div>
-        <span className="text-[11px] text-gray-500 tabular-nums w-7 text-right">
+        <span className="text-[11px] text-gray-500 dark:text-gray-400 tabular-nums w-7 text-right">
           {emp.totalAllocation}%
         </span>
       </div>
@@ -97,7 +97,7 @@ function EmployeeCard({ emp, selectable, isSelected, onToggleSelect }) {
           {emp.allocations.map((a) => (
             <span
               key={a.projectId}
-              className="px-1.5 py-0.5 rounded bg-slate-100 text-[11px] text-gray-600"
+              className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-700 text-[11px] text-gray-600 dark:text-gray-400"
             >
               {a.projectName}
             </span>
@@ -112,7 +112,7 @@ function EmployeeCard({ emp, selectable, isSelected, onToggleSelect }) {
             <SkillTag key={s.name} name={s.name} />
           ))}
           {emp.skills.length > 3 && (
-            <span className="text-[11px] text-gray-500 self-center">
+            <span className="text-[11px] text-gray-500 dark:text-gray-400 self-center">
               +{emp.skills.length - 3}
             </span>
           )}
@@ -161,7 +161,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
 
   if (sorted.length === 0) {
     return (
-      <div className="py-12 text-center text-gray-500 text-sm rounded-xl border border-gray-200 bg-white">
+      <div className="py-12 text-center text-gray-500 dark:text-gray-400 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         Сотрудники не найдены по текущим фильтрам.
       </div>
     );
@@ -183,12 +183,12 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
       </div>
 
       {/* ── Desktop: table ── */}
-      <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm">
         <table className="w-full min-w-[880px] text-[13px]">
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50/80">
+            <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/50">
               {selectable && (
-                <th className="w-10 min-w-[40px] sticky left-0 z-10 bg-gray-50/80">
+                <th className="w-10 min-w-[40px] sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800">
                   <div className="flex items-center justify-center h-full py-2.5">
                     <input
                       type="checkbox"
@@ -206,15 +206,15 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                 <th
                   key={col.key}
                   onClick={() => handleSort(col.key)}
-                  className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 transition-colors
+                  className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors
                     ${col.sticky && selectable ? 'pl-1 pr-4' : 'px-4'}
-                    ${col.sticky && selectable ? 'sticky left-10 z-10 bg-gray-50/80' : ''}
-                    ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80' : ''}`}
+                    ${col.sticky && selectable ? 'sticky left-10 z-10 bg-gray-50/80 dark:bg-gray-800' : ''}
+                    ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800' : ''}`}
                 >
                   <span className="inline-flex items-center gap-1">
                     {col.label}
                     {sortKey === col.key && (
-                      <svg className="w-3 h-3 text-gray-500" viewBox="0 0 12 12" fill="currentColor">
+                      <svg className="w-3 h-3 text-gray-500 dark:text-gray-400" viewBox="0 0 12 12" fill="currentColor">
                         {sortDir === 'asc' ? (
                           <path d="M6 2l4 5H2z" />
                         ) : (
@@ -228,7 +228,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
             {sorted.map((emp) => {
               const isSelected = selectable && selectedIds.has(emp.id);
               return (
@@ -236,13 +236,13 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   key={emp.id}
                   className={`group transition-colors ${
                     isSelected
-                      ? 'bg-blue-50/60 hover:bg-blue-50'
-                      : 'hover:bg-gray-50'
+                      ? 'bg-blue-50/60 dark:bg-blue-500/10 hover:bg-blue-50 dark:hover:bg-blue-500/15'
+                      : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
                   }`}
                 >
                   {selectable && (
                     <td className={`w-10 min-w-[40px] sticky left-0 z-10 transition-colors ${
-                      isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
+                      isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
                     }`}>
                       <div className="flex items-center justify-center h-full py-2.5">
                         <input

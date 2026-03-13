@@ -1,15 +1,12 @@
 import { useState } from 'react';
 
-/* ── Mock data ── */
+/* ── Temporary seed data ── */
 const CURRENT_PROJECTS = [
   {
     id: 1,
     name: 'Интернет-банк 3.0',
     description: 'Полный редизайн и миграция интернет-банка на микросервисную архитектуру',
     team: 14,
-    progress: 68,
-    status: 'В работе',
-    statusColor: 'bg-blue-100 text-blue-700 border-blue-200',
     startDate: 'Янв 2025',
     deadline: 'Дек 2025',
     techStack: ['React', 'Go', 'PostgreSQL', 'Kafka'],
@@ -20,9 +17,6 @@ const CURRENT_PROJECTS = [
     name: 'API Gateway',
     description: 'Единая точка входа для всех внешних и внутренних API сервисов',
     team: 6,
-    progress: 45,
-    status: 'В работе',
-    statusColor: 'bg-blue-100 text-blue-700 border-blue-200',
     startDate: 'Мар 2025',
     deadline: 'Сен 2025',
     techStack: ['Go', 'gRPC', 'Redis', 'Kubernetes'],
@@ -33,9 +27,6 @@ const CURRENT_PROJECTS = [
     name: 'Мобильный банк',
     description: 'Нативное приложение для iOS и Android с биометрией и push-уведомлениями',
     team: 10,
-    progress: 82,
-    status: 'Финал',
-    statusColor: 'bg-emerald-100 text-emerald-700 border-emerald-200',
     startDate: 'Окт 2024',
     deadline: 'Июн 2025',
     techStack: ['Swift', 'Kotlin', 'Firebase', 'REST'],
@@ -46,9 +37,6 @@ const CURRENT_PROJECTS = [
     name: 'Дизайн-система',
     description: 'Библиотека UI-компонентов и токенов для единого визуального стиля',
     team: 4,
-    progress: 35,
-    status: 'В работе',
-    statusColor: 'bg-blue-100 text-blue-700 border-blue-200',
     startDate: 'Фев 2025',
     deadline: 'Авг 2025',
     techStack: ['React', 'Figma', 'Storybook', 'TypeScript'],
@@ -59,9 +47,6 @@ const CURRENT_PROJECTS = [
     name: 'CI/CD Pipeline',
     description: 'Автоматизация сборки, тестирования и деплоя всех сервисов',
     team: 3,
-    progress: 90,
-    status: 'Финал',
-    statusColor: 'bg-emerald-100 text-emerald-700 border-emerald-200',
     startDate: 'Ноя 2024',
     deadline: 'Апр 2025',
     techStack: ['GitLab CI', 'Docker', 'Kubernetes', 'Terraform'],
@@ -72,9 +57,6 @@ const CURRENT_PROJECTS = [
     name: 'Единый кабинет клиента',
     description: 'Портал самообслуживания с личным кабинетом и аналитикой для клиентов',
     team: 8,
-    progress: 20,
-    status: 'Старт',
-    statusColor: 'bg-amber-100 text-amber-700 border-amber-200',
     startDate: 'Мар 2025',
     deadline: 'Фев 2026',
     techStack: ['React', 'Node.js', 'MongoDB', 'GraphQL'],
@@ -88,8 +70,6 @@ const ARCHIVED_PROJECTS = [
     name: 'КХД (Корпоративное хранилище данных)',
     description: 'Централизованное хранилище данных для аналитики и отчётности',
     team: 9,
-    status: 'Завершён',
-    statusColor: 'bg-gray-100 text-gray-600 border-gray-200',
     startDate: 'Мар 2023',
     endDate: 'Дек 2024',
     techStack: ['Informatica', 'Oracle', 'Power BI', 'ETL'],
@@ -101,8 +81,6 @@ const ARCHIVED_PROJECTS = [
     name: 'СИФР',
     description: 'Система информационной финансовой отчётности для регулятора',
     team: 7,
-    status: 'Завершён',
-    statusColor: 'bg-gray-100 text-gray-600 border-gray-200',
     startDate: 'Июн 2023',
     endDate: 'Авг 2024',
     techStack: ['.NET', 'MSSQL', 'Angular', 'SOAP'],
@@ -114,8 +92,6 @@ const ARCHIVED_PROJECTS = [
     name: 'BPM/Pega Platform',
     description: 'Автоматизация бизнес-процессов на платформе Pega',
     team: 11,
-    status: 'Завершён',
-    statusColor: 'bg-gray-100 text-gray-600 border-gray-200',
     startDate: 'Янв 2022',
     endDate: 'Май 2024',
     techStack: ['Pega', 'Java', 'BPMN', 'Camunda'],
@@ -127,8 +103,6 @@ const ARCHIVED_PROJECTS = [
     name: 'ITSM/Мониторинг',
     description: 'Система мониторинга инфраструктуры и управления инцидентами',
     team: 5,
-    status: 'Завершён',
-    statusColor: 'bg-gray-100 text-gray-600 border-gray-200',
     startDate: 'Сен 2023',
     endDate: 'Мар 2024',
     techStack: ['Zabbix', 'Grafana', 'ELK', 'Prometheus'],
@@ -140,8 +114,6 @@ const ARCHIVED_PROJECTS = [
     name: 'Кредитный конвейер',
     description: 'Автоматизация процесса выдачи кредитов от заявки до решения',
     team: 12,
-    status: 'Заморожен',
-    statusColor: 'bg-red-100 text-red-600 border-red-200',
     startDate: 'Апр 2024',
     endDate: 'Окт 2024',
     techStack: ['Java', 'Spring Boot', 'PostgreSQL', 'Kafka'],
@@ -176,34 +148,26 @@ const Icons = {
   ),
 };
 
-/* ── Progress color ── */
-function progressColor(pct) {
-  if (pct >= 80) return 'bg-emerald-500';
-  if (pct >= 50) return 'bg-blue-500';
-  if (pct >= 25) return 'bg-amber-500';
-  return 'bg-gray-300';
-}
-
 /* ── Project Card (current) ── */
 function CurrentCard({ project }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:border-gray-300 transition group">
-      <h3 className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition leading-tight mb-3">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 hover:shadow-md hover:border-gray-300 transition group">
+      <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 transition leading-tight mb-3">
         {project.name}
       </h3>
 
-      <p className="text-xs text-gray-500 leading-relaxed mb-4">{project.description}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">{project.description}</p>
 
       <div className="flex flex-wrap gap-1.5 mb-4">
         {project.techStack.map((t) => (
-          <span key={t} className="text-[11px] font-medium text-gray-600 bg-gray-100 rounded px-1.5 py-0.5">
+          <span key={t} className="text-[11px] font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded px-1.5 py-0.5">
             {t}
           </span>
         ))}
       </div>
 
       {/* Meta */}
-      <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-gray-500">
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-gray-500 dark:text-gray-400">
         <div className="flex items-center gap-1.5">
           {Icons.lead}
           <span>{project.lead}</span>
@@ -224,29 +188,29 @@ function CurrentCard({ project }) {
 /* ── Project Card (archived) ── */
 function ArchivedCard({ project }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 opacity-80 hover:opacity-100 transition">
-      <h3 className="text-sm font-semibold text-gray-700 leading-tight mb-3">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 opacity-80 hover:opacity-100 transition">
+      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 leading-tight mb-3">
         {project.name}
       </h3>
 
-      <p className="text-xs text-gray-500 leading-relaxed mb-4">{project.description}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">{project.description}</p>
 
       <div className="flex flex-wrap gap-1.5 mb-4">
         {project.techStack.map((t) => (
-          <span key={t} className="text-[11px] font-medium text-gray-500 bg-gray-50 border border-gray-200 rounded px-1.5 py-0.5">
+          <span key={t} className="text-[11px] font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5">
             {t}
           </span>
         ))}
       </div>
 
       {/* Result */}
-      <div className="flex items-start gap-1.5 text-xs text-gray-600 bg-gray-50 rounded-lg px-3 py-2 mb-3">
+      <div className="flex items-start gap-1.5 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-3 py-2 mb-3">
         {Icons.check}
         <span>{project.result}</span>
       </div>
 
       {/* Meta */}
-      <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-gray-500">
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-gray-500 dark:text-gray-400">
         <div className="flex items-center gap-1.5">
           {Icons.lead}
           <span>{project.lead}</span>

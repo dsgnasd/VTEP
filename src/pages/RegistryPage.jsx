@@ -65,6 +65,7 @@ export default function RegistryPage({ search }) {
     return (
       <CompareView
         employees={selectedEmployees}
+        allEmployees={employees}
         onBack={handleBackFromCompare}
         defaultTab={compareSource === 'timeline' ? 'timeline' : 'profiles'}
       />

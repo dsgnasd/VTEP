@@ -145,6 +145,7 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, is
         className={`fixed top-0 left-0 bottom-0 w-60 ${bgClass} flex flex-col z-50
                      transform transition-transform duration-300 ease-in-out lg:hidden
                      ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        aria-hidden={!mobileOpen}
       >
         <NavContent isCompact={false} onItemClick={onMobileClose} light={isLight} />
 
@@ -153,6 +154,7 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, is
           <button
             onClick={onCycleTheme}
             className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm ${btnClass}`}
+            aria-label={`Переключить тему. Текущая тема: ${THEME_LABEL[themeMode]}`}
           >
             {THEME_ICON[themeMode]}
             <span>{THEME_LABEL[themeMode]}</span>
@@ -174,6 +176,7 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, is
             className={`w-full flex items-center gap-2 rounded-lg transition-all duration-200 text-sm
                        ${collapsed ? 'justify-center px-2 py-2' : 'px-3 py-2'} ${btnClass}`}
             title={THEME_LABEL[themeMode]}
+            aria-label={`Переключить тему. Текущая тема: ${THEME_LABEL[themeMode]}`}
           >
             {THEME_ICON[themeMode]}
             {!collapsed && <span>{THEME_LABEL[themeMode]}</span>}
@@ -187,6 +190,8 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, is
             className={`w-full flex items-center gap-2 rounded-lg transition-all duration-200 text-sm
                        ${collapsed ? 'justify-center px-2 py-2' : 'px-3 py-2'} ${btnClass}`}
             title={collapsed ? 'Развернуть меню' : 'Свернуть меню'}
+            aria-label={collapsed ? 'Развернуть меню' : 'Свернуть меню'}
+            aria-expanded={!collapsed}
           >
             <svg
               className={`w-4 h-4 transition-transform duration-300 ${collapsed ? 'rotate-180' : ''}`}

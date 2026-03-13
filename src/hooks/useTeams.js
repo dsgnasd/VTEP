@@ -2,16 +2,28 @@ import { useState, useCallback } from 'react';
 
 const STORAGE_KEY = 'ep-teams';
 
+function canUseStorage() {
+  return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+}
+
 function load() {
+  if (!canUseStorage()) return [];
+
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || [];
   } catch {
     return [];
   }
 }
 
 function save(teams) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(teams));
+  if (!canUseStorage()) return;
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(teams));
+  } catch {
+    // Ignore storage failures so the UI keeps working with in-memory state.
+  }
 }
 
 let idCounter = Date.now();

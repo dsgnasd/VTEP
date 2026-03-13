@@ -25,7 +25,7 @@ import VacationRequestModal from '../components/vacation/VacationRequestModal';
 //    Vacation CTA is secondary (outline) — not competing.
 // ──────────────────────────────────────────────────────────────
 
-/* ── Mock current-user data ── */
+/* ── Temporary current-user seed data ── */
 const ME = {
   name: 'Павел Пирожков',
   initials: 'ПП',
@@ -197,7 +197,7 @@ export default function MyProfilePage() {
            Actions pinned top-right.
            UX: One glance = "who is this person".
          ═══════════════════════════════════════════════════════ */}
-      <section className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+      <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
         {/* Subtle top accent — brand presence without decoration */}
         <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-400" />
 
@@ -240,20 +240,20 @@ export default function MyProfilePage() {
             {/* Name block */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
                   {ME.name}
                 </h1>
-                <span className="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-600 text-[11px] font-bold tracking-widest border border-indigo-100">
+                <span className="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 text-[11px] font-bold tracking-widest border border-indigo-100 dark:border-indigo-700/40">
                   {ME.level}
                 </span>
               </div>
 
-              <p className="text-[15px] text-gray-600 mt-0.5">
+              <p className="text-[15px] text-gray-600 dark:text-gray-300 mt-0.5">
                 {ME.role} · {ME.department}
               </p>
 
               {/* Contact row — icons for instant scanning */}
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-sm text-gray-500">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-sm text-gray-500 dark:text-gray-400">
                 <ContactChip icon={Icon.mail} href={`mailto:${ME.email}`}>
                   {ME.email}
                 </ContactChip>
@@ -282,7 +282,7 @@ export default function MyProfilePage() {
                   </button>
                   <button
                     onClick={cancelEditing}
-                    className="h-10 sm:h-9 px-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition"
+                    className="h-10 sm:h-9 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                   >
                     Отмена
                   </button>
@@ -297,7 +297,7 @@ export default function MyProfilePage() {
                     Редактировать
                   </button>
                   <button
-                    className="h-10 w-10 sm:h-9 sm:w-9 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition flex items-center justify-center"
+                    className="h-10 w-10 sm:h-9 sm:w-9 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200 transition flex items-center justify-center"
                     title="Поделиться профилем"
                   >
                     {Icon.share}
@@ -308,31 +308,31 @@ export default function MyProfilePage() {
           </div>
 
           {/* Bio + edit fields — inside the identity block for cohesion */}
-          <div className="mt-5 border-t border-gray-100 pt-5 max-w-2xl">
+          <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 max-w-2xl">
             {editing ? (
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-medium text-gray-500 mb-1.5 block">Телефон</label>
+                  <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Телефон</label>
                   <input
                     type="tel"
                     value={editDraft.phone}
                     onChange={(e) => setEditDraft((d) => ({ ...d, phone: e.target.value }))}
-                    className="w-full sm:w-56 h-9 text-sm border border-gray-200 rounded-lg px-3 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+                    className="w-full sm:w-56 h-9 text-sm border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg px-3 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-500 mb-1.5 block">О себе</label>
+                  <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">О себе</label>
                   <textarea
                     value={editDraft.about}
                     onChange={(e) => setEditDraft((d) => ({ ...d, about: e.target.value }))}
                     rows={4}
-                    className="w-full text-sm leading-relaxed border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 resize-y"
+                    className="w-full text-sm leading-relaxed border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 resize-y"
                   />
                 </div>
               </div>
             ) : (
               profileData.about && (
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                   {profileData.about}
                 </p>
               )
@@ -347,23 +347,23 @@ export default function MyProfilePage() {
            profile < 100%.  Disappears forever on dismiss.
          ═══════════════════════════════════════════════════════ */}
       {nudgeVisible && ME.completionScore < 100 && (
-        <section className="relative flex items-center gap-4 bg-amber-50 rounded-xl px-5 py-3.5">
+        <section className="relative flex items-center gap-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-xl px-5 py-3.5">
           <div className="flex-1 flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center flex-shrink-0">
               <span className="text-base">💡</span>
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-amber-900">
+              <p className="text-sm font-medium text-amber-900 dark:text-amber-200">
                 Заполните профиль до конца — осталось {getCompletionItems(profileData.avatar).filter(i => !i.done).length} шага
               </p>
-              <p className="text-xs text-amber-700 mt-0.5 hidden sm:block">
+              <p className="text-xs text-amber-700 dark:text-amber-300 mt-0.5 hidden sm:block">
                 Полный профиль помогает руководителям учитывать ваши навыки при формировании команд
               </p>
             </div>
           </div>
           <button
             onClick={() => setNudgeVisible(false)}
-            className="p-1.5 rounded-md text-amber-400 hover:text-amber-600 hover:bg-amber-100 transition flex-shrink-0"
+            className="p-1.5 rounded-md text-amber-400 dark:text-amber-500 hover:text-amber-600 dark:hover:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/40 transition flex-shrink-0"
           >
             {Icon.close}
           </button>
@@ -375,7 +375,7 @@ export default function MyProfilePage() {
          ═══════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left — Tabs (3/5) */}
-        <section className="lg:col-span-3 bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <section className="lg:col-span-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
           {/* Tab bar */}
           <div className="px-6 pt-4">
             <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
@@ -386,7 +386,7 @@ export default function MyProfilePage() {
                   className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
                     activeTab === tab
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                      : 'text-gray-500 hover:text-gray-700'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                   }`}
                 >
                   {tab}
@@ -408,38 +408,38 @@ export default function MyProfilePage() {
         {/* Right — Vacation (2/5) */}
         <div className="lg:col-span-2 space-y-5">
           {/* Vacation widget */}
-          <div className="border border-gray-200 rounded-xl p-5 bg-white">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800">
+            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
               Отпуск
             </h3>
 
             <div className="flex items-baseline justify-between mb-2">
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl font-bold text-gray-900">
+                <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                   {ME.vacation.available}
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
                   из {ME.vacation.total} дн.
                 </span>
               </div>
             </div>
-            <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
               <div
                 className="h-full bg-blue-500 rounded-full transition-all"
                 style={{ width: `${(ME.vacation.used / ME.vacation.total) * 100}%` }}
               />
             </div>
-            <div className="flex justify-between mt-1.5 text-[11px] text-gray-500">
+            <div className="flex justify-between mt-1.5 text-[11px] text-gray-500 dark:text-gray-400">
               <span>Использовано: {ME.vacation.used} дн.</span>
               <span>Доступно: {ME.vacation.available} дн.</span>
             </div>
 
             {ME.vacation.next && (
-              <div className="flex items-center gap-2.5 mt-4 p-3 rounded-lg bg-blue-50">
-                <div className="text-blue-500 flex-shrink-0">{Icon.calendar}</div>
+              <div className="flex items-center gap-2.5 mt-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                <div className="text-blue-500 dark:text-blue-400 flex-shrink-0">{Icon.calendar}</div>
                 <div>
-                  <p className="text-xs font-medium text-blue-800">Ближайший отпуск</p>
-                  <p className="text-xs text-blue-600">
+                  <p className="text-xs font-medium text-blue-800 dark:text-blue-200">Ближайший отпуск</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-300">
                     {ME.vacation.next.start} — {ME.vacation.next.end}
                   </p>
                 </div>
@@ -487,13 +487,13 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
           onClick={() => setChecklistOpen((o) => !o)}
           className="flex items-center justify-between w-full group"
         >
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Заполненность профиля
           </h3>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">{completionPct}%</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">{completionPct}%</span>
             <svg
-              className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+              className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
                 checklistOpen ? 'rotate-90' : ''
               }`}
               fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
@@ -504,7 +504,7 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
         </button>
 
         {/* Progress bar — always visible */}
-        <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden mt-2.5">
+        <div className="w-full h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mt-2.5">
           <div
             className="h-full bg-emerald-500 rounded-full transition-all duration-500"
             style={{ width: `${completionPct}%` }}
@@ -518,7 +518,7 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
               <div
                 key={item.label}
                 className={`flex items-center justify-between py-2 px-2.5 rounded-lg transition ${
-                  item.done ? '' : 'hover:bg-gray-50'
+                  item.done ? '' : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
@@ -527,23 +527,23 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
                       {Icon.check}
                     </div>
                   ) : (
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex-shrink-0" />
+                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 flex-shrink-0" />
                   )}
                   <span
                     className={`text-sm ${
                       item.done
-                        ? 'text-gray-500 line-through decoration-gray-300'
-                        : 'text-gray-700'
+                        ? 'text-gray-500 dark:text-gray-400 line-through decoration-gray-300 dark:decoration-gray-600'
+                        : 'text-gray-700 dark:text-gray-200'
                     }`}
                   >
                     {item.label}
                   </span>
-                  <span className="text-[11px] text-gray-500">+{item.points}</span>
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400">+{item.points}</span>
                 </div>
                 {!item.done && (
                   <button
                     onClick={() => item.action === 'avatar' ? onAvatarUpload() : onNavigate(item.tab)}
-                    className="text-xs font-medium text-blue-600 hover:text-blue-700 transition flex items-center gap-1 py-1 px-2.5 rounded-md hover:bg-blue-50"
+                    className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition flex items-center gap-1 py-1 px-2.5 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20"
                   >
                     Добавить
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -582,7 +582,7 @@ function SkillsTab() {
     <div className="space-y-8">
       {/* Languages */}
       <div>
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
           Языки
         </h3>
 
@@ -591,13 +591,13 @@ function SkillsTab() {
             {languages.map((l) => (
               <span
                 key={l.name}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-gray-700"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               >
                 {l.name}
                 <span className="text-[10px] opacity-60 font-normal">{l.level}</span>
                 <button
                   onClick={() => removeLanguage(l.name)}
-                  className="ml-0.5 text-gray-500 hover:text-red-500 transition"
+                  className="ml-0.5 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -611,7 +611,7 @@ function SkillsTab() {
         {/* Add language form */}
         <div className="flex items-end gap-3">
           <div className="flex-1 max-w-[200px]">
-            <label className="text-xs font-medium text-gray-500 mb-1.5 block">Язык</label>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Язык</label>
             <CustomSelect
               value={newLang}
               onChange={(v) => setNewLang(v)}
@@ -620,7 +620,7 @@ function SkillsTab() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 mb-1.5 block">Уровень</label>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Уровень</label>
             <CustomSelect
               value={newLevel}
               onChange={(v) => setNewLevel(v)}
@@ -638,7 +638,7 @@ function SkillsTab() {
 
       {/* Skills → Компетенции */}
       <div>
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
           Компетенции
         </h3>
         <div className="flex flex-wrap gap-2">
@@ -683,17 +683,17 @@ function ExperienceTab() {
   const removeEdu = (idx) => setEdu((prev) => prev.filter((_, i) => i !== idx));
   const cancelEdu = () => { setEduFormOpen(false); setEditingEduIdx(null); };
 
-  const inputCls = 'w-full h-9 px-3 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20';
+  const inputCls = 'w-full h-9 px-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20';
 
   const editBtn = (onClick) => (
-    <button onClick={onClick} className="p-1.5 rounded-md text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition" title="Редактировать">
+    <button onClick={onClick} className="p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition" title="Редактировать">
       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z" />
       </svg>
     </button>
   );
   const deleteBtn = (onClick) => (
-    <button onClick={onClick} className="p-1.5 rounded-md text-gray-500 hover:text-red-600 hover:bg-red-50 transition" title="Удалить">
+    <button onClick={onClick} className="p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition" title="Удалить">
       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
       </svg>
@@ -710,11 +710,11 @@ function ExperienceTab() {
       {/* ── Education ── */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
             Образование
           </h3>
           {!eduFormOpen && (
-            <button onClick={openAddEdu} className="text-xs font-medium text-blue-600 hover:text-blue-700 transition flex items-center gap-1">
+            <button onClick={openAddEdu} className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition flex items-center gap-1">
               {addBtnInline} Добавить
             </button>
           )}
@@ -723,16 +723,16 @@ function ExperienceTab() {
         {edu.length > 0 && (
           <div className="space-y-3 mb-4">
             {edu.map((item, idx) => (
-              <div key={idx} className="group flex items-start gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
-                <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <div key={idx} className="group flex items-start gap-3 p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 transition">
+                <div className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">{item.institution}</p>
-                  {item.specialty && <p className="text-sm text-gray-500">{item.specialty}</p>}
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{item.institution}</p>
+                  {item.specialty && <p className="text-sm text-gray-500 dark:text-gray-400">{item.specialty}</p>}
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                     {item.degree}{item.endYear ? `, ${item.endYear}` : ''}
                   </p>
                 </div>
@@ -746,18 +746,18 @@ function ExperienceTab() {
         )}
 
         {eduFormOpen && (
-          <div className="p-4 rounded-lg border border-gray-200 bg-gray-50/50 space-y-3">
+          <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-700/30 space-y-3">
             <div>
-              <label className="text-xs font-medium text-gray-500 mb-1.5 block">Учебное заведение *</label>
+              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Учебное заведение *</label>
               <input type="text" value={eduForm.institution} onChange={(e) => setEduForm((f) => ({ ...f, institution: e.target.value }))} placeholder="Название вуза / колледжа" className={inputCls} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Специальность</label>
+                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Специальность</label>
                 <input type="text" value={eduForm.specialty} onChange={(e) => setEduForm((f) => ({ ...f, specialty: e.target.value }))} placeholder="Направление" className={inputCls} />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Степень</label>
+                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Степень</label>
                 <CustomSelect
                   value={eduForm.degree}
                   onChange={(v) => setEduForm((f) => ({ ...f, degree: v }))}
@@ -774,72 +774,72 @@ function ExperienceTab() {
               </div>
             </div>
             <div className="max-w-[200px]">
-              <label className="text-xs font-medium text-gray-500 mb-1.5 block">Год окончания</label>
+              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Год окончания</label>
               <input type="number" value={eduForm.endYear} onChange={(e) => setEduForm((f) => ({ ...f, endYear: e.target.value }))} placeholder="2020" min="1970" max="2030" className={inputCls} />
             </div>
             <div className="flex items-center gap-2 pt-1">
               <button onClick={saveEdu} className="h-8 px-4 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition shadow-sm">
                 {editingEduIdx !== null ? 'Сохранить' : 'Добавить'}
               </button>
-              <button onClick={cancelEdu} className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition">Отмена</button>
+              <button onClick={cancelEdu} className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">Отмена</button>
             </div>
           </div>
         )}
 
         {edu.length === 0 && !eduFormOpen && (
-          <p className="text-sm text-gray-500">Нет записей. Добавьте своё образование.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Нет записей. Добавьте своё образование.</p>
         )}
       </div>
 
       {/* ── Current Projects ── */}
       <div>
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
           Текущие проекты
         </h3>
         {ME.currentProjects.length > 0 ? (
           <div className="space-y-3">
             {ME.currentProjects.map((proj) => (
-              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition">
-                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 transition">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">{proj.name}</p>
-                  <p className="text-xs text-gray-500">{proj.role}</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{proj.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{proj.role}</p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="w-16 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div className="h-full bg-blue-500 rounded-full" style={{ width: `${proj.load}%` }} />
                   </div>
-                  <span className="text-xs font-medium text-gray-600 tabular-nums">{proj.load}%</span>
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-300 tabular-nums">{proj.load}%</span>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">Нет активных проектов.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Нет активных проектов.</p>
         )}
       </div>
 
       {/* ── Archived Projects (hidden when empty) ── */}
       {ME.archivedProjects.length > 0 && (
         <div>
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
             Архивные проекты
           </h3>
           <div className="space-y-3">
             {ME.archivedProjects.map((proj) => (
-              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition opacity-70">
-                <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <div key={proj.name} className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 transition opacity-70">
+                <div className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800">{proj.name}</p>
-                  <p className="text-xs text-gray-500">{proj.role}</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-100">{proj.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{proj.role}</p>
                 </div>
               </div>
             ))}
@@ -869,11 +869,11 @@ function IDPTab() {
 function FeedbackTab() {
   return (
     <div className="space-y-4">
-      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+      <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
         Обратная связь
       </h3>
       {ME.feedback.map((fb) => (
-        <div key={fb.id} className="p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition">
+        <div key={fb.id} className="p-4 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 transition">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center flex-shrink-0 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
               {fb.from.split(' ').map(w => w[0]).join('').slice(0, 2)}
@@ -896,20 +896,6 @@ function FeedbackTab() {
 }
 
 /* ── Empty tab placeholder ── */
-function EmptyTab({ label }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
-        <svg className="w-6 h-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-        </svg>
-      </div>
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-xs text-gray-500 mt-1">Раздел в разработке</p>
-    </div>
-  );
-}
-
 /* ── Custom Select — themed dropdown ── */
 function CustomSelect({ value, onChange, options, placeholder, className = '' }) {
   const [open, setOpen] = useState(false);
@@ -932,7 +918,7 @@ function CustomSelect({ value, onChange, options, placeholder, className = '' })
         className="w-full h-9 px-3 rounded-lg border border-gray-200 dark:border-gray-600
                    text-sm text-left outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20
                    flex items-center justify-between gap-2 transition
-                   text-gray-900 dark:text-gray-100 select-trigger"
+                   bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
       >
         <span className={label ? '' : 'text-gray-400 dark:text-gray-500'}>{label || placeholder || 'Выберите'}</span>
         <svg className={`w-4 h-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -942,12 +928,12 @@ function CustomSelect({ value, onChange, options, placeholder, className = '' })
 
       {open && (
         <div className="absolute z-50 mt-1 w-full max-h-56 overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-600
-                        shadow-lg dark:shadow-black/40 py-1 select-dropdown">
+                        bg-white dark:bg-gray-800 shadow-lg dark:shadow-black/40 py-1">
           {placeholder && (
             <button
               type="button"
               onClick={() => { onChange(''); setOpen(false); }}
-              className="w-full text-left px-3 py-2 text-sm text-gray-400 dark:text-gray-500 hover:bg-gray-50 transition"
+              className="w-full text-left px-3 py-2 text-sm text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700/60 transition"
             >
               {placeholder}
             </button>
@@ -963,8 +949,8 @@ function CustomSelect({ value, onChange, options, placeholder, className = '' })
                 onClick={() => { onChange(optValue); setOpen(false); }}
                 className={`w-full text-left px-3 py-2 text-sm transition flex items-center justify-between
                   ${isSelected
-                    ? 'bg-blue-50 text-blue-700 dark:text-blue-300 font-medium'
-                    : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50'
+                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium'
+                    : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/60'
                   }`}
               >
                 {optLabel}
@@ -990,26 +976,13 @@ function ContactChip({ icon, href, children }) {
     <Wrapper
       href={href}
       className={`inline-flex items-center gap-1.5 ${
-        href ? 'text-blue-600 hover:text-blue-700 transition' : 'text-gray-500'
+        href
+          ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition'
+          : 'text-gray-500 dark:text-gray-400'
       }`}
     >
-      <span className="text-gray-500">{icon}</span>
+      <span className="text-gray-500 dark:text-gray-400">{icon}</span>
       {children}
     </Wrapper>
-  );
-}
-
-function InfoCell({ label, value, isLink }) {
-  return (
-    <div>
-      <p className="text-[11px] text-gray-500 mb-0.5">{label}</p>
-      {isLink ? (
-        <a href="#" className="text-sm text-blue-600 hover:text-blue-700 transition">
-          {value}
-        </a>
-      ) : (
-        <p className="text-sm text-gray-800">{value}</p>
-      )}
-    </div>
   );
 }

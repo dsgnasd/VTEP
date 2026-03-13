@@ -2,6 +2,8 @@ import { memo, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AllocationBlock from '../shared/AllocationBlock';
 import StatusBadge from '../shared/StatusBadge';
+import useTeams from '../../hooks/useTeams';
+import { TeamModal } from './TeamsView';
 
 // ──────────────────────────────────────────────────────────────
 // CompareView — сравнение выбранных сотрудников:
@@ -89,9 +91,9 @@ function collectSkillMatrix(employees) {
 }
 
 const LEVEL_COLORS = {
-  Senior: 'bg-emerald-100 text-emerald-700',
-  Middle: 'bg-blue-100 text-blue-700',
-  Junior: 'bg-amber-100 text-amber-700',
+  Senior: 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400',
+  Middle: 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400',
+  Junior: 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400',
 };
 
 const LEVEL_ORDER = { Senior: 3, Middle: 2, Junior: 1 };
@@ -99,17 +101,17 @@ const LEVEL_ORDER = { Senior: 3, Middle: 2, Junior: 1 };
 /* ── Tab: Timeline ── */
 function TimelineTab({ employees, ranges, monthWidths }) {
   return (
-    <div className="border border-gray-200 rounded-xl bg-white overflow-x-auto">
+    <div className="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-x-auto">
       <div className="min-w-[900px]">
-        <div className="flex border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
-          <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2.5 text-xs font-medium text-gray-600 sticky left-0 bg-gray-50 z-20 border-r border-gray-200">
+        <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 sticky top-0 z-10">
+          <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2.5 text-xs font-medium text-gray-600 dark:text-gray-400 sticky left-0 bg-gray-50 dark:bg-gray-800/50 z-20 border-r border-gray-200 dark:border-gray-700">
             Сотрудник
           </div>
           <div className="flex-1 flex">
             {MONTHS.map((m, i) => (
               <div
                 key={m.label}
-                className="text-xs font-medium text-gray-600 px-3 py-2.5 text-center border-r border-gray-100 last:border-r-0"
+                className="text-xs font-medium text-gray-600 dark:text-gray-400 px-3 py-2.5 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
                 style={{ width: `${monthWidths[i]}%` }}
               >
                 {m.label}
@@ -121,12 +123,12 @@ function TimelineTab({ employees, ranges, monthWidths }) {
         {employees.map((emp) => (
           <div
             key={emp.id}
-            className="flex border-b border-gray-100 hover:bg-gray-50/40 transition-colors"
+            className="flex border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50/40 dark:hover:bg-gray-700/40 transition-colors"
           >
-            <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2 sticky left-0 bg-white z-10 border-r border-gray-200">
+            <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2 sticky left-0 bg-white dark:bg-gray-800 z-10 border-r border-gray-200 dark:border-gray-700">
               <Link
                 to={`/employee/${emp.id}`}
-                className="text-sm font-medium text-gray-800 hover:text-blue-600 truncate block transition-colors"
+                className="text-sm font-medium text-gray-800 dark:text-gray-100 hover:text-blue-600 truncate block transition-colors"
               >
                 {emp.name}
               </Link>
@@ -194,17 +196,17 @@ function ProfilesTab({ employees, skillMatrix }) {
           {employees.map((emp) => (
             <div
               key={emp.id}
-              className="flex-1 min-w-[200px] bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+              className="flex-1 min-w-[200px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-3"
             >
               <div>
                 <Link
                   to={`/employee/${emp.id}`}
-                  className="font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                  className="font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors"
                 >
                   {emp.name}
                 </Link>
-                <p className="text-xs text-gray-500 mt-0.5">{emp.role}</p>
-                <p className="text-xs text-gray-500">{emp.team}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{emp.role}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{emp.team}</p>
               </div>
 
               <div className="flex items-center gap-2">
@@ -213,11 +215,11 @@ function ProfilesTab({ employees, skillMatrix }) {
 
               {/* Allocation bar */}
               <div>
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
                   <span>Загрузка</span>
-                  <span className="font-medium text-gray-700">{emp.totalAllocation}%</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">{emp.totalAllocation}%</span>
                 </div>
-                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all ${
                       emp.totalAllocation >= 80
@@ -233,12 +235,12 @@ function ProfilesTab({ employees, skillMatrix }) {
 
               {/* Projects */}
               <div>
-                <p className="text-xs text-gray-500 mb-1">Проекты</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Проекты</p>
                 <div className="flex flex-wrap gap-1">
                   {emp.allocations.map((a) => (
                     <span
                       key={a.projectId}
-                      className="px-1.5 py-0.5 rounded bg-slate-100 text-[11px] text-gray-700"
+                      className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-700 text-[11px] text-gray-700 dark:text-gray-300"
                     >
                       {a.projectName} {a.percentage}%
                     </span>
@@ -248,15 +250,15 @@ function ProfilesTab({ employees, skillMatrix }) {
 
               {/* Certs */}
               <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-500">Сертификации</span>
-                <span className="font-medium text-gray-700">{emp.certificates}</span>
+                <span className="text-gray-500 dark:text-gray-400">Сертификации</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">{emp.certificates}</span>
               </div>
 
               {/* Vacation */}
               <div>
-                <p className="text-xs text-gray-500 mb-1">Отпуска</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Отпуска</p>
                 {emp.vacation.length === 0 ? (
-                  <p className="text-xs text-gray-500">Нет запланированных</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Нет запланированных</p>
                 ) : (
                   <div className="space-y-0.5">
                     {emp.vacation.map((v, i) => (
@@ -275,20 +277,20 @@ function ProfilesTab({ employees, skillMatrix }) {
       </div>
 
       {/* Skills matrix */}
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-        <div className="px-4 py-3 border-b border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-900">Матрица навыков</h3>
-          <p className="text-xs text-gray-500 mt-0.5">Сравнение компетенций и уровней</p>
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Матрица навыков</h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Сравнение компетенций и уровней</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/50">
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 sticky left-0 bg-gray-50/50 z-10 min-w-[140px]">
+              <tr className="border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/60">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-300 sticky left-0 bg-gray-50/50 dark:bg-gray-800/60 z-10 min-w-[140px]">
                   Навык
                 </th>
                 {employees.map((emp) => (
-                  <th key={emp.id} className="text-center px-3 py-2 text-xs font-medium text-gray-600 min-w-[120px]">
+                  <th key={emp.id} className="text-center px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-300 min-w-[120px]">
                     {emp.name.split(' ')[0]}
                   </th>
                 ))}
@@ -296,8 +298,8 @@ function ProfilesTab({ employees, skillMatrix }) {
             </thead>
             <tbody>
               {skillMatrix.map(({ name, levels }) => (
-                <tr key={name} className="border-b border-gray-100 hover:bg-gray-50/60">
-                  <td className="px-4 py-1.5 text-xs font-medium text-gray-700 sticky left-0 bg-white z-10">
+                <tr key={name} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50/60 dark:hover:bg-gray-700/40">
+                  <td className="px-4 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 sticky left-0 bg-white dark:bg-gray-800 z-10">
                     {name}
                   </td>
                   {employees.map((emp) => {
@@ -309,7 +311,7 @@ function ProfilesTab({ employees, skillMatrix }) {
                             {level}
                           </span>
                         ) : (
-                          <span className="text-gray-300">—</span>
+                          <span className="text-gray-300 dark:text-gray-600">—</span>
                         )}
                       </td>
                     );
@@ -325,8 +327,12 @@ function ProfilesTab({ employees, skillMatrix }) {
 }
 
 /* ── Main CompareView ── */
-function CompareView({ employees, onBack, defaultTab = 'timeline' }) {
+
+function CompareView({ employees, allEmployees, onBack, defaultTab = 'timeline' }) {
   const [tab, setTab] = useState(defaultTab);
+  const { createTeam } = useTeams();
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const monthWidths = useMemo(
     () => MONTHS.map((m) => toPercent(m.days)),
@@ -356,26 +362,44 @@ function CompareView({ employees, onBack, defaultTab = 'timeline' }) {
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
               Назад к реестру
             </button>
-            <span className="text-gray-300">|</span>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <span className="text-gray-300 dark:text-gray-600">|</span>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Сравнение
             </h2>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
               {employees.length} сотр.
             </span>
           </div>
-          <button className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition shadow-sm">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-            </svg>
-            Сохранить команду
+          <button
+            onClick={() => setSaveModalOpen(true)}
+            className={`inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium transition shadow-sm ${
+              saved
+                ? 'bg-emerald-600 text-white'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >
+            {saved ? (
+              <>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                Команда сохранена
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                </svg>
+                Сохранить команду
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -389,7 +413,7 @@ function CompareView({ employees, onBack, defaultTab = 'timeline' }) {
             className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
               tab === t.id
                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             {t.label}
@@ -399,16 +423,16 @@ function CompareView({ employees, onBack, defaultTab = 'timeline' }) {
 
       {/* Сводка */}
       <div className="flex flex-wrap gap-3">
-        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-gray-200">
+        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <span className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
-          <span className="text-sm text-gray-700">
-            Пересечение отпусков: <strong className="font-semibold text-gray-900">{overlapDays} дн.</strong>
+          <span className="text-sm text-gray-700 dark:text-gray-300">
+            Пересечение отпусков: <strong className="font-semibold text-gray-900 dark:text-gray-100">{overlapDays} дн.</strong>
           </span>
         </div>
-        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-gray-200">
+        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-          <span className="text-sm text-gray-700">
-            Все доступны: <strong className="font-semibold text-gray-900">{allAvailableDays} дн.</strong>
+          <span className="text-sm text-gray-700 dark:text-gray-300">
+            Все доступны: <strong className="font-semibold text-gray-900 dark:text-gray-100">{allAvailableDays} дн.</strong>
           </span>
         </div>
         {ranges.length > 0 && (
@@ -427,7 +451,7 @@ function CompareView({ employees, onBack, defaultTab = 'timeline' }) {
       {tab === 'timeline' ? (
         <>
           <TimelineTab employees={employees} ranges={ranges} monthWidths={monthWidths} />
-          <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+          <div className="flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-2 rounded-sm bg-emerald-500" />
               Загрузка ≥80%
@@ -449,6 +473,17 @@ function CompareView({ employees, onBack, defaultTab = 'timeline' }) {
       ) : (
         <ProfilesTab employees={employees} skillMatrix={skillMatrix} />
       )}
+
+      <TeamModal
+        open={saveModalOpen}
+        onClose={() => setSaveModalOpen(false)}
+        onSave={(name, memberIds, visibility) => {
+          createTeam(name, memberIds, visibility);
+          setSaved(true);
+        }}
+        employees={allEmployees || employees}
+        initial={{ name: '', memberIds: employees.map((e) => e.id) }}
+      />
     </div>
   );
 }

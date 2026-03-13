@@ -57,11 +57,11 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
   };
 
   return (
-    <div className="border border-gray-200 rounded-xl bg-white shadow-sm overflow-x-auto">
+    <div className="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 shadow-sm overflow-x-auto">
       <div className="min-w-[900px]">
         {/* Заголовок месяцев */}
-        <div className="flex border-b border-gray-200 bg-gray-50/80 sticky top-0 z-10">
-          <div className="w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 bg-gray-50/80 z-20 border-r border-gray-200">
+        <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900 sticky top-0 z-10">
+          <div className="w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 bg-gray-50/80 dark:bg-gray-900 z-20 border-r border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
               {selectable && (
                 <div className="w-8 flex-shrink-0 flex items-center justify-center">
@@ -76,7 +76,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                   />
                 </div>
               )}
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 px-2">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 px-2">
                 Сотрудник
               </span>
             </div>
@@ -85,7 +85,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
             {MONTHS.map((m, i) => (
               <div
                 key={m.label}
-                className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 px-3 py-3 text-center border-r border-gray-100 last:border-r-0"
+                className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 px-3 py-3 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
                 style={{ width: `${monthWidths[i]}%` }}
               >
                 {m.label}
@@ -100,14 +100,14 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
           return (
             <div
               key={emp.id}
-              className={`group flex border-b border-gray-100 transition-colors ${
+              className={`group flex border-b border-gray-100 dark:border-gray-700/50 transition-colors ${
                 isSelected
-                  ? 'bg-blue-50/60 hover:bg-blue-50'
-                  : 'hover:bg-gray-50'
+                  ? 'bg-blue-50/60 dark:bg-blue-500/10 hover:bg-blue-50 dark:hover:bg-blue-500/15'
+                  : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
               }`}
             >
-              <div className={`w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 z-10 border-r border-gray-200 transition-colors ${
-                isSelected ? 'bg-blue-50' : 'bg-white group-hover:bg-gray-50'
+              <div className={`w-52 min-w-[208px] flex-shrink-0 py-2.5 sticky left-0 z-10 border-r border-gray-200 dark:border-gray-700 transition-colors ${
+                isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
               }`}>
                 <div className="flex items-center">
                   {selectable && (
@@ -122,7 +122,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                   )}
                   <Link
                     to={`/employee/${emp.id}`}
-                    className="text-[13px] font-medium text-gray-900 hover:text-blue-600 truncate transition-colors px-2"
+                    className="text-[13px] font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 truncate transition-colors px-2"
                     title={emp.name}
                   >
                     {shortName(emp.name)}
@@ -169,7 +169,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
         })}
 
         {employees.length === 0 && (
-          <div className="py-12 text-center text-gray-500 text-sm">
+          <div className="py-12 text-center text-gray-500 dark:text-gray-400 text-sm">
             Сотрудники не найдены по текущим фильтрам.
           </div>
         )}

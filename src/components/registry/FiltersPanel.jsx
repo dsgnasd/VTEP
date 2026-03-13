@@ -24,7 +24,7 @@ function Dropdown({ label, children, count }) {
       <button
         onClick={() => setOpen((o) => !o)}
         className={`h-8 px-3 rounded-md border text-sm flex items-center gap-1.5 transition
-                    ${count ? 'border-blue-400 bg-blue-50 text-blue-700' : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'}`}
+                    ${count ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'}`}
       >
         {label}
         {count > 0 && (
@@ -37,7 +37,7 @@ function Dropdown({ label, children, count }) {
         </svg>
       </button>
       {open && (
-        <div className="absolute top-full mt-1 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-30 min-w-[200px] py-1">
+        <div className="absolute top-full mt-1 left-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-30 min-w-[200px] py-1">
           {children}
         </div>
       )}
@@ -63,13 +63,13 @@ function MultiSelect({ options, selected, onChange, labels }) {
       {options.map((opt) => (
         <label
           key={opt}
-          className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 cursor-pointer text-sm"
+          className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer text-sm"
         >
           <input
             type="checkbox"
             checked={selected.includes(opt)}
             onChange={() => toggle(opt)}
-            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500/30"
+            className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500/30"
           />
           {labels ? labels[opt] || opt : opt}
         </label>
@@ -84,8 +84,8 @@ function SingleSelect({ options, selected, onChange, placeholder = 'Все' }) {
     <div className="max-h-56 overflow-y-auto">
       <button
         onClick={() => onChange('')}
-        className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 ${
-          !selected ? 'font-medium text-blue-600' : 'text-gray-600'
+        className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${
+          !selected ? 'font-medium text-blue-600' : 'text-gray-600 dark:text-gray-400'
         }`}
       >
         {placeholder}
@@ -94,10 +94,10 @@ function SingleSelect({ options, selected, onChange, placeholder = 'Все' }) {
         <button
           key={typeof opt === 'string' ? opt : opt.value}
           onClick={() => onChange(typeof opt === 'string' ? opt : opt.value)}
-          className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 ${
+          className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${
             selected === (typeof opt === 'string' ? opt : opt.value)
               ? 'font-medium text-blue-600'
-              : 'text-gray-700'
+              : 'text-gray-700 dark:text-gray-300'
           }`}
         >
           {typeof opt === 'string' ? opt : opt.label}
@@ -110,7 +110,7 @@ function SingleSelect({ options, selected, onChange, placeholder = 'Все' }) {
 /* ── Чип активного фильтра ── */
 function FilterChip({ category, label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-xs text-blue-700">
+    <span className="inline-flex items-center gap-1 pl-2 pr-1 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/15 border border-blue-200 text-xs text-blue-700 dark:text-blue-400">
       <span className="text-blue-400 font-medium">{category}:</span>
       <span className="font-medium max-w-[140px] truncate">{label}</span>
       <button
@@ -250,14 +250,14 @@ function FiltersPanel({ filters, setFilter, resetFilters, resultCount }) {
         {hasActive && (
           <button
             onClick={resetFilters}
-            className="h-8 px-3 rounded-md text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition"
+            className="h-8 px-3 rounded-md text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
           >
             Сбросить
           </button>
         )}
 
         {/* Счётчик */}
-        <span className="ml-auto text-xs text-gray-500">
+        <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
           {resultCount} сотр.
         </span>
       </div>
@@ -276,7 +276,7 @@ function FiltersPanel({ filters, setFilter, resetFilters, resultCount }) {
           {chips.length > 1 && (
             <button
               onClick={resetFilters}
-              className="text-xs text-gray-500 hover:text-gray-600 ml-1 transition-colors"
+              className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 ml-1 transition-colors"
             >
               Очистить все
             </button>

@@ -18,10 +18,10 @@ export default function ProfilePage() {
   if (!employee) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <p className="text-gray-500 text-sm">Сотрудник не найден.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">Сотрудник не найден.</p>
         <Link
           to="/registry"
-          className="mt-3 text-sm font-medium text-blue-600 hover:text-blue-700"
+          className="mt-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
         >
           Вернуться в реестр
         </Link>
@@ -33,11 +33,11 @@ export default function ProfilePage() {
     <div>
       {/* Хлебные крошки */}
       <nav className="mb-4 text-sm">
-        <Link to="/registry" className="text-gray-500 hover:text-gray-700 transition">
+        <Link to="/registry" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition">
           Сотрудники
         </Link>
-        <span className="mx-2 text-gray-300">/</span>
-        <span className="text-gray-900 font-medium">{employee.name}</span>
+        <span className="mx-2 text-gray-300 dark:text-gray-600">/</span>
+        <span className="text-gray-900 dark:text-gray-100 font-medium">{employee.name}</span>
       </nav>
 
       <EmployeeProfile employee={employee} />

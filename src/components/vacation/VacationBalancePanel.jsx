@@ -22,12 +22,12 @@ function daysLabel(n) {
 
 function StatCard({ value, label, accent }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4">
       <div className="flex items-baseline gap-1.5">
         <span className={`text-2xl font-bold ${accent}`}>{value}</span>
-        <span className="text-sm text-gray-500">{daysLabel(value)}</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">{daysLabel(value)}</span>
       </div>
-      <p className="text-sm text-gray-500 mt-1">{label}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{label}</p>
     </div>
   );
 }
@@ -36,8 +36,8 @@ function LegendItem({ color, label, value }) {
   return (
     <div className="flex items-center gap-2">
       <span className={`w-2.5 h-2.5 rounded-full ${color} flex-shrink-0`} />
-      <span className="text-sm text-gray-500">{label}:</span>
-      <span className="text-sm font-medium text-gray-700">{value}</span>
+      <span className="text-sm text-gray-500 dark:text-gray-400">{label}:</span>
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{value}</span>
     </div>
   );
 }
@@ -77,35 +77,35 @@ export default function VacationBalancePanel({ balance }) {
       </div>
 
       {/* ── Zone 2: Work year ── */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
           Рабочий год
         </h3>
         <div className="flex items-center gap-2.5 mb-3">
           {CalendarIcon}
-          <span className="text-sm font-medium text-gray-800">
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
             {workYearStart} — {workYearEnd}
           </span>
         </div>
-        <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+        <div className="w-full h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-blue-500 rounded-full transition-all"
             style={{ width: `${yearPct}%` }}
           />
         </div>
-        <div className="flex justify-between mt-2 text-xs text-gray-500">
+        <div className="flex justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
           <span>Начало: {workYearStart}</span>
           <span>Окончание: {workYearEnd}</span>
         </div>
       </div>
 
       {/* ── Zone 3: Usage breakdown ── */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
           Использование отпуска
         </h3>
         {/* Stacked bar */}
-        <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden flex">
+        <div className="w-full h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden flex">
           <div className="h-full bg-blue-500" style={{ width: `${usedPct}%` }} />
           <div className="h-full bg-emerald-400" style={{ width: `${curPct}%` }} />
           <div className="h-full bg-amber-400" style={{ width: `${carryPct}%` }} />

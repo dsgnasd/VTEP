@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────────────────
-// Mock data — realistic VebTech employee data based on actual
+// Temporary seed data — realistic VebTech employee data based on actual
 // organizational structure and competency centers.
 // Dates anchored around 2026-Q1 for the 3-month timeline.
 // ──────────────────────────────────────────────────────────────

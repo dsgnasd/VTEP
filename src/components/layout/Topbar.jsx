@@ -7,13 +7,15 @@ import { Link } from 'react-router-dom';
 // ──────────────────────────────────────────────────────────────
 
 function Topbar({ search, onSearchChange, onMobileMenuOpen }) {
+  const searchInputId = 'employee-search';
+
   return (
-    <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
+    <header className="h-14 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
       <div className="flex items-center gap-3">
         {/* Hamburger — mobile only */}
         <button
           onClick={onMobileMenuOpen}
-          className="lg:hidden p-1.5 -ml-1.5 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition"
+          className="lg:hidden p-1.5 -ml-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
           aria-label="Открыть меню"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -23,8 +25,11 @@ function Topbar({ search, onSearchChange, onMobileMenuOpen }) {
 
         {/* Search */}
         <div className="relative w-48 sm:w-72 lg:w-80">
+          <label htmlFor={searchInputId} className="sr-only">
+            Поиск сотрудников
+          </label>
           <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -33,13 +38,15 @@ function Topbar({ search, onSearchChange, onMobileMenuOpen }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
           <input
+            id={searchInputId}
             type="text"
             placeholder="Поиск сотрудников…"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full h-9 pl-9 pr-3 rounded-lg border border-gray-200 bg-gray-50 text-sm
+            aria-label="Поиск сотрудников"
+            className="w-full h-9 pl-9 pr-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-gray-100
                        placeholder:text-gray-400 focus:outline-none focus:ring-2
-                       focus:ring-blue-500/20 focus:border-blue-400 focus:bg-white transition-all"
+                       focus:ring-blue-500/20 focus:border-blue-400 focus:bg-white dark:focus:bg-gray-900 transition-all"
           />
         </div>
       </div>
@@ -47,11 +54,11 @@ function Topbar({ search, onSearchChange, onMobileMenuOpen }) {
       {/* Right side — user info + avatar → My Profile */}
       <Link
         to="/my-profile"
-        className="flex items-center gap-2.5 px-2 py-1.5 -mr-2 rounded-lg hover:bg-gray-50 transition group"
+        className="flex items-center gap-2.5 px-2 py-1.5 -mr-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition group"
       >
         <div className="hidden sm:block text-right">
-          <p className="text-sm font-medium text-gray-900 leading-tight">Павел Пирожков</p>
-          <p className="text-[11px] text-gray-500 leading-tight">Staff Engineer</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-100 leading-tight">Павел Пирожков</p>
+          <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">Staff Engineer</p>
         </div>
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-xs font-semibold text-white shadow-sm">
           ПП

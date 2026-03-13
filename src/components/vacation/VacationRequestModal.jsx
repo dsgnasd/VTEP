@@ -174,25 +174,25 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
   // ── Shared content ──
   const successContent = (
     <div className="p-10 text-center">
-      <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
-        <svg className="w-7 h-7 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mx-auto mb-4">
+        <svg className="w-7 h-7 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
         </svg>
       </div>
-      <p className="text-lg font-semibold text-gray-900">Заявка отправлена</p>
-      <p className="text-sm text-gray-500 mt-1">Ожидает согласования руководителем</p>
+      <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">Заявка отправлена</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Ожидает согласования руководителем</p>
     </div>
   );
 
   const formContent = (
     <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 flex-shrink-0">
-        <h2 className="text-lg font-semibold text-gray-900">Новая заявка</h2>
+      <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700/50 flex-shrink-0">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Новая заявка</h2>
         <button
           type="button"
           onClick={onClose}
-          className="hidden sm:block p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-600"
+          className="hidden sm:block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -203,15 +203,15 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
       <div data-scroll className="px-6 py-5 space-y-5 overflow-y-auto flex-1 min-h-0">
         {/* Vacation type */}
         <fieldset>
-          <legend className="text-sm font-medium text-gray-700 mb-2">Тип заявки</legend>
+          <legend className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Тип заявки</legend>
           <div className="flex gap-2">
             {TYPES.map((opt) => (
               <label
                 key={opt.value}
                 className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border text-sm font-medium cursor-pointer transition-all ${
                   form.type === opt.value
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                    : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500'
                 }`}
               >
                 <input
@@ -253,15 +253,15 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
 
         {/* Balance info (labor only) */}
         {form.type === 'labor' && (
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
-            <svg className="w-5 h-5 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+            <svg className="w-5 h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
             </svg>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-600">
-                Остаток: <strong className="font-semibold text-gray-900">{vacationBalance.available} дн.</strong> из {vacationBalance.total}
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Остаток: <strong className="font-semibold text-gray-900 dark:text-gray-100">{vacationBalance.available} дн.</strong> из {vacationBalance.total}
               </p>
-              <div className="w-full h-1.5 bg-gray-200 rounded-full mt-1.5 overflow-hidden">
+              <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-1.5 overflow-hidden">
                 <div
                   className="h-full bg-blue-500 rounded-full"
                   style={{ width: `${(vacationBalance.used / vacationBalance.total) * 100}%` }}
@@ -273,11 +273,11 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
 
         {/* 14-day warning */}
         {showMinWarning && (
-          <div className="flex items-start gap-2.5 p-3 rounded-lg bg-amber-50 border border-amber-200">
-            <svg className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div className="flex items-start gap-2.5 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40">
+            <svg className="w-5 h-5 text-amber-500 dark:text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
             </svg>
-            <p className="text-xs text-amber-700">
+            <p className="text-xs text-amber-700 dark:text-amber-300">
               Первый отпуск за рабочий период должен быть не менее 14 календарных дней.
             </p>
           </div>
@@ -286,7 +286,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
         {/* Reason (social only) */}
         {form.type === 'social' && (
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-2 block">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
               Причина <span className="text-red-400">*</span>
             </label>
             <textarea
@@ -296,8 +296,8 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
               placeholder="Укажите причину социального отпуска / отгула..."
               className={`w-full px-3 py-2.5 rounded-lg border text-sm resize-none transition-colors ${
                 errors.reason
-                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                  : 'border-gray-200 focus:ring-blue-500 focus:border-blue-500'
+                  ? 'border-red-300 dark:border-red-500/50 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-red-500 focus:border-red-500'
+                  : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500'
               } focus:ring-2 focus:outline-none`}
             />
             {errors.reason && (
@@ -309,20 +309,20 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
         {/* File upload (sick_leave only) */}
         {form.type === 'sick_leave' && (
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-2 block">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
               Больничный лист <span className="text-red-400">*</span>
             </label>
             <label
               className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 border-dashed cursor-pointer transition-colors ${
                 errors.file
-                  ? 'border-red-300 bg-red-50/50'
+                  ? 'border-red-300 bg-red-50/50 dark:border-red-500/50 dark:bg-red-500/10'
                   : form.file
-                    ? 'border-emerald-300 bg-emerald-50/50'
-                    : 'border-gray-200 hover:border-gray-300 bg-gray-50/50'
+                    ? 'border-emerald-300 bg-emerald-50/50 dark:border-emerald-500/50 dark:bg-emerald-500/10'
+                    : 'border-gray-200 hover:border-gray-300 bg-gray-50/50 dark:border-gray-600 dark:hover:border-gray-500 dark:bg-gray-700/50'
               }`}
             >
               {form.file ? (
-                <div className="flex items-center gap-2 text-sm text-emerald-700">
+                <div className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-400">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>
@@ -330,7 +330,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
                   <button
                     type="button"
                     onClick={(e) => { e.preventDefault(); set('file', null); }}
-                    className="ml-1 text-gray-400 hover:text-gray-600"
+                    className="ml-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -339,11 +339,11 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
                 </div>
               ) : (
                 <>
-                  <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
                   </svg>
-                  <span className="text-sm text-gray-500">Загрузите скан или фото</span>
-                  <span className="text-xs text-gray-400">PDF, JPG, PNG до 10 МБ</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Загрузите скан или фото</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">PDF, JPG, PNG до 10 МБ</span>
                 </>
               )}
               <input
@@ -364,11 +364,11 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex-shrink-0">
+      <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/80 flex-shrink-0">
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+          className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
         >
           Отмена
         </button>
@@ -393,7 +393,7 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
       {/* Mobile bottom sheet */}
       <div
         ref={sheetRef}
-        className="sm:hidden bg-white rounded-t-2xl shadow-2xl w-full max-h-[92vh] flex flex-col overflow-hidden"
+        className="sm:hidden bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl w-full max-h-[92vh] flex flex-col overflow-hidden"
         style={{
           transform: `translateY(${dragY}px)`,
           transition: dragY > 0 ? 'none' : 'transform 300ms ease-out',
@@ -402,14 +402,14 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
       >
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 rounded-full bg-gray-300" />
+          <div className="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />
         </div>
         {submitted ? successContent : formContent}
       </div>
 
       {/* Desktop centered modal */}
       <div
-        className="hidden sm:flex bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] flex-col overflow-hidden"
+        className="hidden sm:flex bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] flex-col overflow-hidden"
         style={{ animation: 'modalIn 200ms ease-out' }}
       >
         {submitted ? successContent : formContent}
