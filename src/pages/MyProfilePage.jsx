@@ -1,7 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import VacationRequestModal from '../components/vacation/VacationRequestModal';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import Field from '../components/ui/Field';
+import Input from '../components/ui/Input';
+import Select from '../components/ui/Select';
+import Textarea from '../components/ui/Textarea';
 import Tabs from '../components/ui/Tabs';
 
 // ──────────────────────────────────────────────────────────────
@@ -318,22 +322,24 @@ export default function MyProfilePage() {
             {editing ? (
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Телефон</label>
-                  <input
+                  <Field label="Телефон">
+                    <Input
                     type="tel"
                     value={editDraft.phone}
                     onChange={(e) => setEditDraft((d) => ({ ...d, phone: e.target.value }))}
-                    className="w-full sm:w-56 h-9 text-sm border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg px-3 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
-                  />
+                    className="sm:w-56"
+                    />
+                  </Field>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">О себе</label>
-                  <textarea
+                  <Field label="О себе">
+                    <Textarea
                     value={editDraft.about}
                     onChange={(e) => setEditDraft((d) => ({ ...d, about: e.target.value }))}
                     rows={4}
-                    className="w-full text-sm leading-relaxed border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 resize-y"
-                  />
+                    className="leading-relaxed"
+                    />
+                  </Field>
                 </div>
               </div>
             ) : (
@@ -679,8 +685,6 @@ function ExperienceTab() {
   const removeEdu = (idx) => setEdu((prev) => prev.filter((_, i) => i !== idx));
   const cancelEdu = () => { setEduFormOpen(false); setEditingEduIdx(null); };
 
-  const inputCls = 'w-full h-9 px-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20';
-
   const editBtn = (onClick) => (
     <button onClick={onClick} className="p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition" title="Редактировать" aria-label="Редактировать">
       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -743,18 +747,15 @@ function ExperienceTab() {
 
         {eduFormOpen && (
           <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-700/30 space-y-3">
-            <div>
-              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Учебное заведение *</label>
-              <input type="text" value={eduForm.institution} onChange={(e) => setEduForm((f) => ({ ...f, institution: e.target.value }))} placeholder="Название вуза / колледжа" className={inputCls} />
-            </div>
+            <Field label="Учебное заведение" required>
+              <Input type="text" value={eduForm.institution} onChange={(e) => setEduForm((f) => ({ ...f, institution: e.target.value }))} placeholder="Название вуза / колледжа" />
+            </Field>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Специальность</label>
-                <input type="text" value={eduForm.specialty} onChange={(e) => setEduForm((f) => ({ ...f, specialty: e.target.value }))} placeholder="Направление" className={inputCls} />
-              </div>
-              <div>
-                <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Степень</label>
-                <CustomSelect
+              <Field label="Специальность">
+                <Input type="text" value={eduForm.specialty} onChange={(e) => setEduForm((f) => ({ ...f, specialty: e.target.value }))} placeholder="Направление" />
+              </Field>
+              <Field label="Степень">
+                <Select
                   value={eduForm.degree}
                   onChange={(v) => setEduForm((f) => ({ ...f, degree: v }))}
                   options={[
@@ -767,17 +768,16 @@ function ExperienceTab() {
                   ]}
                   placeholder="Выберите"
                 />
-              </div>
+              </Field>
             </div>
-            <div className="max-w-[200px]">
-              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Год окончания</label>
-              <input type="number" value={eduForm.endYear} onChange={(e) => setEduForm((f) => ({ ...f, endYear: e.target.value }))} placeholder="2020" min="1970" max="2030" className={inputCls} />
-            </div>
+            <Field label="Год окончания" className="max-w-[200px]">
+              <Input type="number" value={eduForm.endYear} onChange={(e) => setEduForm((f) => ({ ...f, endYear: e.target.value }))} placeholder="2020" min="1970" max="2030" />
+            </Field>
             <div className="flex items-center gap-2 pt-1">
-              <button onClick={saveEdu} className="h-8 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20">
+              <Button onClick={saveEdu} size="sm">
                 {editingEduIdx !== null ? 'Сохранить' : 'Добавить'}
-              </button>
-              <button onClick={cancelEdu} className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">Отмена</button>
+              </Button>
+              <Button onClick={cancelEdu} size="sm" variant="ghost">Отмена</Button>
             </div>
           </div>
         )}
@@ -893,77 +893,6 @@ function FeedbackTab() {
 
 /* ── Empty tab placeholder ── */
 /* ── Custom Select — themed dropdown ── */
-function CustomSelect({ value, onChange, options, placeholder, className = '' }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-
-  const selected = options.find((o) => (typeof o === 'string' ? o : o.value) === value);
-  const label = selected ? (typeof selected === 'string' ? selected : selected.label) : null;
-
-  return (
-    <div ref={ref} className={`relative ${className}`}>
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="w-full h-9 px-3 rounded-lg border border-gray-200 dark:border-gray-600
-                   text-sm text-left outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20
-                   flex items-center justify-between gap-2 transition
-                   bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-      >
-        <span className={label ? '' : 'text-gray-400 dark:text-gray-500'}>{label || placeholder || 'Выберите'}</span>
-        <svg className={`w-4 h-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="absolute z-50 mt-1 w-full max-h-56 overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-600
-                        bg-white dark:bg-gray-800 shadow-lg dark:shadow-black/40 py-1">
-          {placeholder && (
-            <button
-              type="button"
-              onClick={() => { onChange(''); setOpen(false); }}
-              className="w-full text-left px-3 py-2 text-sm text-gray-400 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700/60 transition"
-            >
-              {placeholder}
-            </button>
-          )}
-          {options.map((opt) => {
-            const optValue = typeof opt === 'string' ? opt : opt.value;
-            const optLabel = typeof opt === 'string' ? opt : opt.label;
-            const isSelected = optValue === value;
-            return (
-              <button
-                key={optValue}
-                type="button"
-                onClick={() => { onChange(optValue); setOpen(false); }}
-                className={`w-full text-left px-3 py-2 text-sm transition flex items-center justify-between
-                  ${isSelected
-                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium'
-                    : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/60'
-                  }`}
-              >
-                {optLabel}
-                {isSelected && (
-                  <svg className="w-4 h-4 text-blue-500 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                  </svg>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ── Shared micro-components ── */
 
 function ContactChip({ icon, href, children }) {

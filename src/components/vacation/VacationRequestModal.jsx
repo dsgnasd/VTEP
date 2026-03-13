@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import Button from '../ui/Button';
 import DateRangePicker from '../ui/DateRangePicker';
+import Field from '../ui/Field';
+import Textarea from '../ui/Textarea';
 
 // ──────────────────────────────────────────────────────────────
 // VacationRequestModal — модальная форма создания заявки на отпуск.
@@ -289,25 +292,16 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
 
         {/* Reason (social only) */}
         {form.type === 'social' && (
-          <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-              Причина <span className="text-red-400">*</span>
-            </label>
-            <textarea
+          <Field label="Причина" required error={errors.reason}>
+            <Textarea
               value={form.reason}
               onChange={(e) => set('reason', e.target.value)}
               rows={3}
               placeholder="Укажите причину социального отпуска / отгула..."
-              className={`w-full px-3 py-2.5 rounded-lg border text-sm resize-none transition-colors ${
-                errors.reason
-                  ? 'border-red-300 dark:border-red-500/50 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-red-500 focus:border-red-500'
-                  : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500'
-              } focus:ring-2 focus:outline-none`}
+              invalid={!!errors.reason}
+              className="resize-none py-2.5"
             />
-            {errors.reason && (
-              <p className="text-xs text-red-500 mt-1">{errors.reason}</p>
-            )}
-          </div>
+          </Field>
         )}
 
         {/* File upload (sick_leave only) */}
@@ -369,19 +363,18 @@ export default function VacationRequestModal({ open, onClose, vacationBalance })
 
       {/* Footer */}
       <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/80 flex-shrink-0">
-        <button
+        <Button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          variant="ghost"
         >
           Отмена
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
-          className="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
         >
           Отправить на согласование
-        </button>
+        </Button>
       </div>
     </form>
   );

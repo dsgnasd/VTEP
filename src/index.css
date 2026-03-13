@@ -194,6 +194,52 @@
   .ui-empty-state-description {
     @apply mt-1.5 text-xs text-gray-500 dark:text-gray-400;
   }
+
+  .ui-field-label {
+    @apply mb-1.5 block text-xs font-medium text-gray-500 dark:text-gray-400;
+  }
+
+  .ui-input,
+  .ui-textarea,
+  .ui-select-trigger {
+    @apply w-full rounded-lg border border-gray-200 bg-white text-sm text-gray-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100;
+  }
+
+  .ui-input,
+  .ui-select-trigger {
+    @apply h-9 px-3;
+  }
+
+  .ui-textarea {
+    @apply px-3 py-2 resize-y;
+  }
+
+  .ui-input::placeholder,
+  .ui-textarea::placeholder {
+    @apply text-gray-400 dark:text-gray-500;
+  }
+
+  .ui-input-error,
+  .ui-textarea-error,
+  .ui-select-trigger-error {
+    @apply border-red-300 focus:border-red-500 focus:ring-red-500/20 dark:border-red-500/50;
+  }
+
+  .ui-select-popover {
+    @apply absolute z-50 mt-1 w-full max-h-56 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-600 dark:bg-gray-800 dark:shadow-black/40;
+  }
+
+  .ui-select-option {
+    @apply flex w-full items-center justify-between px-3 py-2 text-left text-sm transition;
+  }
+
+  .ui-select-option-active {
+    @apply bg-blue-50 font-medium text-blue-700 dark:bg-blue-900/20 dark:text-blue-300;
+  }
+
+  .ui-select-option-idle {
+    @apply text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700/60;
+  }
 }
 
 /* Scrollbar */
