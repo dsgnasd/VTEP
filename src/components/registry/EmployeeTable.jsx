@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import SkillTag from '../shared/SkillTag';
 import StatusBadge from '../shared/StatusBadge';
 
+const SELECT_COL_WIDTH = 'w-12 min-w-[48px]';
+const EMPLOYEE_COL_WIDTH = 'w-64 min-w-[256px]';
+
 /* ── Сокращение имени: «Фамилия И. О.» ── */
 function shortName(fullName) {
   const parts = fullName.trim().split(/\s+/);
@@ -10,6 +13,15 @@ function shortName(fullName) {
   const surname = parts[0];
   const initials = parts.slice(1).map((p) => p[0]?.toUpperCase() + '.').join(' ');
   return `${surname} ${initials}`;
+}
+
+function initials(fullName) {
+  return fullName
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || '')
+    .join('');
 }
 
 const COLUMNS = [
@@ -188,8 +200,8 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
           <thead>
             <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/60">
               {selectable && (
-                <th className="w-10 min-w-[40px] sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60">
-                  <div className="flex items-center justify-center h-full py-2.5">
+                <th className={`${SELECT_COL_WIDTH} sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60 border-r border-gray-200 dark:border-gray-700/80`}>
+                  <div className="flex items-center justify-center h-full py-3">
                     <input
                       type="checkbox"
                       checked={allVisibleSelected}
@@ -207,11 +219,12 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   key={col.key}
                   onClick={() => handleSort(col.key)}
                   className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors
-                    ${col.sticky && selectable ? 'pl-1 pr-4' : 'px-4'}
-                    ${col.sticky && selectable ? 'sticky left-10 z-10 bg-gray-50/80 dark:bg-gray-800/60' : ''}
+                    ${col.sticky ? 'px-4' : 'px-4'}
+                    ${col.sticky ? `${EMPLOYEE_COL_WIDTH} border-r border-gray-200 dark:border-gray-700/80` : ''}
+                    ${col.sticky && selectable ? 'sticky left-12 z-10 bg-gray-50/80 dark:bg-gray-800/60' : ''}
                     ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60' : ''}`}
                 >
-                  <span className="inline-flex items-center gap-1">
+                  <span className={`inline-flex items-center gap-1 ${col.sticky ? 'pl-0.5' : ''}`}>
                     {col.label}
                     {sortKey === col.key && (
                       <svg className="w-3 h-3 text-gray-500 dark:text-gray-400" viewBox="0 0 12 12" fill="currentColor">
@@ -241,30 +254,35 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                   }`}
                 >
                   {selectable && (
-                    <td className={`w-10 min-w-[40px] sticky left-0 z-10 transition-colors ${
+                    <td className={`${SELECT_COL_WIDTH} sticky left-0 z-10 border-r border-gray-200 dark:border-gray-700/80 transition-colors ${
                       isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
                     }`}>
-                      <div className="flex items-center justify-center h-full py-2.5">
+                      <div className="flex items-center justify-center h-full py-3">
                         <input
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => onToggleSelect(emp.id)}
-                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer"
                         />
                       </div>
                     </td>
                   )}
-                  <td className={`sticky z-10 py-2.5 transition-colors ${
-                    selectable ? 'left-10 pl-1 pr-4' : 'left-0 px-4'
+                  <td className={`${EMPLOYEE_COL_WIDTH} sticky z-10 px-4 py-3 border-r border-gray-200 dark:border-gray-700/80 transition-colors ${
+                    selectable ? 'left-12' : 'left-0'
                     } ${isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
                   }`}>
-                    <Link
-                      to={`/employee/${emp.id}`}
-                      className="font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors whitespace-nowrap"
-                      title={emp.name}
-                    >
-                      {shortName(emp.name)}
-                    </Link>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-8 h-8 rounded-full flex-shrink-0 bg-slate-100 dark:bg-gray-700/80 border border-gray-200 dark:border-gray-600/80 text-[11px] font-semibold text-gray-600 dark:text-gray-200 flex items-center justify-center">
+                        {initials(emp.name)}
+                      </div>
+                      <Link
+                        to={`/employee/${emp.id}`}
+                        className="block min-w-0 font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate"
+                        title={emp.name}
+                      >
+                        {shortName(emp.name)}
+                      </Link>
+                    </div>
                   </td>
 
                   <td className="px-4 py-2.5" title={emp.role}>
