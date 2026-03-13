@@ -4,6 +4,9 @@ import AllocationBlock from '../shared/AllocationBlock';
 import StatusBadge from '../shared/StatusBadge';
 import useTeams from '../../hooks/useTeams';
 import { TeamModal } from './TeamsView';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
+import Tabs from '../ui/Tabs';
 
 // ──────────────────────────────────────────────────────────────
 // CompareView — сравнение выбранных сотрудников:
@@ -377,13 +380,9 @@ function CompareView({ employees, allEmployees, onBack, defaultTab = 'timeline' 
               {employees.length} сотр.
             </span>
           </div>
-          <button
+          <Button
             onClick={() => setSaveModalOpen(true)}
-            className={`inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium transition shadow-sm ${
-              saved
-                ? 'bg-emerald-600 text-white'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
+            variant={saved ? 'success' : 'primary'}
           >
             {saved ? (
               <>
@@ -400,41 +399,31 @@ function CompareView({ employees, allEmployees, onBack, defaultTab = 'timeline' 
                 Сохранить команду
               </>
             )}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Вкладки */}
-      <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`px-3 py-1.5 text-sm font-semibold tracking-[-0.01em] rounded-md transition-all whitespace-nowrap ${
-              tab === t.id
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        tabs={tabs.map((t) => ({ value: t.id, label: t.label }))}
+        value={tab}
+        onChange={setTab}
+      />
 
       {/* Сводка */}
       <div className="flex flex-wrap gap-3">
-        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <Card padding="none" className="flex items-center gap-2 px-3.5 py-2">
           <span className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
           <span className="text-sm text-gray-700 dark:text-gray-300">
             Пересечение отпусков: <strong className="font-semibold text-gray-900 dark:text-gray-100">{overlapDays} дн.</strong>
           </span>
-        </div>
-        <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        </Card>
+        <Card padding="none" className="flex items-center gap-2 px-3.5 py-2">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
           <span className="text-sm text-gray-700 dark:text-gray-300">
             Все доступны: <strong className="font-semibold text-gray-900 dark:text-gray-100">{allAvailableDays} дн.</strong>
           </span>
-        </div>
+        </Card>
         {ranges.length > 0 && (
           <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-50 border border-amber-200 dark:bg-amber-900/30 dark:border-amber-700/50">
             <svg className="w-4 h-4 text-amber-500 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

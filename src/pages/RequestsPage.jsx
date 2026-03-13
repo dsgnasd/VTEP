@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import VacationRequestModal from '../components/vacation/VacationRequestModal';
 import VacationBalancePanel from '../components/vacation/VacationBalancePanel';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+import EmptyState from '../components/ui/EmptyState';
+import PageHeader from '../components/ui/PageHeader';
+import Tabs from '../components/ui/Tabs';
 
 // ──────────────────────────────────────────────────────────────
 // RequestsPage — employee requests / tickets management.
@@ -21,7 +26,7 @@ const TABS = ['Отпуск', 'На согласовании', 'Завершён
 function LegalInfoAccordion() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+    <Card>
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center justify-between w-full"
@@ -74,7 +79,7 @@ function LegalInfoAccordion() {
           </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 }
 
@@ -85,42 +90,25 @@ export default function RequestsPage() {
   return (
     <div className="space-y-6 max-w-screen-xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h1 className="ui-page-title text-gray-900 dark:text-gray-100">Заявки</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Управление заявками и запросами
-          </p>
-        </div>
-        <button
-          onClick={() => setVacationModalOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition self-start shadow-sm shadow-blue-900/20"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          Новая заявка
-        </button>
-      </div>
+      <PageHeader
+        title="Заявки"
+        description="Управление заявками и запросами"
+        action={(
+          <Button onClick={() => setVacationModalOpen(true)} className="self-start">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Новая заявка
+          </Button>
+        )}
+      />
 
       {/* Tab bar */}
-      <div>
-        <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`ui-tab-trigger ${
-                activeTab === tab
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
+      <Tabs
+        tabs={TABS.map((tab) => ({ value: tab, label: tab }))}
+        value={activeTab}
+        onChange={setActiveTab}
+      />
 
       {/* Content */}
       {activeTab === 'Отпуск' ? (
@@ -132,19 +120,18 @@ export default function RequestsPage() {
         </div>
       ) : (
         /* Empty state */
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 min-h-[400px] flex items-center justify-center">
-          <div className="text-center max-w-sm">
-            <div className="w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center mx-auto mb-4">
+        <Card padding="lg" className="min-h-[400px] flex items-center justify-center">
+          <EmptyState
+            icon={(
               <svg className="w-7 h-7 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15a2.25 2.25 0 0 1 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25Z" />
               </svg>
-            </div>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Заявок пока нет</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
-              Здесь будут отображаться ваши заявки на отпуск, оборудование, доступы и другие запросы
-            </p>
-          </div>
-        </div>
+            )}
+            title="Заявок пока нет"
+            description="Здесь будут отображаться ваши заявки на отпуск, оборудование, доступы и другие запросы"
+            className="max-w-sm"
+          />
+        </Card>
       )}
 
       <VacationRequestModal

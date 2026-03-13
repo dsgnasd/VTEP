@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import Card from '../components/ui/Card';
+import PageHeader from '../components/ui/PageHeader';
+import Tabs from '../components/ui/Tabs';
 
 /* ── Temporary seed data ── */
 const CURRENT_PROJECTS = [
@@ -151,7 +154,7 @@ const Icons = {
 /* ── Project Card (current) ── */
 function CurrentCard({ project }) {
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 hover:shadow-md hover:border-gray-300 transition group">
+    <Card className="hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 group" hoverable>
       <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 transition leading-tight mb-3">
         {project.name}
       </h3>
@@ -181,14 +184,14 @@ function CurrentCard({ project }) {
           <span>{project.startDate} — {project.deadline}</span>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
 /* ── Project Card (archived) ── */
 function ArchivedCard({ project }) {
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 opacity-80 hover:opacity-100 transition">
+    <Card className="opacity-80 hover:opacity-100" hoverable>
       <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 leading-tight mb-3">
         {project.name}
       </h3>
@@ -224,7 +227,7 @@ function ArchivedCard({ project }) {
           <span>{project.startDate} — {project.endDate}</span>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -235,34 +238,21 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="ui-page-title text-gray-900 dark:text-gray-100">Проекты</h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Каталог проектов компании и распределение ресурсов
-        </p>
-      </div>
+      <PageHeader
+        title="Проекты"
+        description="Каталог проектов компании и распределение ресурсов"
+      />
 
       {/* Tabs */}
-      <div>
-        <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`ui-tab-trigger ${
-                activeTab === tab
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                }`}
-              >
-              {tab}
-              <span className="ml-1.5 text-[11px] opacity-70">
-                {tab === 'Текущие' ? CURRENT_PROJECTS.length : ARCHIVED_PROJECTS.length}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
+      <Tabs
+        tabs={TABS.map((tab) => ({
+          value: tab,
+          label: tab,
+          meta: tab === 'Текущие' ? CURRENT_PROJECTS.length : ARCHIVED_PROJECTS.length,
+        }))}
+        value={activeTab}
+        onChange={setActiveTab}
+      />
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

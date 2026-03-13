@@ -4,6 +4,7 @@ import SkillTag from '../shared/SkillTag';
 import StatusBadge from '../shared/StatusBadge';
 import AllocationBlock from '../shared/AllocationBlock';
 import Avatar from '../shared/Avatar';
+import Card from '../ui/Card';
 
 // ──────────────────────────────────────────────────────────────
 // EmployeeProfile — полный профиль сотрудника: заголовок,
@@ -41,7 +42,7 @@ function EmployeeProfile({ employee }) {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* ── Заголовок ── */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+      <Card padding="lg">
         <div className="flex items-start gap-5">
           <Avatar
             src={emp.avatar}
@@ -77,10 +78,10 @@ function EmployeeProfile({ employee }) {
             />
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* ── Навыки ── */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+      <Card padding="lg">
         <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Навыки</h2>
         <div className="flex flex-wrap gap-2">
           {emp.skills.map((s) => (
@@ -95,10 +96,10 @@ function EmployeeProfile({ employee }) {
             <p className="text-sm text-gray-500 dark:text-gray-400">Навыки не указаны.</p>
           )}
         </div>
-      </div>
+      </Card>
 
       {/* ── Проекты ── */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+      <Card padding="lg">
         <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Проекты</h2>
         {emp.allocations.length > 0 ? (
           <div className="space-y-3">
@@ -136,10 +137,10 @@ function EmployeeProfile({ employee }) {
         ) : (
           <p className="text-sm text-gray-500 dark:text-gray-400">Нет назначенных проектов.</p>
         )}
-      </div>
+      </Card>
 
       {/* ── Мини-таймлайн ── */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+      <Card padding="lg">
         <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Таймлайн (Q1 2026)</h2>
         <div className="relative">
           <div className="flex mb-1">
@@ -179,11 +180,11 @@ function EmployeeProfile({ employee }) {
             })}
           </div>
         </div>
-      </div>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* ── Достижения ── */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+        <Card padding="lg">
           <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Достижения</h2>
           {emp.achievements.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
@@ -203,10 +204,10 @@ function EmployeeProfile({ employee }) {
           ) : (
             <p className="text-sm text-gray-500 dark:text-gray-400">Пока нет достижений.</p>
           )}
-        </div>
+        </Card>
 
         {/* ── Отпуск ── */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+        <Card padding="lg">
           <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Отпуск</h2>
           {emp.vacation.length > 0 ? (
             <div className="space-y-2">
@@ -232,7 +233,7 @@ function EmployeeProfile({ employee }) {
           ) : (
             <p className="text-sm text-gray-500 dark:text-gray-400">Нет запланированных отпусков.</p>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   );

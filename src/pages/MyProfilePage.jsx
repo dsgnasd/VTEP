@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import VacationRequestModal from '../components/vacation/VacationRequestModal';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+import Tabs from '../components/ui/Tabs';
 
 // ──────────────────────────────────────────────────────────────
 // MyProfilePage — redesigned around core UX principles:
@@ -271,38 +274,40 @@ export default function MyProfilePage() {
             <div className="flex items-center gap-2 flex-shrink-0 sm:self-start">
               {editing ? (
                 <>
-                  <button
+                  <Button
                     onClick={saveEditing}
-                    className="inline-flex items-center gap-1.5 h-10 sm:h-9 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20"
+                    className="h-10 sm:h-9"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                     </svg>
                     Сохранить
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={cancelEditing}
-                    className="h-10 sm:h-9 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    variant="ghost"
+                    className="h-10 sm:h-9 px-3"
                   >
                     Отмена
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
-                  <button
+                  <Button
                     onClick={startEditing}
-                    className="inline-flex items-center gap-1.5 h-10 sm:h-9 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20"
+                    className="h-10 sm:h-9"
                   >
                     {Icon.edit}
                     Редактировать
-                  </button>
-                  <button
-                    className="h-10 w-10 sm:h-9 sm:w-9 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200 transition flex items-center justify-center"
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="h-10 w-10 sm:h-9 sm:w-9 px-0"
                     title="Поделиться профилем"
                     aria-label="Поделиться профилем"
                   >
                     {Icon.share}
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
@@ -376,24 +381,14 @@ export default function MyProfilePage() {
          ═══════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left — Tabs (3/5) */}
-        <section className="lg:col-span-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <Card as="section" padding="none" className="lg:col-span-3 overflow-hidden">
           {/* Tab bar */}
           <div className="px-6 pt-4">
-            <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
-              {TABS.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`ui-tab-trigger ${
-                    activeTab === tab
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
+            <Tabs
+              tabs={TABS.map((tab) => ({ value: tab, label: tab }))}
+              value={activeTab}
+              onChange={setActiveTab}
+            />
           </div>
 
           {/* Tab content */}
@@ -404,12 +399,12 @@ export default function MyProfilePage() {
             {activeTab === 'ИПР' && <IDPTab />}
             {activeTab === 'Фидбэки' && <FeedbackTab />}
           </div>
-        </section>
+        </Card>
 
         {/* Right — Vacation (2/5) */}
         <div className="lg:col-span-2 space-y-5">
           {/* Vacation widget */}
-          <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800">
+          <Card>
             <h3 className="ui-section-label mb-4">
               Отпуск
             </h3>
@@ -453,7 +448,7 @@ export default function MyProfilePage() {
             >
               Запросить отпуск
             </button>
-          </div>
+          </Card>
 
         </div>
       </div>

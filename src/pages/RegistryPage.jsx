@@ -7,6 +7,9 @@ import EmployeeTable from '../components/registry/EmployeeTable';
 import TimelineView from '../components/registry/TimelineView';
 import CompareView from '../components/registry/CompareView';
 import TeamsView from '../components/registry/TeamsView';
+import Button from '../components/ui/Button';
+import PageHeader from '../components/ui/PageHeader';
+import Tabs from '../components/ui/Tabs';
 
 // ──────────────────────────────────────────────────────────────
 // RegistryPage — реестр сотрудников с фильтрами, переключением
@@ -78,11 +81,10 @@ export default function RegistryPage({ search }) {
 
   return (
     <div className="space-y-6">
-      {/* Заголовок */}
-      <div>
-        <h1 className="ui-page-title text-gray-900 dark:text-gray-100">Реестр сотрудников</h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Поиск, сравнение сотрудников и управление командами</p>
-      </div>
+      <PageHeader
+        title="Реестр сотрудников"
+        description="Поиск, сравнение сотрудников и управление командами"
+      />
 
       {/* Мои команды — всегда видны */}
       <TeamsView employees={employees} onDetailChange={setTeamDetailOpen} />
@@ -91,21 +93,11 @@ export default function RegistryPage({ search }) {
       {!teamDetailOpen && (
         <>
           {/* Вкладки Таблица / Таймлайн */}
-          <div className="flex flex-wrap justify-center sm:justify-start gap-0.5 p-0.5 rounded-lg">
-            {VIEW_TABS.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setView(viewMap[tab])}
-                className={`ui-tab-trigger ${
-                  viewLabel === tab
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+          <Tabs
+            tabs={VIEW_TABS.map((tab) => ({ value: tab, label: tab }))}
+            value={viewLabel}
+            onChange={(tab) => setView(viewMap[tab])}
+          />
 
           {/* Фильтры */}
           <FiltersPanel
@@ -142,12 +134,13 @@ export default function RegistryPage({ search }) {
               <span className="text-sm">
                 Выбрано <strong className="font-semibold">{selectedIds.size}</strong>
               </span>
-              <button
+              <Button
                 onClick={handleCompare}
-                className="floating-bar-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
+                size="sm"
+                className="floating-bar-btn px-4 py-1.5"
               >
                 Сравнить
-              </button>
+              </Button>
               <button
                 onClick={clearSelection}
                 className="p-1.5 hover:bg-white/15 rounded-lg transition-colors"
