@@ -22,16 +22,20 @@ function getInitialDarkMode(theme) {
   return theme === 'dark' || ((theme === 'system' || !theme) && prefersDark);
 }
 
-const storedTheme = getStoredTheme();
-const initialDark =
-  getInitialDarkMode(storedTheme);
+if (typeof document !== 'undefined') {
+  const storedTheme = getStoredTheme();
+  const initialDark = getInitialDarkMode(storedTheme);
 
-document.documentElement.classList.toggle('dark', initialDark);
+  document.documentElement.classList.toggle('dark', initialDark);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>
-);
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    ReactDOM.createRoot(rootElement).render(
+      <StrictMode>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </StrictMode>
+    );
+  }
+}
