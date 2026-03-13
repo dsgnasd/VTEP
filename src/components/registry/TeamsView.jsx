@@ -22,6 +22,42 @@ function initials(name) {
     .join('');
 }
 
+/* ── Confirm Modal ── */
+
+function ConfirmModal({ open, onClose, onConfirm, title, message, confirmText = 'Удалить', danger }) {
+  if (!open) return null;
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="fixed inset-0 bg-black/40" />
+      <div
+        className="relative bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.key === 'Escape' && onClose()}
+      >
+        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        {message && <p className="text-sm text-gray-500">{message}</p>}
+        <div className="flex justify-end gap-2 pt-2">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            Отмена
+          </button>
+          <button
+            onClick={() => { onConfirm(); onClose(); }}
+            className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors ${
+              danger ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            {confirmText}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 /* ── Team Modal (create / edit) ── */
 
 function TeamModal({ open, onClose, onSave, employees, initial, addOnly }) {
@@ -229,6 +265,8 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const [newName, setNewName] = useState(team.name);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState(null);
   const members = useMemo(
     () => team.memberIds.map((id) => employees.find((e) => e.id === id)).filter(Boolean),
     [team.memberIds, employees]
@@ -322,7 +360,7 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
           </>
         )}
         <button
-          onClick={() => { if (window.confirm(`Удалить команду «${team.name}»?`)) { onDelete(team.id); onBack(); } }}
+          onClick={() => setConfirmDelete(true)}
           className="p-1.5 rounded-lg hover:bg-red-50 transition-colors text-gray-400 hover:text-red-500"
           title="Удалить команду"
         >
@@ -393,7 +431,7 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
                   <StatusBadge status={emp.status} />
                 </div>
                 <button
-                  onClick={() => removeMember(emp.id)}
+                  onClick={() => setConfirmRemove(emp)}
                   className="p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
                   title="Убрать из команды"
                 >
@@ -414,6 +452,25 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
         employees={employees.filter((e) => !team.memberIds.includes(e.id))}
         initial={{ name: team.name, memberIds: [] }}
         addOnly
+      />
+
+      <ConfirmModal
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        onConfirm={() => { onDelete(team.id); onBack(); }}
+        title={`Удалить команду «${team.name}»?`}
+        message="Команда будет удалена безвозвратно. Это не повлияет на самих сотрудников."
+        confirmText="Удалить"
+        danger
+      />
+
+      <ConfirmModal
+        open={!!confirmRemove}
+        onClose={() => setConfirmRemove(null)}
+        onConfirm={() => { if (confirmRemove) removeMember(confirmRemove.id); }}
+        title={`Убрать ${confirmRemove ? shortName(confirmRemove.name) : ''} из команды?`}
+        confirmText="Убрать"
+        danger
       />
     </div>
   );
