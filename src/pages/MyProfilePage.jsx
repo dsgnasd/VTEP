@@ -389,7 +389,7 @@ export default function MyProfilePage() {
         {/* Left — Tabs (3/5) */}
         <Card as="section" padding="none" className="lg:col-span-3 overflow-hidden">
           {/* Tab bar */}
-          <div className="ui-card-header border-b border-gray-100 dark:border-gray-700/70">
+          <div className="ui-card-header py-3.5 border-b border-gray-100 dark:border-gray-700/70">
             <Tabs
               tabs={TABS.map((tab) => ({ value: tab, label: tab }))}
               value={activeTab}
@@ -398,7 +398,7 @@ export default function MyProfilePage() {
           </div>
 
           {/* Tab content */}
-          <div className="ui-card-body">
+          <div className="ui-card-body pt-5">
             {activeTab === 'Обзор' && <OverviewTab onNavigate={setActiveTab} hasAvatar={!!profileData.avatar} onAvatarUpload={() => avatarInputRef.current?.click()} />}
             {activeTab === 'Компетенции' && <SkillsTab />}
             {activeTab === 'Опыт' && <ExperienceTab />}
@@ -482,12 +482,12 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
   const completionPct = Math.round((donePoints / totalPoints) * 100);
 
   return (
-    <div>
+    <div className="ui-section-stack">
       {/* Completion checklist — collapsible */}
-      <div>
+      <div className="ui-section-stack">
         <button
           onClick={() => setChecklistOpen((o) => !o)}
-          className="flex items-center justify-between w-full group"
+          className="flex items-center justify-between w-full group pb-0.5"
         >
           <h3 className="ui-section-label">
             Заполненность профиля
@@ -506,7 +506,7 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
         </button>
 
         {/* Progress bar — always visible */}
-        <div className="w-full h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mt-2.5">
+        <div className="w-full h-2.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-emerald-500 rounded-full transition-all duration-500"
             style={{ width: `${completionPct}%` }}
@@ -515,15 +515,15 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
 
         {/* Collapsible list */}
         {checklistOpen && (
-          <div className="mt-3 space-y-0.5">
+          <div className="space-y-1">
             {items.map((item) => (
               <div
                 key={item.label}
-                className={`flex items-center justify-between py-2 px-2.5 rounded-lg transition ${
+                className={`flex items-center justify-between gap-4 py-2.5 px-3 rounded-lg transition ${
                   item.done ? '' : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
                 }`}
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex min-w-0 items-center gap-2.5">
                   {item.done ? (
                     <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
                       {Icon.check}
@@ -532,7 +532,7 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 flex-shrink-0" />
                   )}
                   <span
-                    className={`text-sm ${
+                    className={`min-w-0 text-sm ${
                       item.done
                         ? 'text-gray-500 dark:text-gray-400 line-through decoration-gray-300 dark:decoration-gray-600'
                         : 'text-gray-700 dark:text-gray-200'
@@ -540,12 +540,12 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
                   >
                     {item.label}
                   </span>
-                  <span className="text-[11px] text-gray-500 dark:text-gray-400">+{item.points}</span>
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400 flex-shrink-0">+{item.points}</span>
                 </div>
                 {!item.done && (
                   <button
                     onClick={() => item.action === 'avatar' ? onAvatarUpload() : onNavigate(item.tab)}
-                    className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition flex items-center gap-1 py-1 px-2.5 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                    className="flex flex-shrink-0 items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium text-blue-600 transition hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-900/20 dark:hover:text-blue-300"
                   >
                     Добавить
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -613,28 +613,27 @@ function SkillsTab() {
         {/* Add language form */}
         <div className="flex items-end gap-3">
           <div className="flex-1 max-w-[200px]">
-            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Язык</label>
-            <CustomSelect
+            <Field label="Язык">
+              <Select
               value={newLang}
               onChange={(v) => setNewLang(v)}
               options={LANGUAGE_OPTIONS.filter((l) => !languages.some((x) => x.name === l))}
               placeholder="Выберите язык"
-            />
+              />
+            </Field>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Уровень</label>
-            <CustomSelect
+            <Field label="Уровень">
+              <Select
               value={newLevel}
               onChange={(v) => setNewLevel(v)}
               options={LANGUAGE_LEVELS}
-            />
+              />
+            </Field>
           </div>
-          <button
-            onClick={addLanguage}
-            className="h-9 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition shadow-sm shadow-blue-900/20"
-          >
+          <Button onClick={addLanguage}>
             Добавить
-          </button>
+          </Button>
         </div>
       </div>
 

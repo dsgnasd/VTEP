@@ -2,6 +2,10 @@ import { useState, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import StatusBadge from '../shared/StatusBadge';
 import useTeams from '../../hooks/useTeams';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
+import Field from '../ui/Field';
+import Input from '../ui/Input';
 
 // ──────────────────────────────────────────────────────────────
 // TeamsView — manage custom employee teams.
@@ -30,27 +34,22 @@ function ConfirmModal({ open, onClose, onConfirm, title, message, confirmText = 
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="fixed inset-0 bg-black/40" />
       <div
-        className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4"
+        className="relative ui-card max-w-sm w-full p-6 space-y-4 shadow-xl"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.key === 'Escape' && onClose()}
       >
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
         {message && <p className="text-sm text-gray-500 dark:text-gray-400">{message}</p>}
         <div className="flex justify-end gap-2 pt-2">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-          >
+          <Button onClick={onClose} variant="secondary">
             Отмена
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => { onConfirm(); onClose(); }}
-            className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors ${
-              danger ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+            className={danger ? 'bg-red-500 hover:bg-red-600' : ''}
           >
             {confirmText}
-          </button>
+          </Button>
         </div>
       </div>
     </div>,
@@ -104,11 +103,11 @@ export function TeamModal({ open, onClose, onSave, employees, initial, addOnly }
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden"
+        className="ui-card rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden"
         style={{ animation: 'modalIn 200ms ease-out' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+        <div className="ui-card-header border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             {addOnly ? 'Добавить участников' : initial ? 'Редактировать команду' : 'Новая команда'}
           </h2>
@@ -120,31 +119,30 @@ export function TeamModal({ open, onClose, onSave, employees, initial, addOnly }
         </div>
 
         {/* Body */}
-        <div className="px-6 py-4 space-y-4 overflow-y-auto flex-1 min-h-0">
+        <div className="ui-card-body ui-form-stack overflow-y-auto flex-1 min-h-0">
           {/* Name */}
           {addOnly ? (
             <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Команда</label>
+              <label className="ui-field-label text-sm">Команда</label>
               <p className="text-sm text-gray-900 dark:text-gray-100 font-medium px-3 py-2.5">{name}</p>
             </div>
           ) : (
-            <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Название</label>
-              <input
+            <Field label="Название">
+              <Input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Например: Backend Core Team"
-                className="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                className="h-10 dark:bg-gray-700"
                 autoFocus
               />
-            </div>
+            </Field>
           )}
 
           {/* Visibility toggle */}
           {!addOnly && (
             <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Видимость</label>
+              <label className="ui-field-label text-sm">Видимость</label>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -186,19 +184,19 @@ export function TeamModal({ open, onClose, onSave, employees, initial, addOnly }
 
           {/* Search */}
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">
+            <label className="ui-field-label text-sm">
               Участники <span className="text-gray-400 font-normal">({selected.size})</span>
             </label>
             <div className="relative">
               <svg className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>
-              <input
+              <Input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Поиск сотрудников..."
-                className="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                className="h-10 pl-9 pr-3 dark:bg-gray-700"
               />
             </div>
           </div>
@@ -234,17 +232,16 @@ export function TeamModal({ open, onClose, onSave, employees, initial, addOnly }
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex-shrink-0">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+        <div className="ui-card-footer border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex-shrink-0">
+          <Button onClick={onClose} variant="ghost">
             Отмена
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSave}
             disabled={!name.trim() || selected.size === 0}
-            className="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {initial ? 'Сохранить' : 'Создать'}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -372,33 +369,33 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4">
+        <Card padding="none" className="px-5 py-4">
           <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{members.length}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Участников</p>
-        </div>
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4">
+        </Card>
+        <Card padding="none" className="px-5 py-4">
           <p className={`text-2xl font-bold ${avgLoad > 100 ? 'text-red-600' : 'text-gray-900 dark:text-gray-100'}`}>{avgLoad}%</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Средняя загрузка</p>
-        </div>
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-4">
+        </Card>
+        <Card padding="none" className="px-5 py-4">
           <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{upcomingVacations}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">В отпуске / планируют</p>
-        </div>
+        </Card>
       </div>
 
       {/* Members table */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-700">
+      <Card padding="none" className="overflow-hidden">
+        <div className="ui-card-header py-3.5 border-b border-gray-100 dark:border-gray-700">
           <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Состав команды</h3>
-          <button
+          <Button
             onClick={() => setModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-700 transition-colors"
+            size="sm"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
             Добавить
-          </button>
+          </Button>
         </div>
 
         {members.length === 0 ? (
@@ -443,7 +440,7 @@ function TeamDetail({ team, employees, onBack, onUpdate, onDelete }) {
             ))}
           </div>
         )}
-      </div>
+      </Card>
 
       <TeamModal
         open={modalOpen}
