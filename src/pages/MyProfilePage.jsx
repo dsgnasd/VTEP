@@ -384,7 +384,7 @@ export default function MyProfilePage() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
+                  className={`ui-tab-trigger ${
                     activeTab === tab
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
                       : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -410,7 +410,7 @@ export default function MyProfilePage() {
         <div className="lg:col-span-2 space-y-5">
           {/* Vacation widget */}
           <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800">
-            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+            <h3 className="ui-section-label mb-4">
               Отпуск
             </h3>
 
@@ -488,7 +488,7 @@ function OverviewTab({ onNavigate, hasAvatar, onAvatarUpload }) {
           onClick={() => setChecklistOpen((o) => !o)}
           className="flex items-center justify-between w-full group"
         >
-          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+          <h3 className="ui-section-label">
             Заполненность профиля
           </h3>
           <div className="flex items-center gap-2">
@@ -583,7 +583,7 @@ function SkillsTab() {
     <div className="space-y-8">
       {/* Languages */}
       <div>
-        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+        <h3 className="ui-section-label mb-4">
           Языки
         </h3>
 
@@ -639,7 +639,7 @@ function SkillsTab() {
 
       {/* Skills → Компетенции */}
       <div>
-        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+        <h3 className="ui-section-label mb-4">
           Компетенции
         </h3>
         <div className="flex flex-wrap gap-2">
@@ -711,7 +711,7 @@ function ExperienceTab() {
       {/* ── Education ── */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+          <h3 className="ui-section-label">
             Образование
           </h3>
           {!eduFormOpen && (
@@ -794,7 +794,7 @@ function ExperienceTab() {
 
       {/* ── Current Projects ── */}
       <div>
-        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+        <h3 className="ui-section-label mb-4">
           Текущие проекты
         </h3>
         {ME.currentProjects.length > 0 ? (
@@ -827,7 +827,7 @@ function ExperienceTab() {
       {/* ── Archived Projects (hidden when empty) ── */}
       {ME.archivedProjects.length > 0 && (
         <div>
-          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+          <h3 className="ui-section-label mb-4">
             Архивные проекты
           </h3>
           <div className="space-y-3">
@@ -870,7 +870,7 @@ function IDPTab() {
 function FeedbackTab() {
   return (
     <div className="space-y-4">
-      <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+      <h3 className="ui-section-label mb-2">
         Обратная связь
       </h3>
       {ME.feedback.map((fb) => (

@@ -78,7 +78,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                   />
                 </div>
               )}
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <span className="ui-table-label">
                 Сотрудник
               </span>
             </div>
@@ -87,7 +87,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
             {MONTHS.map((m, i) => (
               <div
                 key={m.label}
-                className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 px-3 py-2.5 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
+                className="ui-table-label px-3 py-2.5 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
                 style={{ width: `${monthWidths[i]}%` }}
               >
                 {m.label}

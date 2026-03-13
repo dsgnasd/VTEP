@@ -193,7 +193,7 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                 <th
                   key={col.key}
                   onClick={() => handleSort(col.key)}
-                  className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors
+                  className={`ui-table-label text-left whitespace-nowrap select-none cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors
                     ${col.sticky ? `${EMPLOYEE_COL_WIDTH} sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60 border-r border-gray-200 dark:border-gray-700/80 px-0 py-0` : 'px-4 py-2.5'}`}
                 >
                   {col.sticky ? (

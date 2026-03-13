@@ -104,14 +104,14 @@ function TimelineTab({ employees, ranges, monthWidths }) {
     <div className="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 overflow-x-auto">
       <div className="min-w-[900px]">
         <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 sticky top-0 z-10">
-          <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2.5 text-xs font-medium text-gray-600 dark:text-gray-400 sticky left-0 bg-gray-50 dark:bg-gray-800/50 z-20 border-r border-gray-200 dark:border-gray-700">
+          <div className="w-44 min-w-[176px] flex-shrink-0 px-4 py-2.5 ui-section-label normal-case tracking-[-0.01em] sticky left-0 bg-gray-50 dark:bg-gray-800/50 z-20 border-r border-gray-200 dark:border-gray-700">
             Сотрудник
           </div>
           <div className="flex-1 flex">
             {MONTHS.map((m, i) => (
               <div
                 key={m.label}
-                className="text-xs font-medium text-gray-600 dark:text-gray-400 px-3 py-2.5 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
+                className="text-xs font-medium tracking-[-0.01em] text-gray-600 dark:text-gray-400 px-3 py-2.5 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
                 style={{ width: `${monthWidths[i]}%` }}
               >
                 {m.label}
@@ -370,7 +370,7 @@ function CompareView({ employees, allEmployees, onBack, defaultTab = 'timeline' 
               Назад к реестру
             </button>
             <span className="text-gray-300 dark:text-gray-600">|</span>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="text-lg font-semibold tracking-[-0.02em] text-gray-900 dark:text-gray-100">
               Сравнение
             </h2>
             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -410,7 +410,7 @@ function CompareView({ employees, allEmployees, onBack, defaultTab = 'timeline' 
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
+            className={`px-3 py-1.5 text-sm font-semibold tracking-[-0.01em] rounded-md transition-all whitespace-nowrap ${
               tab === t.id
                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'

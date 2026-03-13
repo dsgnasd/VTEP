@@ -2,6 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.02em;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  strong,
+  b {
+    font-weight: 600;
+  }
+}
+
+@layer components {
+  .ui-page-title {
+    @apply text-[22px] sm:text-2xl font-semibold tracking-[-0.03em];
+  }
+
+  .ui-section-label {
+    @apply text-xs font-semibold uppercase tracking-[0.08em] text-gray-500 dark:text-gray-400;
+  }
+
+  .ui-tab-trigger {
+    @apply px-3 py-1.5 text-sm font-semibold tracking-[-0.01em] rounded-md transition-all whitespace-nowrap;
+  }
+
+  .ui-table-label {
+    @apply text-[11px] font-medium uppercase tracking-[0.08em] text-gray-500 dark:text-gray-400;
+  }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

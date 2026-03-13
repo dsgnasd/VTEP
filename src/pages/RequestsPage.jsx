@@ -27,7 +27,7 @@ function LegalInfoAccordion() {
         className="flex items-center justify-between w-full"
         aria-expanded={open}
       >
-        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <h3 className="ui-section-label">
           Правовая информация
         </h3>
         <svg
@@ -87,7 +87,7 @@ export default function RequestsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Заявки</h1>
+          <h1 className="ui-page-title text-gray-900 dark:text-gray-100">Заявки</h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Управление заявками и запросами
           </p>
@@ -110,7 +110,7 @@ export default function RequestsPage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
+              className={`ui-tab-trigger ${
                 activeTab === tab
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'

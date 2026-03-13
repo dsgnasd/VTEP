@@ -48,18 +48,29 @@ const NAV_ITEMS = [
 ];
 
 /* Renders nav links — isCompact controls icon-only vs icon+label */
-function NavContent({ isCompact, onItemClick, light }) {
+function NavContent({ isCompact, onItemClick, light, mobile = false }) {
+  const brandHeight = mobile ? 'h-16' : 'h-14';
+  const brandPadding = mobile ? 'px-5' : 'px-4';
+  const brandText = mobile ? 'text-base' : 'text-sm';
+  const navPadding = mobile ? 'py-4 px-3' : 'py-3 px-2';
+  const itemSize = isCompact
+    ? 'justify-center px-2 py-2.5'
+    : mobile
+      ? 'px-4 py-3.5 text-base'
+      : 'px-3 py-2 text-[14px]';
+  const iconSize = mobile ? 'w-6 h-6' : 'w-[18px] h-[18px]';
+
   return (
     <>
       {/* Brand header */}
-      <div className={`h-14 flex items-center border-b flex-shrink-0 ${light ? 'border-gray-200' : 'border-white/10'}`}>
+      <div className={`${brandHeight} flex items-center border-b flex-shrink-0 ${light ? 'border-gray-200' : 'border-white/10'}`}>
         {isCompact ? (
           <div className="w-full flex justify-center">
             <span className={`font-bold text-lg ${light ? 'text-gray-900' : 'text-white'}`}>EP</span>
           </div>
         ) : (
-          <div className="flex items-center justify-between w-full px-4">
-            <span className={`font-semibold text-[15px] tracking-tight ${light ? 'text-gray-900' : 'text-white'}`}>
+          <div className={`flex items-center justify-between w-full ${brandPadding}`}>
+            <span className={`font-semibold ${brandText} tracking-tight ${light ? 'text-gray-900' : 'text-white'}`}>
               Employee Portal
             </span>
           </div>
@@ -67,7 +78,7 @@ function NavContent({ isCompact, onItemClick, light }) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
+      <nav className={`flex-1 ${navPadding} space-y-1.5 overflow-y-auto`}>
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
@@ -75,8 +86,9 @@ function NavContent({ isCompact, onItemClick, light }) {
             end={item.to === '/'}
             onClick={onItemClick}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-200
-               ${isCompact ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}
+              `group flex items-center gap-3 rounded-xl transition-all duration-200
+               ${itemSize}
+               ${mobile ? 'font-medium' : 'font-normal'}
                ${isActive
                   ? light
                     ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
@@ -88,7 +100,7 @@ function NavContent({ isCompact, onItemClick, light }) {
             }
             title={isCompact ? item.label : undefined}
           >
-            {item.icon}
+            <span className={`${iconSize} shrink-0 flex items-center justify-center ${mobile ? '[&_svg]:w-6 [&_svg]:h-6' : '[&_svg]:w-[18px] [&_svg]:h-[18px]'}`}>{item.icon}</span>
             {!isCompact && <span>{item.label}</span>}
           </NavLink>
         ))}
@@ -142,18 +154,18 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose, themeMode, is
 
       {/* ── Mobile drawer — always expanded ── */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 w-60 ${bgClass} flex flex-col z-50
+        className={`fixed top-0 left-0 bottom-0 w-72 max-w-[88vw] ${bgClass} flex flex-col z-50
                      transform transition-transform duration-300 ease-in-out lg:hidden
                      ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
         aria-hidden={!mobileOpen}
       >
-        <NavContent isCompact={false} onItemClick={onMobileClose} light={isLight} />
+        <NavContent isCompact={false} onItemClick={onMobileClose} light={isLight} mobile />
 
         {/* Theme toggle — mobile */}
-        <div className={`border-t ${borderClass} p-2 flex-shrink-0`}>
+        <div className={`border-t ${borderClass} p-3 flex-shrink-0`}>
           <button
             onClick={onCycleTheme}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm ${btnClass}`}
+            className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 text-base ${btnClass}`}
             aria-label={`Переключить тему. Текущая тема: ${THEME_LABEL[themeMode]}`}
           >
             {THEME_ICON[themeMode]}

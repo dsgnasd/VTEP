@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SkillTag from '../shared/SkillTag';
 import StatusBadge from '../shared/StatusBadge';
 import AllocationBlock from '../shared/AllocationBlock';
+import Avatar from '../shared/Avatar';
 
 // ──────────────────────────────────────────────────────────────
 // EmployeeProfile — полный профиль сотрудника: заголовок,
@@ -42,14 +43,14 @@ function EmployeeProfile({ employee }) {
       {/* ── Заголовок ── */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
         <div className="flex items-start gap-5">
-          <img
+          <Avatar
             src={emp.avatar}
-            alt={emp.name}
-            className="w-16 h-16 rounded-full bg-slate-100 dark:bg-gray-700 flex-shrink-0"
+            name={emp.name}
+            className="w-16 h-16 flex-shrink-0 text-[22px]"
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{emp.name}</h1>
+              <h1 className="ui-page-title text-gray-900 dark:text-gray-100">{emp.name}</h1>
               <StatusBadge status={emp.status} />
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{emp.role}</p>
@@ -80,7 +81,7 @@ function EmployeeProfile({ employee }) {
 
       {/* ── Навыки ── */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-        <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Навыки</h2>
+        <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Навыки</h2>
         <div className="flex flex-wrap gap-2">
           {emp.skills.map((s) => (
             <SkillTag
@@ -98,7 +99,7 @@ function EmployeeProfile({ employee }) {
 
       {/* ── Проекты ── */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-        <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Проекты</h2>
+        <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Проекты</h2>
         {emp.allocations.length > 0 ? (
           <div className="space-y-3">
             {emp.allocations.map((a) => (
@@ -139,7 +140,7 @@ function EmployeeProfile({ employee }) {
 
       {/* ── Мини-таймлайн ── */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-        <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Таймлайн (Q1 2026)</h2>
+        <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Таймлайн (Q1 2026)</h2>
         <div className="relative">
           <div className="flex mb-1">
             {monthLabels.map((m) => (
@@ -183,7 +184,7 @@ function EmployeeProfile({ employee }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* ── Достижения ── */}
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Достижения</h2>
+          <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Достижения</h2>
           {emp.achievements.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
               {emp.achievements.map((a) => (
@@ -206,7 +207,7 @@ function EmployeeProfile({ employee }) {
 
         {/* ── Отпуск ── */}
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Отпуск</h2>
+          <h2 className="text-sm font-semibold tracking-[-0.015em] text-gray-900 dark:text-gray-100 mb-3">Отпуск</h2>
           {emp.vacation.length > 0 ? (
             <div className="space-y-2">
               {emp.vacation.map((v, i) => (

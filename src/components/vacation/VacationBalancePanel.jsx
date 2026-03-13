@@ -78,7 +78,7 @@ export default function VacationBalancePanel({ balance }) {
 
       {/* ── Zone 2: Work year ── */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
-        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+        <h3 className="ui-section-label mb-4">
           Рабочий год
         </h3>
         <div className="flex items-center gap-2.5 mb-3">
@@ -101,7 +101,7 @@ export default function VacationBalancePanel({ balance }) {
 
       {/* ── Zone 3: Usage breakdown ── */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
-        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+        <h3 className="ui-section-label mb-4">
           Использование отпуска
         </h3>
         {/* Stacked bar */}
