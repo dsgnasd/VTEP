@@ -2,21 +2,12 @@ import { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import AllocationBlock from '../shared/AllocationBlock';
 
-const EMPLOYEE_COL_WIDTH = 'w-64 min-w-[256px]';
+const EMPLOYEE_COL_WIDTH = 'w-56 min-w-[224px]';
 
 function shortName(fullName) {
   const parts = fullName.trim().split(/\s+/);
   if (parts.length <= 1) return fullName;
   return `${parts[0]} ${parts.slice(1).map((p) => p[0]?.toUpperCase() + '.').join(' ')}`;
-}
-
-function initials(fullName) {
-  return fullName
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() || '')
-    .join('');
 }
 
 const TIMELINE_START = new Date('2026-01-01');
@@ -72,7 +63,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
       <div className="min-w-[900px]">
         {/* Заголовок месяцев */}
         <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/60 sticky top-0 z-10">
-          <div className={`${EMPLOYEE_COL_WIDTH} flex-shrink-0 py-3 sticky left-0 bg-gray-50/80 dark:bg-gray-800/60 z-20 border-r border-gray-200 dark:border-gray-700/80`}>
+          <div className={`${EMPLOYEE_COL_WIDTH} flex-shrink-0 py-2.5 sticky left-0 bg-gray-50/80 dark:bg-gray-800/60 z-20 border-r border-gray-200 dark:border-gray-700/80`}>
             <div className="flex items-center px-4">
               {selectable && (
                 <div className="w-8 flex-shrink-0 flex items-center justify-center mr-3">
@@ -96,7 +87,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
             {MONTHS.map((m, i) => (
               <div
                 key={m.label}
-                className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 px-3 py-3 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
+                className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 px-3 py-2.5 text-center border-r border-gray-100 dark:border-gray-700/50 last:border-r-0"
                 style={{ width: `${monthWidths[i]}%` }}
               >
                 {m.label}
@@ -117,7 +108,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                   : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
               }`}
             >
-              <div className={`${EMPLOYEE_COL_WIDTH} flex-shrink-0 py-3 sticky left-0 z-10 border-r border-gray-200 dark:border-gray-700/80 transition-colors ${
+              <div className={`${EMPLOYEE_COL_WIDTH} flex-shrink-0 py-2.5 sticky left-0 z-10 border-r border-gray-200 dark:border-gray-700/80 transition-colors ${
                 isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
               }`}>
                 <div className="flex items-center px-4">
@@ -131,12 +122,9 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                       />
                     </div>
                   )}
-                  <div className="w-8 h-8 rounded-full flex-shrink-0 bg-slate-100 dark:bg-gray-700/80 border border-gray-200 dark:border-gray-600/80 text-[11px] font-semibold text-gray-600 dark:text-gray-200 flex items-center justify-center">
-                    {initials(emp.name)}
-                  </div>
                   <Link
                     to={`/employee/${emp.id}`}
-                    className="ml-3 block min-w-0 text-[13px] font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
+                    className="block min-w-0 text-[13px] font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 truncate transition-colors"
                     title={emp.name}
                   >
                     {shortName(emp.name)}
@@ -144,7 +132,7 @@ function TimelineView({ employees, selectedIds, onToggleSelect }) {
                 </div>
               </div>
 
-              <div className="flex-1 relative h-[56px]">
+              <div className="flex-1 relative h-[42px]">
                 {emp.allocations.map((a) => {
                   const start = dayOffset(a.startDate);
                   const end = dayOffset(a.endDate);

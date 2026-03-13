@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import SkillTag from '../shared/SkillTag';
 import StatusBadge from '../shared/StatusBadge';
 
-const SELECT_COL_WIDTH = 'w-12 min-w-[48px]';
-const EMPLOYEE_COL_WIDTH = 'w-64 min-w-[256px]';
+const EMPLOYEE_COL_WIDTH = 'w-56 min-w-[224px]';
 
 /* ── Сокращение имени: «Фамилия И. О.» ── */
 function shortName(fullName) {
@@ -13,15 +12,6 @@ function shortName(fullName) {
   const surname = parts[0];
   const initials = parts.slice(1).map((p) => p[0]?.toUpperCase() + '.').join(' ');
   return `${surname} ${initials}`;
-}
-
-function initials(fullName) {
-  return fullName
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() || '')
-    .join('');
 }
 
 const COLUMNS = [
@@ -199,43 +189,58 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
         <table className="w-full min-w-[880px] text-[13px]">
           <thead>
             <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/60">
-              {selectable && (
-                <th className={`${SELECT_COL_WIDTH} sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60 border-r border-gray-200 dark:border-gray-700/80`}>
-                  <div className="flex items-center justify-center h-full py-3">
-                    <input
-                      type="checkbox"
-                      checked={allVisibleSelected}
-                      ref={(el) => {
-                        if (el) el.indeterminate = someSelected && !allVisibleSelected;
-                      }}
-                      onChange={handleSelectAll}
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                    />
-                  </div>
-                </th>
-              )}
               {COLUMNS.map((col) => (
                 <th
                   key={col.key}
                   onClick={() => handleSort(col.key)}
-                  className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 py-2.5 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors
-                    ${col.sticky ? 'px-4' : 'px-4'}
-                    ${col.sticky ? `${EMPLOYEE_COL_WIDTH} border-r border-gray-200 dark:border-gray-700/80` : ''}
-                    ${col.sticky && selectable ? 'sticky left-12 z-10 bg-gray-50/80 dark:bg-gray-800/60' : ''}
-                    ${col.sticky && !selectable ? 'sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60' : ''}`}
+                  className={`text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 whitespace-nowrap select-none cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 transition-colors
+                    ${col.sticky ? `${EMPLOYEE_COL_WIDTH} sticky left-0 z-10 bg-gray-50/80 dark:bg-gray-800/60 border-r border-gray-200 dark:border-gray-700/80 px-0 py-0` : 'px-4 py-2.5'}`}
                 >
-                  <span className={`inline-flex items-center gap-1 ${col.sticky ? 'pl-0.5' : ''}`}>
-                    {col.label}
-                    {sortKey === col.key && (
-                      <svg className="w-3 h-3 text-gray-500 dark:text-gray-400" viewBox="0 0 12 12" fill="currentColor">
-                        {sortDir === 'asc' ? (
-                          <path d="M6 2l4 5H2z" />
-                        ) : (
-                          <path d="M6 10l4-5H2z" />
+                  {col.sticky ? (
+                    <div className="flex items-center px-4 py-2.5">
+                      {selectable && (
+                        <span
+                          className="w-8 flex-shrink-0 flex items-center justify-center mr-3"
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={allVisibleSelected}
+                            ref={(el) => {
+                              if (el) el.indeterminate = someSelected && !allVisibleSelected;
+                            }}
+                            onChange={handleSelectAll}
+                            className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </span>
+                      )}
+                      <span className="inline-flex items-center gap-1">
+                        {col.label}
+                        {sortKey === col.key && (
+                          <svg className="w-3 h-3 text-gray-500 dark:text-gray-400" viewBox="0 0 12 12" fill="currentColor">
+                            {sortDir === 'asc' ? (
+                              <path d="M6 2l4 5H2z" />
+                            ) : (
+                              <path d="M6 10l4-5H2z" />
+                            )}
+                          </svg>
                         )}
-                      </svg>
-                    )}
-                  </span>
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="inline-flex items-center gap-1">
+                      {col.label}
+                      {sortKey === col.key && (
+                        <svg className="w-3 h-3 text-gray-500 dark:text-gray-400" viewBox="0 0 12 12" fill="currentColor">
+                          {sortDir === 'asc' ? (
+                            <path d="M6 2l4 5H2z" />
+                          ) : (
+                            <path d="M6 10l4-5H2z" />
+                          )}
+                        </svg>
+                      )}
+                    </span>
+                  )}
                 </th>
               ))}
             </tr>
@@ -253,28 +258,21 @@ function EmployeeTable({ employees, selectedIds, onToggleSelect }) {
                       : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'
                   }`}
                 >
-                  {selectable && (
-                    <td className={`${SELECT_COL_WIDTH} sticky left-0 z-10 border-r border-gray-200 dark:border-gray-700/80 transition-colors ${
-                      isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
-                    }`}>
-                      <div className="flex items-center justify-center h-full py-3">
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => onToggleSelect(emp.id)}
-                          className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                        />
-                      </div>
-                    </td>
-                  )}
-                  <td className={`${EMPLOYEE_COL_WIDTH} sticky z-10 px-4 py-3 border-r border-gray-200 dark:border-gray-700/80 transition-colors ${
-                    selectable ? 'left-12' : 'left-0'
+                  <td className={`${EMPLOYEE_COL_WIDTH} sticky z-10 px-4 py-2.5 border-r border-gray-200 dark:border-gray-700/80 transition-colors ${
+                    'left-0'
                     } ${isSelected ? 'bg-blue-50 dark:bg-blue-500/15' : 'bg-white dark:bg-gray-900 group-hover:bg-gray-50 dark:group-hover:bg-gray-800'
                   }`}>
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-full flex-shrink-0 bg-slate-100 dark:bg-gray-700/80 border border-gray-200 dark:border-gray-600/80 text-[11px] font-semibold text-gray-600 dark:text-gray-200 flex items-center justify-center">
-                        {initials(emp.name)}
-                      </div>
+                    <div className="flex items-center min-w-0">
+                      {selectable && (
+                        <span className="w-8 flex-shrink-0 flex items-center justify-center mr-3">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => onToggleSelect(emp.id)}
+                            className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </span>
+                      )}
                       <Link
                         to={`/employee/${emp.id}`}
                         className="block min-w-0 font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate"
