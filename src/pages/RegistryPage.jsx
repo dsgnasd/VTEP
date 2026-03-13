@@ -1,13 +1,15 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { employees } from '../data/mockData';
 import useEmployeeFilters from '../hooks/useEmployeeFilters';
+import useRegistryCatalog from '../hooks/useRegistryCatalog';
 import FiltersPanel from '../components/registry/FiltersPanel';
 import EmployeeTable from '../components/registry/EmployeeTable';
 import TimelineView from '../components/registry/TimelineView';
 import CompareView from '../components/registry/CompareView';
 import TeamsView from '../components/registry/TeamsView';
 import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+import EmptyState from '../components/ui/EmptyState';
 import PageHeader from '../components/ui/PageHeader';
 import Tabs from '../components/ui/Tabs';
 
@@ -18,6 +20,7 @@ import Tabs from '../components/ui/Tabs';
 
 export default function RegistryPage({ search }) {
   const [view, setView] = useState('table');
+  const { employees, teams, projects, skills, loading, error } = useRegistryCatalog();
   const { filters, setFilter, resetFilters, filtered } =
     useEmployeeFilters(employees);
   const [searchParams] = useSearchParams();
@@ -79,6 +82,42 @@ export default function RegistryPage({ search }) {
   const viewMap = { 'Таблица': 'table', 'Таймлайн': 'timeline' };
   const viewLabel = VIEW_TABS.find((t) => viewMap[t] === view) || 'Таблица';
 
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Реестр сотрудников"
+          description="Поиск, сравнение сотрудников и управление командами"
+        />
+        <Card padding="lg" className="min-h-[320px] flex items-center justify-center">
+          <EmptyState
+            title="Загружаем каталог сотрудников"
+            description="Подготавливаем реестр, команды и фильтры"
+            className="max-w-sm"
+          />
+        </Card>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Реестр сотрудников"
+          description="Поиск, сравнение сотрудников и управление командами"
+        />
+        <Card padding="lg" className="min-h-[320px] flex items-center justify-center">
+          <EmptyState
+            title="Не удалось загрузить реестр"
+            description="Проверьте источник данных или подключение к API-слою"
+            className="max-w-sm"
+          />
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -105,6 +144,9 @@ export default function RegistryPage({ search }) {
             setFilter={setFilter}
             resetFilters={resetFilters}
             resultCount={filtered.length}
+            teams={teams}
+            projects={projects}
+            skills={skills}
           />
 
           {/* Вид */}

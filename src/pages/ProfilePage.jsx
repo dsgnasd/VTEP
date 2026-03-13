@@ -1,7 +1,9 @@
-import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { employees } from '../data/mockData';
 import EmployeeProfile from '../components/profile/EmployeeProfile';
+import Card from '../components/ui/Card';
+import EmptyState from '../components/ui/EmptyState';
+import Button from '../components/ui/Button';
+import useEmployeeProfile from '../hooks/useEmployeeProfile';
 
 // ──────────────────────────────────────────────────────────────
 // ProfilePage — страница профиля конкретного сотрудника.
@@ -9,23 +11,51 @@ import EmployeeProfile from '../components/profile/EmployeeProfile';
 
 export default function ProfilePage() {
   const { id } = useParams();
+  const { employee, loading, error } = useEmployeeProfile(id);
 
-  const employee = useMemo(
-    () => employees.find((e) => e.id === id),
-    [id]
-  );
+  if (loading) {
+    return (
+      <Card padding="lg" className="min-h-[320px] flex items-center justify-center">
+        <EmptyState
+          title="Загружаем профиль сотрудника"
+          description="Подготавливаем данные профиля"
+          className="max-w-sm"
+        />
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card padding="lg" className="min-h-[320px] flex items-center justify-center">
+        <EmptyState
+          title="Не удалось загрузить профиль"
+          description="Источник данных временно недоступен"
+          action={(
+            <Button as={Link} to="/registry" variant="secondary">
+              Вернуться в реестр
+            </Button>
+          )}
+          className="max-w-sm"
+        />
+      </Card>
+    );
+  }
 
   if (!employee) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-center">
-        <p className="text-gray-500 dark:text-gray-400 text-sm">Сотрудник не найден.</p>
-        <Link
-          to="/registry"
-          className="mt-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-        >
-          Вернуться в реестр
-        </Link>
-      </div>
+      <Card padding="lg" className="min-h-[320px] flex items-center justify-center">
+        <EmptyState
+          title="Сотрудник не найден"
+          description="Проверьте ссылку или вернитесь в реестр"
+          action={(
+            <Button as={Link} to="/registry" variant="secondary">
+              Вернуться в реестр
+            </Button>
+          )}
+          className="max-w-sm"
+        />
+      </Card>
     );
   }
 

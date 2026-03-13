@@ -1,5 +1,4 @@
 import { memo, useState, useRef, useEffect, useCallback } from 'react';
-import { teams as allTeams, projects, allSkills } from '../../data/mockData';
 
 // ──────────────────────────────────────────────────────────────
 // FiltersPanel — горизонтальная панель фильтров с выпадающими
@@ -138,9 +137,8 @@ const STATUS_LABELS = {
   'Bench': 'На скамейке',
 };
 
-const PROJECT_MAP = Object.fromEntries(projects.map((p) => [p.id, p.name]));
-
-function FiltersPanel({ filters, setFilter, resetFilters, resultCount }) {
+function FiltersPanel({ filters, setFilter, resetFilters, resultCount, teams = [], projects = [], skills = [] }) {
+  const PROJECT_MAP = Object.fromEntries(projects.map((p) => [p.id, p.name]));
   const hasActive =
     filters.teams.length > 0 ||
     filters.projects.length > 0 ||
@@ -203,7 +201,7 @@ function FiltersPanel({ filters, setFilter, resetFilters, resultCount }) {
         {/* Отдел */}
         <Dropdown label="Отдел" count={filters.teams.length}>
           <MultiSelect
-            options={allTeams}
+            options={teams}
             selected={filters.teams}
             onChange={(v) => setFilter('teams', v)}
           />
@@ -222,7 +220,7 @@ function FiltersPanel({ filters, setFilter, resetFilters, resultCount }) {
         {/* Навык */}
         <Dropdown label="Навык" count={filters.skills.length}>
           <MultiSelect
-            options={allSkills}
+            options={skills}
             selected={filters.skills}
             onChange={(v) => setFilter('skills', v)}
           />
